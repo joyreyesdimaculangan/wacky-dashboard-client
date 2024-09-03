@@ -1,0 +1,95 @@
+<div class="flex h-screen bg-gray-200 overflow-hidden">
+  <app-drawer></app-drawer>
+  <div class="flex-1 p-6 overflow-y-auto">
+      <!-- Search and Items per Page Panel -->
+      <div class="mb-4 flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+              <div class="relative">
+                  <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a7 7 0 100 14 7 7 0 000-14zM21 21l-4.35-4.35"/>
+                  </svg>
+                  <input
+                      type="text"
+                      [(ngModel)]="searchText"
+                      placeholder="Search..."
+                      class="pl-12 py-3 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 w-96"
+                  />
+              </div>
+              <button
+                  (click)="resetSearch()"
+                  class="py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                  Reset
+              </button>
+          </div>
+          <div>
+              <select
+                  [(ngModel)]="itemsPerPage"
+                  (change)="changeItemsPerPage()"
+                  class="py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                  <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }} per page</option>
+              </select>
+          </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="overflow-x-auto mb-6">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-base">
+              <thead class="bg-green-500 text-white">
+                  <tr>
+                      <th class="p-4 text-left">Package Type</th>
+                      <th class="p-4 text-left">Reservation ID</th>
+                      <th class="p-4 text-left">Date</th>
+                      <th class="p-4 text-left">Time</th>
+                      <th class="p-4 text-left">Status</th>
+                      <th class="p-4 text-left">Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of pagedData()" class="hover:bg-gray-50">
+                      <td class="p-4">{{ item.name }}</td>
+                      <td class="p-4">{{ item.releaseDate }}</td>
+                      <td class="p-4">{{ item.npmDownloads }}</td>
+                      <td class="p-4">{{ item.growth }}</td>
+                      <td class="p-4">{{ item.status }}</td>
+                      <td class="p-4 flex space-x-1 items-center">
+                          <button
+                              (click)="viewItem(item)"
+                              class="py-1 px-2 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                              View
+                          </button>
+                          <button
+                              (click)="editItem(item)"
+                              class="py-1 px-2 bg-yellow-500 text-white rounded-lg text-xs hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                              Edit
+                          </button>
+                          <button
+                              (click)="deleteItem(item)"
+                              class="py-1 px-2 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                              Delete
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="flex justify-end">
+          <div class="flex items-center space-x-2">
+              <button
+                  (click)="prevPage()"
+                  [disabled]="currentPage === 1"
+                  class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                  Previous
+              </button>
+              <span class="text-sm">Page {{ currentPage }} of {{ totalPages() }}</span>
+              <button
+                  (click)="nextPage()"
+                  [disabled]="currentPage === totalPages()"
+                  class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                  Next
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
