@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `<div
     class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
     style="background-image: url('assets/images/Food House.jpg')"
@@ -121,7 +121,7 @@ import { AuthService } from '../../auth.service';
       </p>
     </div>
   </div> `,
-  styleUrl: './login-page.component.css',
+  styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent {
@@ -141,9 +141,9 @@ export class LoginPageComponent {
     if (success) {
       const role = this.authService.getUserRole();
       if (role === 'admin') {
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/dashboard']);
       } else if (role === 'customer') {
-        this.router.navigate(['/customer']);
+        this.router.navigate(['/home']);
       }
     } else {
       this.loginError = 'Invalid username or password';

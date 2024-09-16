@@ -1,0 +1,43 @@
+/* main part */
+.main-slides {
+    @apply w-full h-[80vh] relative overflow-hidden bg-cover bg-center;
+}
+
+.slideshow-container {
+    @apply absolute inset-0;
+}
+
+.mySlides {
+    @apply w-full h-full bg-cover bg-center;
+}
+
+.overlay {
+    @apply absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center;
+}
+
+.content-container {
+    @apply text-center max-w-xl mx-auto; /* Center align content and remove margin */
+}
+
+.content-container h2 {
+    @apply text-5xl font-bold mb-6 text-white; /* Increased font size to 5xl for the heading */
+}
+
+.content-container p {
+    @apply text-2xl mb-8 text-white; /* Increased font size to 2xl for the paragraph */
+}
+
+.content-container a {
+    @apply text-lg font-semibold py-4 px-8 rounded-lg bg-green-600 hover:bg-green-700 text-white; /* Increased font size and padding for the button */
+}
+
+/* fade effect */
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from { opacity: .4 }
+    to { opacity: 1 }
+}

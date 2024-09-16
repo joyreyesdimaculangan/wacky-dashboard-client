@@ -10,24 +10,44 @@
       <ul>
           <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
           <i class="fas fa-home mr-4 text-green-600 text-xl"></i>
-          <span class="text-gray-800 font-medium text-lg">Home</span>
+          <button
+            [routerLink]="['/admin/reservations']"
+            class="text-gray-800 font-medium text-lg"
+            > Home
+          </button>
           </li>
           <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
           <i class="fas fa-tachometer-alt mr-4 text-green-600 text-xl"></i>
-          <span class="text-gray-800 font-medium text-lg">Dashboard</span>
+          <button 
+            [routerLink]="['/admin/dashboard']"
+            class="text-gray-800 font-medium text-lg"
+            > Dashboard
+          </button>
           </li>
           <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
           <i class="fas fa-calendar-check mr-4 text-green-600 text-xl"></i>
-          <span class="text-gray-800 font-medium text-lg">Reservations</span>
+          <button
+            [routerLink]="['/admin/reservations']" 
+            class="text-gray-800 font-medium text-lg"
+            >Reservations
+          </button>
           </li>
           <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
           <i class="fas fa-star mr-4 text-green-600 text-xl"></i>
-          <span class="text-gray-800 font-medium text-lg">Reviews</span>
+          <button
+            [routerLink]="['/admin/reservations']"
+            class="text-gray-800 font-medium text-lg"
+            >Reviews
+          </button>
           </li>
           <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
           <i class="fas fa-chart-line mr-4 text-green-600 text-xl"></i>
-          <span class="text-gray-800 font-medium text-lg">Analytics</span>
-          </li>
+          <button
+            [routerLink]="['/admin/reservations']"
+            class="text-gray-800 font-medium text-lg"
+            >Analytics
+          </button>
+        </li>
       </ul>
       </nav>
   </aside>

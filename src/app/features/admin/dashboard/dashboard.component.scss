@@ -1,0 +1,28 @@
+/* Additional styles for the admin dashboard */
+.sidebar {
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar.closed {
+    transform: translateX(-100%);
+  }
+  
+  .graph-card {
+    background: #f9f9f9;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+  
+  .graph-card h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .graph-card p {
+    text-align: center;
+  }
+  

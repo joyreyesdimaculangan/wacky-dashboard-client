@@ -1,0 +1,26 @@
+/* Style the swiper container */
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+  
+/* Style for each slide */
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+  
+/* Style for navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #000; /* Change to your desired color */
+}
+  
+/* Style for pagination */
+.swiper-pagination-bullet {
+    background: #000; /* Change to your desired color */
+}
+  
