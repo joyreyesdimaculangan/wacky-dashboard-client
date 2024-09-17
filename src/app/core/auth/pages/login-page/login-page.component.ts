@@ -36,6 +36,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
       <h2 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
         Welcome Back
       </h2>
+
       <form [formGroup]="loginForm">
         <!-- Email Input -->
         <div class="mb-6">
@@ -94,18 +95,20 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
                 d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
               ></path>
               <line x1="2" x2="22" y1="2" y2="22"></line>
-            </svg>
+              </svg>
             }
-          </button>
-          <!-- Remember Me and Forgot Password -->
-          <div class="flex items-center justify-between mb-8">
-            <label class="inline-flex items-center text-green-900">
-              <input
-                type="checkbox"
-                class="form-checkbox text-green-600 focus:ring-green-500"
-              />
-              <span class="ml-2">Remember Me</span>
-            </label>
+            </button>
+        </div>
+
+        <!-- Remember Me and Forgot Password -->
+        <div class="flex items-center justify-between mb-8">
+          <label class="inline-flex items-center text-green-900">
+            <input
+              type="checkbox"
+              class="form-checkbox text-green-600 focus:ring-green-500"
+            />
+            <span class="ml-2">Remember Me</span>
+          </label>
             <a
               href="#"
               class="text-green-700 hover:text-green-500 font-semibold"
@@ -113,25 +116,24 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
             >
           </div>
 
-          <!-- Login Button -->
-          <button
-            (click)="login()"
-            class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
-          >
-            Log In
-          </button>
+        <!-- Login Button -->
+        <button
+          (click)="login()"
+          class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
+        >
+          Log In
+        </button>
 
-          <!-- Sign Up Link -->
-          <p class="text-center text-green-900 mt-8">
-            Don't have an account?
-            <a href="#" class="text-green-700 hover:text-green-500 font-bold"
-              >Sign Up</a
-            >
-          </p>
-        </div>
-      </form>
-    </div>
-  </div> `,
+        <!-- Sign Up Link -->
+        <p class="text-center text-green-900 mt-8">
+          Don't have an account?
+        <a href="#" class="text-green-700 hover:text-green-500 font-bold"
+          >Sign Up</a
+          >
+        </p>
+    </form>
+  </div>
+`,
   styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -155,6 +157,7 @@ export class LoginPageComponent {
       password: ['', Validators.required],
     });
   }
+
   login() {
     this.isLoadingButton.set(true);
     this.loginSubscription.add(
