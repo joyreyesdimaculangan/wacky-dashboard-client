@@ -1,174 +1,30 @@
-<section class="mb-20 px-4 lg:px-16 p-10 max-w-screen-xl mx-auto">
-  <h3 class="text-3xl font-bold text-center mb-6 text-green-700">Our Eat-All-You-Can Buffet</h3>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Food Images -->
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Afritada.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 1</span>
-              </div>
+<section class="mb-20 p-10 max-w-screen-xl mx-auto">
+  <h3 class="text-3xl font-bold text-center mb-6 text-green-700">
+    Our Eat-All-You-Can Buffet
+  </h3>
+  <div class="flex">
+    <!-- Food Images -->
+    <div class="flex flex-wrap gap-5">
+      @for (image of buffet; track $index) {
+      <div class="rounded-lg">
+        <div
+          class="w-50 h-96 relative transition-transform transform hover:scale-105 rounded-lg"
+        >
+          <img
+            [src]="image.image"
+            alt="Food Image"
+            class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75 rounded-lg"
+          />
+          <div
+            class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
+          >
+            <span class="text-white text-xl font-semibold">{{
+              image.name
+            }}</span>
           </div>
+        </div>
       </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Boiled Crabs.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 2</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Chicken Caldereta.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 3</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Chicken Curry.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 4</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Chicken Inasal.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 5</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Ampalaya.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Crablets.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Crabs.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Imbutido.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Laing.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Langka.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Mixed Seafoods.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Paksiw.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Pansit.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Pork Adobo.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Pork Curry.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Pork Tausi.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Pusit.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Shanghai.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Shrimp.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
-      <div class="relative overflow-hidden rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          <div class="w-full h-96 relative">
-              <img src="assets/images/Spaghetti.jpg" alt="Food Image" class="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75">
-              <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <span class="text-white text-xl font-semibold">Delicious Dish 6</span>
-              </div>
-          </div>
-      </div>
+      }
+    </div>
   </div>
 </section>

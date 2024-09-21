@@ -18,8 +18,8 @@ export const CustomerRoutes: Routes = [
     path: 'services',
     loadComponent: () => import('./services/services.component').then((m) => m.ServicesComponent),
   },
-  {
-    path: 'reservation-form',
-    loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
-  }
+  // {
+  //   path: 'reservation-form',
+  //   loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
+  // }
 ];

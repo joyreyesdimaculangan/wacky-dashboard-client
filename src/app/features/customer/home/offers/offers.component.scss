@@ -1,20 +1,8 @@
-/* main part */
-.main-slides {
-    @apply w-full h-[80vh] relative overflow-hidden bg-cover bg-center;
-}
-
-.slideshow-container {
-    @apply absolute inset-0;
-}
 
 .mySlides {
     @apply w-full h-full bg-cover bg-center relative; /* Keep the background and adjust positioning */
 }
 
-.overlay {
-    @apply absolute inset-0 bg-black bg-opacity-40 flex items-center; /* Darker overlay with more opacity */
-    @apply justify-end p-6; /* Align items to the right and add padding */
-}
 
 .content-container {
     @apply text-right max-w-lg mr-6; /* Align text to the right, reduce max width, and add right margin */
@@ -38,7 +26,6 @@
 }
 
 /* Font-family imports */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
 
 /* Font styles */
 .font-serif {
