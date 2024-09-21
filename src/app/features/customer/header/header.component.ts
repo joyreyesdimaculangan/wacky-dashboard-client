@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -14,5 +14,16 @@ export class HeaderComponent {
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const dropdownButton = document.getElementById('user-menu-button');
+
+    // Close the dropdown if the click is outside the dropdown and the button
+    if (!dropdownButton?.contains(target)) {
+      this.isDropdownOpen = false;
+    }
   }
 }

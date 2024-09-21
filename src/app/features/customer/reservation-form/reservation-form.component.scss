@@ -1,0 +1,27 @@
+.input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* reservation-form.component.scss */
+mat-form-field {
+    width: 100%; /* Ensure it takes the full width */
+}
+  
+mat-form-field .mat-form-field-infix {
+    background-color: #ffffff; /* Match background color */
+    border-radius: 0.25rem; /* Match border radius */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1); /* Match box shadow */
+}
+  
+/* Optional: Customize the hint and error styles */
+mat-hint {
+    color: #6b7280; /* Adjust color to match the design */
+}
+  
+mat-error {
+    color: #ef4444; /* Adjust color to match the design */
+}
+  

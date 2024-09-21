@@ -1,4 +1,4 @@
-<nav class="bg-white border-b border-gray-200 py-6 shadow-sm">
+<nav class="bg-white border-b border-gray-200 py-6 shadow-sm relative">
   <div class="max-w-screen-xl mx-auto flex items-center justify-between px-8">
     <!-- Logo and H1 centered with space between -->
     <a href="" class="flex items-center space-x-4">
@@ -12,7 +12,7 @@
         <li>
           <button 
             [routerLink]="['/customer/home']" 
-            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded"
+            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins"
           >
             Home
           </button>
@@ -20,7 +20,7 @@
         <li>
           <button 
             [routerLink]="['/customer/menu']" 
-            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded"
+            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins"
           >
             Menu
           </button>
@@ -28,7 +28,7 @@
         <li>
           <button
             [routerLink]="['/customer/services']" 
-            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded"
+            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins"
           >
             Services
         </button>
@@ -36,7 +36,7 @@
         <li>
           <button
             [routerLink]="['/customer/reservation']" 
-            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded"
+            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins"
           >
             Reservation
         </button>
@@ -44,35 +44,34 @@
       </ul>
     </div>
 
-    <!-- Dropdown Button positioned in the top-right corner -->
-    <button type="button" class="flex items-center text-sm bg-white text-green-600 border border-green-600 rounded-full focus:ring-4 focus:ring-green-300 hover:bg-green-100" id="user-menu-button" aria-expanded="false" (click)="toggleDropdown()">
-      <span class="sr-only">Open user menu</span>
-      <img class="w-12 h-12 rounded-full" src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU" alt="user photo">
-    </button>
-  </div>
+    <!-- Dropdown Button -->
+    <div class="relative">
+      <button type="button" class="flex items-center text-sm bg-white text-green-600 border border-green-600 rounded-full focus:ring-4 focus:ring-green-300 hover:bg-green-100" id="user-menu-button" aria-expanded="false" (click)="toggleDropdown()">
+        <span class="sr-only">Open user menu</span>
+        <img class="w-12 h-12 rounded-full" src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU" alt="user photo">
+      </button>
 
-  <!-- Dropdown Menu -->
-  <div *ngIf="isDropdownOpen" class="fixed top-20 right-6 z-50 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48">
-    <div class="px-6 py-4">
-      <span class="block text-lg text-green-600">Bonnie Green</span>
-      <span class="block text-sm text-gray-500 truncate">name.com</span>
+      <!-- Dropdown Menu -->
+      <div *ngIf="isDropdownOpen" class="absolute top-14 right-0 z-50 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48">
+        <div class="px-6 py-4">
+          <span class="block text-lg text-green-600">Bonnie Green</span>
+          <span class="block text-sm text-gray-500 truncate">name.com</span>
+        </div>
+        <ul class="py-3" aria-labelledby="user-menu-button">
+          <li>
+            <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Reservations</a>
+          </li>
+          <li>
+            <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Notifications</a>
+          </li>
+          <li>
+            <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Settings</a>
+          </li>
+          <li>
+            <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Sign out</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul class="py-3" aria-labelledby="user-menu-button">
-      <li>
-        <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100">Reservations</a>
-      </li>
-      <li>
-        <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100">Notifications</a>
-      </li>
-      <li>
-        <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100">Settings</a>
-      </li>
-      <li>
-        <a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100">Sign out</a>
-      </li>
-    </ul>
   </div>
 </nav>
-
-
-

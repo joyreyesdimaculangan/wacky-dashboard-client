@@ -8,36 +8,43 @@
 }
 
 .mySlides {
-    @apply w-full h-full bg-cover bg-center;
+    @apply w-full h-full bg-cover bg-center relative; /* Keep the background and adjust positioning */
 }
 
 .overlay {
-    @apply absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center;
+    @apply absolute inset-0 bg-black bg-opacity-40 flex items-center; /* Darker overlay with more opacity */
+    @apply justify-end p-6; /* Align items to the right and add padding */
 }
 
 .content-container {
-    @apply text-center max-w-xl mx-auto; /* Center align content and remove margin */
+    @apply text-right max-w-lg mr-6; /* Align text to the right, reduce max width, and add right margin */
 }
 
+/* Heading styling */
 .content-container h2 {
-    @apply text-5xl font-bold mb-6 text-white; /* Increased font size to 5xl for the heading */
+    @apply text-7xl font-bold mb-4 text-green-100 font-serif; /* Large font size and lightest green color */
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.6); /* Shadow for better contrast */
 }
 
+/* Paragraph styling */
 .content-container p {
-    @apply text-2xl mb-8 text-white; /* Increased font size to 2xl for the paragraph */
+    @apply text-2xl mb-6 text-green-100 font-poppins; /* Adjusted font size and lightest green color */
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle text shadow for readability */
 }
 
-.content-container a {
-    @apply text-lg font-semibold py-4 px-8 rounded-lg bg-green-600 hover:bg-green-700 text-white; /* Increased font size and padding for the button */
+/* Adjust vertical spacing */
+.overlay {
+    @apply flex items-center; /* Center content vertically */
 }
 
-/* fade effect */
-.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
+/* Font-family imports */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
+
+/* Font styles */
+.font-serif {
+    font-family: 'Playfair Display', serif;
 }
 
-@keyframes fade {
-    from { opacity: .4 }
-    to { opacity: 1 }
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
 }
