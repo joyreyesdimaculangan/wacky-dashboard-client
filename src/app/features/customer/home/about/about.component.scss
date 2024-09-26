@@ -32,3 +32,19 @@
   transform: scale(1.08);
   background-color: #388E3C; /* Slightly darker green on hover */
 }
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}

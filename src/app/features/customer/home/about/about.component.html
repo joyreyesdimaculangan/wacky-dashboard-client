@@ -1,4 +1,4 @@
-<section class="section-container py-16 px-4 md:px-8 lg:px-16 bg-gradient-to-b from-white to-gray-100 shadow-2xl rounded-lg">
+<section id="section4" class="section-container py-16 px-4 md:px-8 lg:px-16 bg-gradient-to-b from-white to-gray-100 shadow-2xl rounded-lg">
     <div class="flex flex-col md:flex-row items-center w-full max-w-7xl mx-auto">
         <div class="md:w-1/2 relative">
             <img class="rounded-lg shadow-md w-full transform hover:scale-105 transition-transform duration-300" src="assets/images/Event 10.jpg" alt="Wacky's Food House" />
@@ -13,9 +13,22 @@
             </p>
 
             <!-- Distinctive button with icon and stronger hover effect -->
-            <a href="#reservation" class="bg-green-700 text-white px-10 py-4 mt-8 rounded-full shadow-lg hover:bg-green-800 transition-all duration-300 ease-in-out text-lg font-bold uppercase tracking-wider flex items-center justify-center space-x-2">
+            <button (click)="openModal()" class="bg-green-700 text-white px-10 py-4 mt-8 rounded-full shadow-lg hover:bg-green-800 transition-all duration-300 ease-in-out text-lg font-bold uppercase tracking-wider flex items-center justify-center space-x-2">
                 <span>Book a Reservation</span>
-            </a>
+            </button>
+            <!-- Modal Overlay -->
+            <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white p-8 rounded-lg shadow-lg relative w-full max-w-lg">
+            
+                    <!-- Close Button -->
+                    <button (click)="closeModal()" class="absolute top-4 right-4 text-gray-500">
+                        &#x2715;
+                    </button>
+                
+                    <!-- Modal Content -->
+                    <app-reservation-form/>      
+                </div>
+            </div>
         </div>
     </div>
 </section>

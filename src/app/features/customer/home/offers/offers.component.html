@@ -1,8 +1,8 @@
-<section class="w-full h-[80vh] relative overflow-hidden mb-10">
-  <img [src]="offers[slideIndex].images" class="w-full h-[80vh] object-cover" />
-  <div class="absolute inset-0 bg-slate-800 bg-opacity-60"></div> 
-  <div class="absolute inset-0 flex justify-end items-center p-6 text-right">
-    <div class="content-container">
+<section class="w-full h-[100vh] relative overflow-hidden">
+  <img [src]="offers[slideIndex].images" class="w-full h-[100vh] object-cover" />
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent to-slate-700"></div> <!-- Gradient background from light to dark -->
+  <div class="absolute inset-0 flex justify-end items-center p-6">
+    <div class="content-container text-right">
       <h2 class="text-4xl font-bold font-serif text-white">
         {{ offers[slideIndex].title }}
       </h2>

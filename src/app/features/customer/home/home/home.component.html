@@ -1,25 +1,39 @@
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col sticky top-0 z-50">
   <!-- Calling header -->
-  <app-header />
+  <header class="sticky top-0 z-50">
+    <app-header />
+  </header>
 
   <!-- Main Content -->
   <main class="flex-1 bg-green-100">
       <!-- Events Section -->
-      <app-offers />
+      <section id="home">
+        <app-offers />
+      </section>
 
       <!-- Buffet Section -->
-      <app-menu />
+      <section id="menu">
+        <app-menu />
+      </section>
 
       <!-- Packages -->
-      <app-services />
+      <section id="services">
+        <app-services />
+      </section>
 
       <!-- Reviews Section -->
-      <app-review-section />
+      <section id="reviews">
+        <app-review-section />
+      </section>
 
       <!-- Food House Section -->
-      <app-about />
+      <section id="reservation">
+        <app-about />
+      </section>
   </main>
 
   <!-- Footer -->
-  <app-footer />
+  <footer>
+    <app-footer />
+  </footer> 
 </div>

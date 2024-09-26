@@ -33,7 +33,7 @@ export class OffersComponent implements OnInit, OnDestroy {
   autoplayInterval: any;
 
   ngOnInit() {
-    this.startAutoplay();
+    this.startAutoplay(); 
   }
 
   ngOnDestroy(): void {

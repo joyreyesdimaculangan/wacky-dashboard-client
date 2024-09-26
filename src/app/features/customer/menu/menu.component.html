@@ -1,4 +1,4 @@
-<section class="mb-12 p-10 max-w-screen-xl mx-auto"> <!-- Changed mb-20 to mb-12 -->
+<section class="my-5 p-32 pb-32 px-10 max-w-screen-xl mx-auto"> 
     <h3 class="text-4xl font-bold font-serif text-center mb-6 mt-8 text-green-700 relative elegant-underline"> 
         Our Menu
     </h3>
@@ -9,7 +9,7 @@
             
     <div class="flex">
         <!-- Products Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"> <!-- Adjusted gap -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 m-2"> 
             @for (dishes of menu; track $index) {
                 <div class="relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2"> <!-- Added margin to each container -->
                     <img [src]="dishes.image" class="square-image w-full object-cover rounded-lg" alt="Product Image">

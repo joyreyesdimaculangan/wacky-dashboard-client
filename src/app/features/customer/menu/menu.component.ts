@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
+  activeRoute: ActivatedRoute = inject(ActivatedRoute);
   isDropdownOpen = false;
   selectedCategory: string | null = null;
 
