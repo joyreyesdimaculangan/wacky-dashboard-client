@@ -1,32 +1,64 @@
-<div class="p-4 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-bold mb-4 text-green-600">Reservation Form</h2>
-    <form (submit)="onSubmit()">
+<!-- Reservation Form Section -->
+<div class="p-4 bg-white shadow-lg rounded-lg max-w-md mx-auto">
+   <h2 class="text-3xl font-bold mb-6 text-green-600 text-center">Reservation Form</h2>
+   <form (submit)="onSubmit()">
       <!-- Name Input -->
-      <div class="mb-4">
-        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-        <input type="text" id="name" class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.name" name="name" required>
+      <div class="mb-6">
+         <label for="name" class="block text-base font-semibold text-gray-800 mb-2">Name</label>
+         <input type="text" id="name" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.name" name="name" required>
       </div>
-  
+
       <!-- Email Input -->
-      <div class="mb-4">
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" id="email" class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.email" name="email" required>
+      <div class="mb-6">
+         <label for="email" class="block text-base font-semibold text-gray-800 mb-2">Email</label>
+         <input type="email" id="email" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.email" name="email" required>
       </div>
-  
+      
+      <!-- Options Select Input -->
+      <div class="mb-6">
+         <label for="options" class="block text-base font-semibold text-gray-800 mb-2">Options</label>
+         <select id="options" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white" [(ngModel)]="reservation.options" name="options" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Option 1" class="text-black">Option 1</option>
+            <option value="Option 2" class="text-black">Option 2</option>
+            <option value="Option 3" class="text-black">Option 3</option>
+            <option value="Option 4" class="text-black">Option 4</option>
+         </select>
+      </div>
+
       <!-- Date Input -->
-      <div class="mb-4">
-        <label for="date" class="block text-sm font-medium text-gray-700">Reservation Date</label>
-        <input type="date" id="date" class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.date" name="date" required>
+      <div class="relative mb-6">
+         <label for="datepicker" class="block text-base font-semibold text-gray-800 mb-2">Date</label>
+         <mat-form-field appearance="outline" class="w-full">
+            <input matInput [matDatepicker]="datepicker" placeholder="Select a date" class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-md">
+            <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker></mat-datepicker>
+         </mat-form-field>
       </div>
-  
+ 
+      <!-- Time Input -->
+      <div class="mb-6">
+         <label for="time" class="block text-base font-semibold text-gray-800 mb-2">Time</label>
+         <ul class="grid grid-cols-2 gap-4">
+            <li>
+               <input type="radio" id="10-am" value="11:00 AM" class="hidden peer" name="timetable">
+               <label for="10-am" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">11:00 AM</label>
+            </li>
+            <li>
+               <input type="radio" id="10-30-am" value="4:00 PM" class="hidden peer" name="timetable">
+               <label for="10-30-am" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">4:00 PM</label>
+            </li>
+            <!-- Add more time slots as needed -->
+         </ul>
+      </div>
+
       <!-- Number of Guests Input -->
-      <div class="mb-4">
-        <label for="guests" class="block text-sm font-medium text-gray-700">Number of Guests</label>
-        <input type="number" id="guests" class="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.guests" name="guests" required min="1">
+      <div class="mb-6">
+         <label for="guests" class="block text-base font-semibold text-gray-800 mb-2">Number of Guests</label>
+         <input type="number" id="guests" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.guests" name="guests" required min="1">
       </div>
-  
+
       <!-- Submit Button -->
-      <button type="submit" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700">Submit</button>
-    </form>
-  </div>
-  
+      <button type="submit" class="w-full bg-green-600 text-white p-3 rounded-md hover:bg-green-700">Submit</button>
+   </form>
+</div>

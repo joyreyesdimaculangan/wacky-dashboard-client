@@ -25,3 +25,20 @@
     opacity: 1;
     transform: scaleX(1);
 }
+
+html, body { height: 100%; }
+
+/* Set Poppins as the default font across the entire project */
+body, html {
+    font-family: 'Poppins', sans-serif;
+}
+  
+  
+.mat-form-field,
+.mat-button,
+.mat-input-element,
+.mat-checkbox,
+.mat-radio-button {
+    font-family: 'Poppins', sans-serif !important;
+}
+  
