@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
+import { Component, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InquiryFormComponent } from "../inquiry-form/inquiry-form.component";
+import { PackageDetailsComponent } from "../package-details/package-details.component";
 
 declare const Flowbite: any;
 
@@ -11,7 +10,7 @@ declare const Flowbite: any;
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent, RouterModule, InquiryFormComponent],
+  imports: [CommonModule, RouterModule, InquiryFormComponent, PackageDetailsComponent],
   templateUrl: './services.component.html',
   styleUrl: './services.component.scss'
 })
@@ -25,13 +24,9 @@ export class ServicesComponent {
     { name: "For Small Celebrations", image: "assets/images/Event 2.jpg", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed odio ligula, blandit eget diam in, vulputate luctus augue. Pellentesque at viverra turpis, ac vestibulum libero."}
   ];
 
-  isModalOpen = false;
+  @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
 
-  openModal() {
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
+  openPackageModal(offer: any) {
+    this.packageModal.openModal(offer);
   }
 }

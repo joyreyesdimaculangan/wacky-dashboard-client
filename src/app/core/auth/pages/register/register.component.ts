@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-register',
@@ -184,7 +185,7 @@ export class RegisterComponent {
   onRegister(): void {
     const success = this.authService.login(this.username, this.password);
     if (success) {
-      const role = this.authService.getUserRole();
+      const role = this.authService.user()?.account_type;
       if (role === 'admin') {
         this.router.navigate(['/login']);
       } else if (role === 'customer') {

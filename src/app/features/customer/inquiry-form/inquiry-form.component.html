@@ -1,8 +1,6 @@
 <!-- Inquiry Form Container -->
-<div class="flex flex-col md:flex-row w-full max-w-5xl mx-auto mt-10 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden"> 
   <!-- Form Section -->
   <div class="p-8 leading-normal">  
-    <h2 class="text-3xl font-bold mb-6 text-green-600 text-center">Inquiry Form</h2>
     <form (submit)="onSubmit()">
       <!-- Name Input -->
       <div class="mb-4"> 
@@ -22,23 +20,8 @@
         <textarea id="message" class="w-full h-40 border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500 resize-none" [(ngModel)]="inquiry.message" name="message" required></textarea>
       </div>
 
-      <!-- Price Range Input -->
-      <div class="mb-4"> 
-        <label class="block text-sm font-medium text-gray-700 text-left">Ideal Price Range (in PHP)</label>
-        <div class="flex space-x-2">  
-          <div class="w-1/2">
-            <label for="minPrice" class="sr-only">Minimum Price</label>
-            <input type="number" id="minPrice" class="w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500" placeholder="Min Price" [(ngModel)]="inquiry.minPrice" name="minPrice" required>
-          </div>
-          <div class="w-1/2">
-            <label for="maxPrice" class="sr-only">Maximum Price</label>
-            <input type="number" id="maxPrice" class="w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500" placeholder="Max Price" [(ngModel)]="inquiry.maxPrice" name="maxPrice" required>
-          </div>
-        </div>
-      </div>
-
       <!-- Submit Button -->
-      <button type="submit" class="w-full bg-green-600 text-white p-4 rounded-md hover:bg-green-700">Submit</button>
+      <button type="submit" class="w-full bg-green-600 text-white p-4 rounded-md hover:bg-green-700">Send</button>
     </form>
   </div>
-</div>
+

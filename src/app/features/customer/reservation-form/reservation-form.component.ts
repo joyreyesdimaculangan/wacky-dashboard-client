@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -21,10 +21,22 @@ export class ReservationFormComponent {
     guests: 1,
     options: ''
   };
+  isReservationOpen = false;
+
+  openReservationForm() {
+    this.isReservationOpen = true;
+  }
+
+  closeReservationForm() {
+    this.isReservationOpen = false;
+  }
+
+  @Output() reservationSubmitted = new EventEmitter<any>();
+  @Output() close = new EventEmitter<void>();
 
   onSubmit() {
-    // Logic to handle the form submission
     console.log('Reservation Details:', this.reservation);
-    // You can call a service to submit the reservation here
+    this.reservationSubmitted.emit(this.reservation);
+    this.close.emit(); 
   }
 }

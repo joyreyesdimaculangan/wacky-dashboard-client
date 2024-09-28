@@ -6,10 +6,10 @@ import {
   signal,
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, Subscription, throwError } from 'rxjs';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -174,9 +174,12 @@ export class LoginPageComponent {
         .subscribe((response) => {
           if (response['status'] == 200) {
             this.isLoadingButton.set(false);
-            setTimeout(() => {
+            if (this.authService.user()?.account_type === 'admin') {
+              this.router.navigate(['admin/dashboard'])
+            } 
+            else {
               this.router.navigate(['customer/home']);
-            }, 2000);
+            }
           }
         })
     );
