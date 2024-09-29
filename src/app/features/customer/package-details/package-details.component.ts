@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { ReservationFormComponent } from "../reservation-form/reservation-form.component";
 
 @Component({
@@ -7,23 +7,33 @@ import { ReservationFormComponent } from "../reservation-form/reservation-form.c
   standalone: true,
   imports: [CommonModule, ReservationFormComponent],
   templateUrl: './package-details.component.html',
-  styleUrls: ['./package-details.component.scss'], // Corrected 'styleUrl' to 'styleUrls'
+  styleUrls: ['./package-details.component.scss'], 
 })
 export class PackageDetailsComponent {
   isOpen: boolean = false;
   isReservationOpen: boolean = false;
-  packageDetails: any = {};
-  reservation: any = { // Initialize reservation object
+  packageDetails: any = {
+    additionalInclusions: [] // Initialize to ensure it exists
+  };
+  
+  reservation: any = { 
     name: '',
     email: '',
     date: '',
     guests: 1,
     options: ''
   };
+  constructor(private cdr: ChangeDetectorRef) {}
+  editMode: boolean = false; // Track if in edit mode
 
   openModal(offer: any) {
-    this.packageDetails = offer;
+    this.packageDetails = { 
+      ...offer,
+      additionalInclusions: offer.additionalInclusions || [], // Initialize additional inclusions
+      availableInclusions: offer.availableInclusions || [] // Ensure available inclusions are also initialized
+    };
     this.isOpen = true;
+    this.cdr.detectChanges();
   }
 
   closeModal() {
@@ -31,12 +41,12 @@ export class PackageDetailsComponent {
     this.isReservationOpen = false; // Close reservation form when closing package modal
   }
 
-  // Method to open the second modal (reservation form)
+  // Method to open the reservation form modal
   openReservationForm() {
     this.isReservationOpen = true;
   }
 
-  // Method to close the second modal
+  // Method to close the reservation form modal
   closeReservationForm() {
     this.isReservationOpen = false;
   }
@@ -46,5 +56,19 @@ export class PackageDetailsComponent {
     // Form submission logic
     console.log("Form Submitted", this.reservation);
     this.closeReservationForm();
+  }
+
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+  }
+
+  // Method to toggle additional inclusion selection
+  toggleAdditionalInclusion(inclusion: string) {
+    const index = this.packageDetails.additionalInclusions.indexOf(inclusion);
+    if (index > -1) {
+      this.packageDetails.additionalInclusions.splice(index, 1); // Remove additional inclusion
+    } else {
+      this.packageDetails.additionalInclusions.push(inclusion); // Add additional inclusion
+    }
   }
 }
