@@ -24,20 +24,28 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  activeRoute: ActivatedRoute = inject(ActivatedRoute);
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.activeRoute.fragment.subscribe((fragment) => {
-      this.jumpToSection(fragment);
+    // Subscribe to fragment changes
+    this.route.fragment.subscribe((fragment) => {
+      if (fragment) {
+        this.scrollToFragment(fragment);
+      }
+    });
+
+    // Check if there's a fragment on initial load
+    this.route.fragment.subscribe((fragment) => {
+      if (fragment) {
+        this.scrollToFragment(fragment);
+      }
     });
   }
 
-  jumpToSection(fragment: any) {
-    if (fragment) {
-      const element = document.getElementById(fragment);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+  private scrollToFragment(fragment: string) {
+    const element = document.getElementById(fragment);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 }

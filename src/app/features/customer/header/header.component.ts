@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  currentFragment: string | null = null;
   isDropdownOpen = false;
 
   toggleDropdown() {
@@ -25,5 +26,18 @@ export class HeaderComponent {
     if (!dropdownButton?.contains(target)) {
       this.isDropdownOpen = false;
     }
+  }
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    // Subscribe to fragment changes
+    this.route.fragment.subscribe((fragment) => {
+      this.currentFragment = fragment;
+    });
+  }
+
+  isActive(fragment: string): boolean {
+    return this.currentFragment === fragment;
   }
 }
