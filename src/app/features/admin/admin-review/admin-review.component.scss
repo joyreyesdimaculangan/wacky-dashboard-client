@@ -1,0 +1,29 @@
+/* In your component's SCSS file */
+.bg-gray-950 {
+    background-color: #1f2937; /* Dark background for the outer container */
+}
+
+.bg-gray-800 {
+    background-color: #2d3748; /* Darker background for the inner container */
+}
+
+.bg-gray-600 {
+    background-color: rgba(75, 85, 99, 0.5); /* More transparent gray */
+}
+
+span:hover {
+    background-color: #63b3ed; /* Light blue on hover for tags */
+}
+
+.flex-col {
+    transition: transform 0.2s ease; /* Smooth transition effect */
+}
+
+.flex-col:hover {
+    transform: scale(1.02); /* Slightly scale up on hover for reviews */
+}
+
+.bg-gray-700 {
+    background-color: #4a5568; /* Dark gray for review cards */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
