@@ -1,54 +1,78 @@
 <!-- Sidebar -->
 <div class="flex h-screen bg-gray-200">
   <aside class="w-80 bg-green-100 shadow-lg">
-      <!-- Logo Section -->
-      <div class="flex items-center justify-center p-6 bg-green-200 text-white border-b border-gray-300">
+    <!-- Logo Section -->
+    <div class="flex items-center justify-center p-6 bg-green-200 text-white border-b border-gray-300">
       <img src="assets/images/Wacky's Logo.png" alt="Logo" class="w-28 h-auto" />
-      </div>
-      <!-- Navigation Menu -->
-      <nav class="mt-6">
+    </div>
+    <!-- Navigation Menu -->
+    <nav class="mt-6">
       <ul>
-          <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
+        <!-- Home -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-home mr-4 text-green-600 text-xl"></i>
-          <button
-            [routerLink]="['/admin/reservations']"
-            class="text-gray-800 font-medium text-lg"
-            > Home
+          <button [routerLink]="['/customer/home']" class="text-gray-800 font-medium text-lg">
+            Home
           </button>
-          </li>
-          <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
+        </li>
+        <!-- Dashboard -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-tachometer-alt mr-4 text-green-600 text-xl"></i>
-          <button 
-            [routerLink]="['/admin/dashboard']"
-            class="text-gray-800 font-medium text-lg"
-            > Dashboard
+          <button [routerLink]="['/admin/dashboard']" class="text-gray-800 font-medium text-lg">
+            Dashboard
           </button>
-          </li>
-          <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
+        </li>
+        <!-- Reservations -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-calendar-check mr-4 text-green-600 text-xl"></i>
-          <button
-            [routerLink]="['/admin/reservations']" 
-            class="text-gray-800 font-medium text-lg"
-            >Reservations
+          <button [routerLink]="['/admin/reservations']" class="text-gray-800 font-medium text-lg">
+            Reservations
           </button>
-          </li>
-          <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
+        </li>
+        <!-- Calendar -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="fas fa-calendar-alt mr-4 text-green-600 text-xl"></i>
+          <button [routerLink]="['/admin/calendar']" class="text-gray-800 font-medium text-lg">
+            Calendar
+          </button>
+        </li>
+        <!-- Reviews -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-star mr-4 text-green-600 text-xl"></i>
-          <button
-            [routerLink]="['/admin/reservations']"
-            class="text-gray-800 font-medium text-lg"
-            >Reviews
+          <button [routerLink]="['/admin/reviews']" class="text-gray-800 font-medium text-lg">
+            Reviews
           </button>
-          </li>
-          <li class="flex items-center p-4 hover:bg-green-300 cursor-pointer transition duration-150 ease-in-out rounded-lg">
+        </li>
+        <!-- Analytics -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-chart-line mr-4 text-green-600 text-xl"></i>
-          <button
-            [routerLink]="['/admin/reservations']"
-            class="text-gray-800 font-medium text-lg"
-            >Analytics
+          <button [routerLink]="['/admin/analytics']" class="text-gray-800 font-medium text-lg">
+            Analytics
+          </button>
+        </li>
+        <!-- Setup -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="fas fa-cog mr-4 text-green-600 text-xl"></i>
+          <button [routerLink]="['/admin/setup']" class="text-gray-800 font-medium text-lg">
+            Setup
+          </button>
+        </li>
+        <!-- Sign Out -->
+        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
+            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="fas fa-sign-out-alt mr-4 text-green-600 text-xl"></i>
+          <button [routerLink]="['/logout']" class="text-gray-800 font-medium text-lg">
+            Sign Out
           </button>
         </li>
       </ul>
-      </nav>
+    </nav>
   </aside>
 </div>
