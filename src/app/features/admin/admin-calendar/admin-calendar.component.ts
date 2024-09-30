@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Calendar } from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import dayGridPlugin from '@fullcalendar/daygrid'; // Import dayGrid plugin
+import dayGridPlugin from '@fullcalendar/daygrid'; 
 import { DrawerComponent } from "../drawer/drawer.component";
 
 @Component({

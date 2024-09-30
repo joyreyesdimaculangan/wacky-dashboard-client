@@ -1,8 +1,7 @@
-<div class="flex h-screen bg-gray-200">
+<div class="flex h-screen bg-gray-100">
   <!-- Sidebar -->
-  <app-drawer></app-drawer>
+  <app-drawer />
 
-  <!-- Main content -->
   <main class="flex-1 p-6 overflow-auto">
     <!-- Combined Card: Admin Greeting and Statistics -->
     <div class="flex flex-wrap gap-6 mb-8">
@@ -51,77 +50,45 @@
           </div>
         </div>
       </div>
+  
 
+    <!-- Filter Buttons -->
     <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
-      <button type="button" class="text-green-700 hover:text-white border border-green-600 bg-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-500 dark:bg-gray-900 dark:focus:ring-green-800">All Sales</button>
-      <button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">Revenue</button>
-      <button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">Reservations</button>
-      <button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">Customers</button>
-  </div>
+      <button 
+        (click)="setFilter('all')" 
+        [ngClass]="{'bg-green-700 text-white': activeFilter === 'all', 'text-green-700 border-green-600 bg-white hover:bg-green-700': activeFilter !== 'all'}" 
+        class="border hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        All Sales
+      </button>
+      
+      <button 
+        (click)="setFilter('sales')" 
+        [ngClass]="{'bg-green-700 text-white': activeFilter === 'sales', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'sales'}" 
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Revenue
+      </button>
+      
+      <button 
+        (click)="setFilter('reservations')" 
+        [ngClass]="{'bg-green-700 text-white': activeFilter === 'reservations', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'reservations'}" 
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Reservations
+      </button>
+      
+      <button 
+        (click)="setFilter('customers')" 
+        [ngClass]="{'bg-green-700 text-white': activeFilter === 'customers', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'customers'}" 
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Customers
+      </button>
+    </div>
 
-    <!-- Graph Cards -->
+    <!-- Graph Cards (Filtered) -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-      <!-- Graph Card 1: Sales Overview -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Revenue Trends</h2>
+      <div *ngFor="let card of filteredCards" class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ card.title }}</h2>
         <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-      <!-- Graph Card 2: Sales Overview -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Yearly Revenue Trends</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-      <!-- Graph Card 3: Order Trends -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Most Availed Packages</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-      <!-- Graph Card 4: Category Revenue -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Category Revenue</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-       <!-- Graph Card 5: Reservation Trends -->
-       <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Reservation Trends</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-       <!-- Graph Card 6: Annual Reservation Patterns -->
-       <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Annual Reservation Patterns</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-      <!-- Graph Card 7: Reservation by Time Slot -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Reservation by Time Slot</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
-        </div>
-      </div>
-
-      <!-- Graph Card 8: Comparison of Pax -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Comparison of Pax</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">[Graph goes here]</p>
+          <p class="text-gray-600">{{ card.content }}</p>
         </div>
       </div>
     </div>

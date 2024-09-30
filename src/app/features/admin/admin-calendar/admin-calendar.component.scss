@@ -1,46 +1,16 @@
-/* Custom styles for FullCalendar */
+/* styles.scss or your component-specific SCSS file */
 #calendar {
-  background-color: white !important; /* Background color of the calendar */
+  border: 2px solid #38a169; /* Tailwind green-500 for a stronger green border */
+  border-radius: 0.5rem; /* Rounded corners */
+  /* Optional: you can also add shadow effects if desired */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
 
-/* admin-calendar.component.scss */
+/* Custom styles for calendar events or specific elements */
+.calendar-event {
+  background-color: #38a169; /* Tailwind green-500 */
+  color: white;
+  border-radius: 0.25rem; /* Slight rounding */
+  padding: 0.5rem; /* Padding for event elements */
+}
 
-/* Override FullCalendar styles */
-.fc {
-    background-color: #f0f0f0; /* Background for the entire calendar */
-  }
-  
-  /* Change the header background and text color */
-  .fc-header-toolbar {
-    background-color: #2f855a; /* Dark green background */
-    color: white; /* White text color */
-  }
-  
-  /* Change the color of the day headers */
-  .fc-day-header {
-    background-color: #276749; /* Darker green for day headers */
-    color: white; /* White text for day headers */
-  }
-  
-  /* Change the color of the events */
-  .fc-event {
-    background-color: #68d391; /* Light green for events */
-    border-color: #48bb78; /* Darker green for event border */
-    color: #1a202c; /* Darker text color */
-  }
-  
-  /* Change hover effect for events */
-  .fc-event:hover {
-    background-color: #4cae4f; /* Darker green on hover */
-  }
-  
-  /* Distinguish selected day */
-  .fc-day.fc-day-today {
-    background-color: #a0e9b5; /* Light green background for today's date */
-  }
-  
-  /* Optional: Change slot background in resource timeline */
-  .fc-resource-area {
-    background-color: #e6fffa; /* Very light green for resource area */
-  }
-  

@@ -1,12 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
+import { ViewReservationModalComponent } from "../reservation-modal-forms/view-reservation-modal.component";
+import { EditReservationModalComponent } from "../reservation-modal-forms/edit-reservation-modal.component";
+import { DeleteReservationModalComponent } from "../reservation-modal-forms/delete-reservation-modal.component";
+
 
 @Component({
   selector: 'app-datatables',
   standalone: true,
-  imports: [ DrawerComponent, CommonModule, FormsModule],
+  imports: [DrawerComponent, CommonModule, FormsModule, ViewReservationModalComponent, EditReservationModalComponent, DeleteReservationModalComponent],
   templateUrl: './datatables.component.html',
   styleUrl: './datatables.component.scss'
 })
@@ -15,36 +19,161 @@ export class DatatablesComponent {
   currentPage: number = 1;
   itemsPerPage: number = 5;
   itemsPerPageOptions: number[] = [5, 10, 15, 20];
+  viewingItem: any = null;
+  editingItem: any = null;
+  deletingItem: any = null;
+
   data = [
-    { id: 1, name: 'Flowbite', releaseDate: '2021/25/09', npmDownloads: 269000, growth: '49%', status: 'Pending' },
-    { id: 2, name: 'React', releaseDate: '2013/24/05', npmDownloads: 4500000, growth: '24%', status: 'Pending' },
-    { id: 3, name: 'Angular', releaseDate: '2010/20/09', npmDownloads: 2800000, growth: '17%', status: 'Pending' },
-    { id: 4, name: 'Vue', releaseDate: '2014/12/02', npmDownloads: 3600000, growth: '30%', status: 'Pending' },
-    { id: 5, name: 'Svelte', releaseDate: '2016/26/11', npmDownloads: 1200000, growth: '57%', status: 'Pending' },
-    { id: 6, name: 'Ember', releaseDate: '2011/08/12', npmDownloads: 500000, growth: '44%', status: 'Pending'},
-    { id: 7, name: 'Backbone', releaseDate: '2010/13/10', npmDownloads: 300000, growth: '9%', status: 'Pending' },
-    { id: 8, name: 'jQuery', releaseDate: '2006/28/01', npmDownloads: 6000000, growth: '5%', status: 'Pending' },
-    { id: 9, name: 'Bootstrap', releaseDate: '2011/19/08', npmDownloads: 1800000, growth: '12%', status: 'Pending' },
-    { id: 10, name: 'Foundation', releaseDate: '2011/23/09', npmDownloads: 700000, growth: '8%', status: 'Pending' },
-    { id: 11, name: 'Bulma', releaseDate: '2016/24/10', npmDownloads: 500000, growth: '7%', status: 'Approved' },
-    { id: 12, name: 'Next.js', releaseDate: '2016/25/10', npmDownloads: 2300000, growth: '45%', status: 'Approved' },
-    { id: 13, name: 'Nuxt.js', releaseDate: '2016/16/10', npmDownloads: 900000, growth: '50%', status: 'Approved' },
-    { id: 14, name: 'Meteor', releaseDate: '2012/17/01', npmDownloads: 1000000, growth: '10%', status: 'Approved' },
-    { id: 15, name: 'Aurelia', releaseDate: '2015/08/07', npmDownloads: 200000, growth: '20%', status: 'Approved' },
-    { id: 16, name: 'Inferno', releaseDate: '2016/27/09', npmDownloads: 100000, growth: '35%', status: 'Approved' },
-    { id: 17, name: 'Preact', releaseDate: '2015/16/08', npmDownloads: 600000, growth: '28%', status: 'Approved' },
-    { id: 18, name: 'Lit', releaseDate: '2018/28/05', npmDownloads: 400000, growth: '60%', status: 'Approved' },
-    { id: 19, name: 'Alpine.js', releaseDate: '2019/02/11', npmDownloads: 300000, growth: '70%', status: 'Approved' },
-    { id: 20, name: 'Stimulus', releaseDate: '2018/06/03', npmDownloads: 150000, growth: '25%', status: 'Approved' },
-    { id: 21, name: 'Solid', releaseDate: '2021/05/07', npmDownloads: 250000, growth: '80%', status: 'Approved' },
-  ];
+    {
+        reservationID: 24121,
+        packageType: "Standard Civil Wedding Package",
+        customerName: "Kariza Smith",
+        numberofPax: 58,
+        reservationDate: "2021-09-25",
+        reservationTime: "10:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24122,
+        packageType: "Standard Civil Wedding Package",
+        customerName: "Michael Williams",
+        numberofPax: 110,
+        reservationDate: "2021-09-25",
+        reservationTime: "4:00 PM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24123,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Mercy Jones",
+        numberofPax: 50,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24124,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Pia Smith",
+        numberofPax: 125,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24125,
+        packageType: "All-In Christening & 1st Birthday Party Package",
+        customerName: "Jonnabel Smith",
+        numberofPax: 102,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24126,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Kariza Brown",
+        numberofPax: 58,
+        reservationDate: "2021-09-25",
+        reservationTime: "10:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24127,
+        packageType: "All-In Christening & 1st Birthday Party Package",
+        customerName: "Michael Smith",
+        numberofPax: 110,
+        reservationDate: "2021-09-25",
+        reservationTime: "4:00 PM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24128,
+        packageType: "Small Celebrations",
+        customerName: "Mercy Johnson",
+        numberofPax: 50,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24129,
+        packageType: "All-In Christening & 1st Birthday Party Package",
+        customerName: "Pia Davis",
+        numberofPax: 125,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24130,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Jonnabel Lee",
+        numberofPax: 102,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24131,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Kariza White",
+        numberofPax: 58,
+        reservationDate: "2021-09-25",
+        reservationTime: "10:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24132,
+        packageType: "Standard Civil Wedding Package",
+        customerName: "Michael Brown",
+        numberofPax: 110,
+        reservationDate: "2021-09-25",
+        reservationTime: "4:00 PM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24133,
+        packageType: "Small Celebrations",
+        customerName: "Mercy Green",
+        numberofPax: 50,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24134,
+        packageType: "All-In Christening & 1st Birthday Party Package",
+        customerName: "Pia White",
+        numberofPax: 125,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    },
+    {
+        reservationID: 24135,
+        packageType: "All-In 7th Birthday Party Package",
+        customerName: "Jonnabel Brown",
+        numberofPax: 102,
+        reservationDate: "2021-09-25",
+        reservationTime: "11:00 AM",
+        status: "Pending"
+    }
+]
+
+@Output() viewItemEvent = new EventEmitter<any>();
+@Output() editItemEvent = new EventEmitter<any>();
+@Output() deleteItemEvent = new EventEmitter<any>();
 
   filteredData() {
     return this.data.filter(item =>
-      item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      item.releaseDate.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      item.npmDownloads.toString().includes(this.searchText) ||
-      item.growth.toLowerCase().includes(this.searchText.toLowerCase())
+      item.reservationID.toString().includes(this.searchText) ||
+      item.packageType.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.customerName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.numberofPax.toString().includes(this.searchText) ||
+      item.reservationDate.toString().includes(this.searchText) ||
+      item.reservationTime.toString().includes(this.searchText) ||
+      item.status.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -78,18 +207,46 @@ export class DatatablesComponent {
     this.searchText = '';
   }
 
-  viewItem(item: any) {
-    console.log('View item:', item);
-    // Implement your view logic here
+ 
+  openView(item: any) {
+    console.log('Opening view for:', item); // Debugging
+    this.viewingItem = item;
   }
 
-  editItem(item: any) {
-    console.log('Edit item:', item);
-    // Implement your edit logic here
+  closeView() {
+    this.viewingItem = null;
   }
 
-  deleteItem(item: any) {
-    console.log('Delete item:', item);
-    // Implement your delete logic here
+  openEdit(item: any) {
+    console.log('Opening edit for:', item); // Debugging
+    this.editingItem = item;
+  }
+
+  closeEdit() {
+    this.editingItem = null;
+  }
+
+  saveEdit(editedItem: any) {
+    // Update the item in the data array
+    const index = this.data.findIndex(i => i.reservationID === editedItem.reservationID);
+    if (index !== -1) {
+      this.data[index] = editedItem;
+    }
+    this.closeEdit();
+  }
+
+  openDelete(item: any) {
+    console.log('Opening delete for:', item); // Debugging
+    this.deletingItem = item;
+  }
+
+  closeDelete() {
+    this.deletingItem = null;
+  }
+
+  confirmDelete(item: any) {
+    // Remove the item from the data array
+    this.data = this.data.filter(i => i.reservationID !== item.reservationID);
+    this.closeDelete();
   }
 }
