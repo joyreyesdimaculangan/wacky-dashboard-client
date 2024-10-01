@@ -38,25 +38,32 @@ import { MatInputModule } from '@angular/material/input';
         <!-- Customer Name Input -->
         <div>
           <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name:</label>
-          <input id="customerName" [(ngModel)]="editedItem.customerName" name="customerName" 
+          <input id="customerName" [(ngModel)]="editedItem.name" name="customerName" 
+            class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
+        </div>
+
+        <!-- Contact Number Input -->
+        <div>
+          <label for="contactNumber" class="block text-sm font-medium text-gray-700">Customer Name:</label>
+          <input id="contactNumber" [(ngModel)]="editedItem.contactNumber" name="contactNumber" 
             class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
         </div>
 
         <!-- Number of Pax Input -->
         <div>
-          <label for="numberofPax" class="block text-sm font-medium text-gray-700">Number of Pax:</label>
-          <input id="numberofPax" [(ngModel)]="editedItem.numberofPax" name="numberofPax" type="number" 
+          <label for="numberOfPax" class="block text-sm font-medium text-gray-700">Number of Pax:</label>
+          <input id="numberOfPax" [(ngModel)]="editedItem.numberoOfPax" name="numberOfPax" type="number" 
             class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
         </div>
 
         <!-- Reservation Date Input -->
         <div>
-          <label for="reservationDate" class="block text-sm font-medium text-gray-700">Reservation Date:</label>
+          <label for="eventDate" class="block text-sm font-medium text-gray-700">Reservation Date:</label>
           <mat-form-field appearance="outline" class="w-full">
             <input
-              id="reservationDate" 
-              [(ngModel)]="editedItem.reservationDate" 
-              name="reservationDate" 
+              id="eventDate" 
+              [(ngModel)]="editedItem.eventDate" 
+              name="eventDate" 
               type="date" 
               matInput
               class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -72,31 +79,56 @@ import { MatInputModule } from '@angular/material/input';
           <label class="block text-sm font-medium text-gray-700">Reservation Time:</label>
           <ul class="grid grid-cols-2 gap-4">
             <li>
-              <input type="radio" id="10-am" value="10:00 AM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="10-am" value="10:00 AM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="10-am" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">10:00 AM</label>
             </li>
             <li>
-              <input type="radio" id="10-30-am" value="10:30 AM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="10-30-am" value="10:30 AM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="10-30-am" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">10:30 AM</label>
             </li>
             <li>
-              <input type="radio" id="11-am" value="11:00 AM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="11-am" value="11:00 AM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="11-am" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">11:00 AM</label>
             </li>
             <li>
-              <input type="radio" id="3-pm" value="3:00 PM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="3-pm" value="3:00 PM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="3-pm" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">3:00 PM</label>
             </li>
             <li>
-              <input type="radio" id="3-30-pm" value="3:30 PM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="3-30-pm" value="3:30 PM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="3-30-pm" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">3:30 PM</label>
             </li>
             <li>
-              <input type="radio" id="4-pm" value="4:00 PM" [(ngModel)]="editedItem.reservationTime" class="hidden peer" name="timetable" />
+              <input type="radio" id="4-pm" value="4:00 PM" [(ngModel)]="editedItem.eventTime" class="hidden peer" name="timetable" />
               <label for="4-pm" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">4:00 PM</label>
             </li>
             <!-- Add more time slots as needed -->
           </ul>
+        </div>
+
+        <!-- Event Input -->
+        <div>
+          <label for="eventTheme" class="block text-sm font-medium text-gray-700">Event Theme:</label>
+          <input id="eventTheme" [(ngModel)]="editedItem.eventTheme" name="eventTheme" 
+            class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
+        </div>
+
+        <div>
+          <label for="cakeTheme" class="block text-sm font-medium text-gray-700">Cake Theme:</label>
+          <input id="cakeTheme" [(ngModel)]="editedItem.cakeTheme" name="cakeTheme" 
+            class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
+        </div>
+
+        <div>
+          <label for="cakeMessage" class="block text-sm font-medium text-gray-700">Cake Message:</label>
+          <input id="cakeMessage" [(ngModel)]="editedItem.cakeMessage" name="cakeMessage" 
+            class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
+        </div>
+
+        <div>
+          <label for="otherRequest" class="block text-sm font-medium text-gray-700">Cake Message:</label>
+          <input id="otherRequest" [(ngModel)]="editedItem.otherRequest" name="otherRequest" 
+            class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500" />
         </div>
 
         <!-- Status Input -->

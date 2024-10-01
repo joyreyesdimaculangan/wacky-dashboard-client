@@ -26,141 +26,218 @@ export class DatatablesComponent {
 
   data = [
     {
-        reservationID: 24121,
-        packageType: "Standard Civil Wedding Package",
-        customerName: "Kariza Smith",
-        numberofPax: 58,
-        reservationDate: "2021-09-25",
-        reservationTime: "10:00 AM",
-        status: "Pending"
+      reservationID: 24121,
+      packageType: "Standard Civil Wedding Package",
+      name: "Kariza Smith",
+      contactNumber: "0917-123-4567",
+      numberOfPax: 58,
+      eventDate: "2021-09-25",
+      eventTime: "10:00 AM",
+      eventTheme: "Classic Wedding",
+      cakeTheme: "White & Gold",
+      cakeMessage: "Congratulations, Kariza & John!",
+      otherRequest: "Extra floral decorations",
+      status: "Pending"
     },
     {
-        reservationID: 24122,
-        packageType: "Standard Civil Wedding Package",
-        customerName: "Michael Williams",
-        numberofPax: 110,
-        reservationDate: "2021-09-25",
-        reservationTime: "4:00 PM",
-        status: "Pending"
+      reservationID: 24122,
+      packageType: "Standard Civil Wedding Package",
+      name: "Michael Williams",
+      contactNumber: "0918-234-5678",
+      numberOfPax: 110,
+      eventDate: "2021-09-25",
+      eventTime: "4:00 PM",
+      eventTheme: "Modern Wedding",
+      cakeTheme: "Silver & Blue",
+      cakeMessage: "Best Wishes, Michael & Sarah!",
+      otherRequest: "Additional lighting",
+      status: "Approved"
     },
     {
-        reservationID: 24123,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Mercy Jones",
-        numberofPax: 50,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24123,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Mercy Jones",
+      contactNumber: "0919-345-6789",
+      numberOfPax: 50,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Princess Party",
+      cakeTheme: "Pink Castle",
+      cakeMessage: "Happy 7th Birthday, Mercy!",
+      otherRequest: "Balloon arch at entrance",
+      status: "Cancelled"
     },
     {
-        reservationID: 24124,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Pia Smith",
-        numberofPax: 125,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24124,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Pia Smith",
+      contactNumber: "0917-456-7890",
+      numberOfPax: 125,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Superhero Party",
+      cakeTheme: "Superhero Logo",
+      cakeMessage: "Happy 7th Birthday, Pia!",
+      otherRequest: "Face painting station",
+      status: "Approved"
     },
     {
-        reservationID: 24125,
-        packageType: "All-In Christening & 1st Birthday Party Package",
-        customerName: "Jonnabel Smith",
-        numberofPax: 102,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24125,
+      packageType: "All-In Christening & 1st Birthday Party Package",
+      name: "Jonnabel Smith",
+      contactNumber: "0918-567-8901",
+      numberOfPax: 102,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Baby Animal Theme",
+      cakeTheme: "Baby Animals",
+      cakeMessage: "Happy 1st Birthday, Jonnabel!",
+      otherRequest: "Photo booth with animal props",
+      status: "Pending"
     },
     {
-        reservationID: 24126,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Kariza Brown",
-        numberofPax: 58,
-        reservationDate: "2021-09-25",
-        reservationTime: "10:00 AM",
-        status: "Pending"
+      reservationID: 24126,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Kariza Brown",
+      contactNumber: "0919-678-9012",
+      numberOfPax: 58,
+      eventDate: "2021-09-25",
+      eventTime: "10:00 AM",
+      eventTheme: "Fairy Tale Party",
+      cakeTheme: "Fairy Castle",
+      cakeMessage: "Happy 7th Birthday, Kariza!",
+      otherRequest: "Magician show",
+      status: "Cancelled"
     },
     {
-        reservationID: 24127,
-        packageType: "All-In Christening & 1st Birthday Party Package",
-        customerName: "Michael Smith",
-        numberofPax: 110,
-        reservationDate: "2021-09-25",
-        reservationTime: "4:00 PM",
-        status: "Pending"
+      reservationID: 24127,
+      packageType: "All-In Christening & 1st Birthday Party Package",
+      name: "Michael Smith",
+      contactNumber: "0917-789-0123",
+      numberOfPax: 110,
+      eventDate: "2021-09-25",
+      eventTime: "4:00 PM",
+      eventTheme: "Jungle Adventure",
+      cakeTheme: "Safari Animals",
+      cakeMessage: "Happy 1st Birthday, Michael!",
+      otherRequest: "Animal mascot appearance",
+      status: "Approved"
     },
     {
-        reservationID: 24128,
-        packageType: "Small Celebrations",
-        customerName: "Mercy Johnson",
-        numberofPax: 50,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24128,
+      packageType: "Small Celebrations",
+      name: "Mercy Johnson",
+      contactNumber: "0918-890-1234",
+      numberOfPax: 50,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Garden Party",
+      cakeTheme: "Floral Design",
+      cakeMessage: "Happy Celebration, Mercy!",
+      otherRequest: "String lights for ambiance",
+      status: "Pending"
     },
     {
-        reservationID: 24129,
-        packageType: "All-In Christening & 1st Birthday Party Package",
-        customerName: "Pia Davis",
-        numberofPax: 125,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24129,
+      packageType: "All-In Christening & 1st Birthday Party Package",
+      name: "Pia Davis",
+      contactNumber: "0919-901-2345",
+      numberOfPax: 125,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Under the Sea",
+      cakeTheme: "Mermaid",
+      cakeMessage: "Happy 1st Birthday, Pia!",
+      otherRequest: "Mermaid performer",
+      status: "Approved"
     },
     {
-        reservationID: 24130,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Jonnabel Lee",
-        numberofPax: 102,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24130,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Jonnabel Lee",
+      contactNumber: "0917-012-3456",
+      numberOfPax: 102,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Pirate Adventure",
+      cakeTheme: "Pirate Ship",
+      cakeMessage: "Happy 7th Birthday, Jonnabel!",
+      otherRequest: "Treasure hunt game",
+      status: "Cancelled"
     },
     {
-        reservationID: 24131,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Kariza White",
-        numberofPax: 58,
-        reservationDate: "2021-09-25",
-        reservationTime: "10:00 AM",
-        status: "Pending"
+      reservationID: 24131,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Kariza White",
+      contactNumber: "0918-123-4567",
+      numberOfPax: 58,
+      eventDate: "2021-09-25",
+      eventTime: "10:00 AM",
+      eventTheme: "Space Explorer",
+      cakeTheme: "Rocket Ship",
+      cakeMessage: "Happy 7th Birthday, Kariza!",
+      otherRequest: "Astronaut performer",
+      status: "Approved"
     },
     {
-        reservationID: 24132,
-        packageType: "Standard Civil Wedding Package",
-        customerName: "Michael Brown",
-        numberofPax: 110,
-        reservationDate: "2021-09-25",
-        reservationTime: "4:00 PM",
-        status: "Pending"
+      reservationID: 24132,
+      packageType: "Standard Civil Wedding Package",
+      name: "Michael Brown",
+      contactNumber: "0919-234-5678",
+      numberOfPax: 110,
+      eventDate: "2021-09-25",
+      eventTime: "4:00 PM",
+      eventTheme: "Rustic Wedding",
+      cakeTheme: "Woodland Theme",
+      cakeMessage: "Congratulations, Michael & Anna!",
+      otherRequest: "Rustic wooden decor",
+      status: "Pending"
     },
     {
-        reservationID: 24133,
-        packageType: "Small Celebrations",
-        customerName: "Mercy Green",
-        numberofPax: 50,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24133,
+      packageType: "Small Celebrations",
+      name: "Mercy Green",
+      contactNumber: "0917-345-6789",
+      numberOfPax: 50,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Picnic Party",
+      cakeTheme: "Checkered Picnic",
+      cakeMessage: "Happy Celebration, Mercy!",
+      otherRequest: "Picnic-style seating",
+      status: "Cancelled"
     },
     {
-        reservationID: 24134,
-        packageType: "All-In Christening & 1st Birthday Party Package",
-        customerName: "Pia White",
-        numberofPax: 125,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24134,
+      packageType: "All-In Christening & 1st Birthday Party Package",
+      name: "Pia White",
+      contactNumber: "0918-456-7890",
+      numberOfPax: 125,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Rainbow Theme",
+      cakeTheme: "Rainbow Cake",
+      cakeMessage: "Happy 1st Birthday, Pia!",
+      otherRequest: "Rainbow balloon arch",
+      status: "Approved"
     },
     {
-        reservationID: 24135,
-        packageType: "All-In 7th Birthday Party Package",
-        customerName: "Jonnabel Brown",
-        numberofPax: 102,
-        reservationDate: "2021-09-25",
-        reservationTime: "11:00 AM",
-        status: "Pending"
+      reservationID: 24135,
+      packageType: "All-In 7th Birthday Party Package",
+      name: "Jonnabel Brown",
+      contactNumber: "0919-567-8901",
+      numberOfPax: 102,
+      eventDate: "2021-09-25",
+      eventTime: "11:00 AM",
+      eventTheme: "Dinosaur Adventure",
+      cakeTheme: "Dinosaur Cake",
+      cakeMessage: "Happy 7th Birthday, Jonnabel!",
+      otherRequest: "Dinosaur performer",
+      status: "Pending"
     }
-]
+  ];
+  
+  
 
 @Output() viewItemEvent = new EventEmitter<any>();
 @Output() editItemEvent = new EventEmitter<any>();
@@ -170,11 +247,16 @@ export class DatatablesComponent {
     return this.data.filter(item =>
       item.reservationID.toString().includes(this.searchText) ||
       item.packageType.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      item.customerName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      item.numberofPax.toString().includes(this.searchText) ||
-      item.reservationDate.toString().includes(this.searchText) ||
-      item.reservationTime.toString().includes(this.searchText) ||
-      item.status.toLowerCase().includes(this.searchText.toLowerCase())
+      item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.contactNumber.toString().includes(this.searchText) ||
+      item.numberOfPax.toString().includes(this.searchText) ||
+      item.eventDate.toString().includes(this.searchText) ||
+      item.eventTime.toString().includes(this.searchText) ||
+      item.eventTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.cakeTheme.toString().includes(this.searchText) ||
+      item.cakeMessage.toString().includes(this.searchText) ||
+      item.otherRequest.toString().includes(this.searchText) ||
+      item.status.toString().includes(this.searchText)
     );
   }
 

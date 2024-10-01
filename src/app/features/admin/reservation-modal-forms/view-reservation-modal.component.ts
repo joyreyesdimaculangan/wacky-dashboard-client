@@ -37,25 +37,55 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <div>
           <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
           <input id="customerName" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-            [value]="item.customerName" readonly>
+            [value]="item.name" readonly>
         </div>
 
         <div>
-          <label for="numberofPax" class="block text-sm font-medium text-gray-700">Number of Pax</label>
-          <input id="numberofPax" type="number" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-            [value]="item.numberofPax" readonly>
+          <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
+          <input id="contactNumber" type="number" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.contactNumber" readonly>
         </div>
 
         <div>
-          <label for="reservationDate" class="block text-sm font-medium text-gray-700">Reservation Date</label>
-          <input id="reservationDate" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-            [value]="item.reservationDate | date: 'mediumDate'" readonly>
+          <label for="numberOfPax" class="block text-sm font-medium text-gray-700">Number of Pax</label>
+          <input id="numberOfPax" type="number" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.numberOfPax" readonly>
         </div>
 
         <div>
-          <label for="reservationTime" class="block text-sm font-medium text-gray-700">Reservation Time</label>
-          <input id="reservationTime" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-            [value]="item.reservationTime" readonly>
+          <label for="eventDate" class="block text-sm font-medium text-gray-700">Reservation Date</label>
+          <input id="eventDate" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.eventDate | date: 'mediumDate'" readonly>
+        </div>
+
+        <div>
+          <label for="eventTime" class="block text-sm font-medium text-gray-700">Reservation Time</label>
+          <input id="eventTime" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.eventTime" readonly>
+        </div>
+
+        <div>
+          <label for="eventTheme" class="block text-sm font-medium text-gray-700">Event Theme</label>
+          <input id="eventTheme" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.eventTheme" readonly>
+        </div>
+
+        <div>
+          <label for="cakeTheme" class="block text-sm font-medium text-gray-700">Cake Theme</label>
+          <input id="cakeTheme" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.cakeTheme" readonly>
+        </div>
+
+        <div>
+          <label for="cakeTheme" class="block text-sm font-medium text-gray-700">Cake Message</label>
+          <input id="cakeTheme" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.cakeMessage" readonly>
+        </div>
+
+        <div>
+          <label for="otherRequest" class="block text-sm font-medium text-gray-700">Other Request</label>
+          <input id="otherRequest" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+            [value]="item.otherRequest" readonly>
         </div>
 
         <div>
