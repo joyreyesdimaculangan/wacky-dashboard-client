@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { ReservationFormComponent } from "../reservation-form/reservation-form.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-package-details',
   standalone: true,
-  imports: [CommonModule, ReservationFormComponent],
+  imports: [CommonModule, ReservationFormComponent, RouterModule],
   templateUrl: './package-details.component.html',
   styleUrls: ['./package-details.component.scss'], 
 })

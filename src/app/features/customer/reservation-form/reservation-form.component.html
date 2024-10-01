@@ -1,97 +1,96 @@
 <!-- Reservation Form Section -->
-<h2 class="text-3xl font-bold mb-6 text-green-600 text-center">Reservation Form</h2>
+<div class="min-h-screen bg-white flex items-center justify-center">
+  <div class="container mx-auto p-6">
+    <div class="flex flex-col items-center mb-6"> <!-- Updated to use flexbox -->
+      <img src="assets/images/Wacky's Logo.png" alt="Restaurant Logo" class="mb-4" style="width: 150px; height: auto;" />
+      <h2 class="text-3xl font-bold mb-2 text-green-600">Reservation Form</h2>
+    </div>
 
-<mat-horizontal-stepper>
-  <!-- Step 1: Personal Details -->
-  <mat-step label="Personal Details">
-    <form (ngSubmit)="onSubmit()">
-      <!-- Name Input -->
-      <div class="mb-6">
-        <label for="name" class="block text-base font-semibold text-gray-800 mb-2 text-left">Name</label>
-        <input type="text" id="name" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.name" name="name" required />
-      </div>
+    <mat-horizontal-stepper>
+      <mat-step label="Personal Details">
+        <form (ngSubmit)="onSubmit()">
+          <!-- Name Input -->
+          <div class="mb-6">
+            <label for="name" class="block text-base font-semibold text-gray-800 mb-2 text-left">Name</label>
+            <input type="text" id="name" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.name" name="name" required />
+          </div>
 
-      <!-- Contact Number Input -->
-      <div class="mb-6">
-        <label for="contactNumber" class="block text-base font-semibold text-gray-800 mb-2 text-left">Contact No.</label>
-        <input type="number" id="contactNumber" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.contactNumber" name="contactNumber" required />
-      </div>
+          <!-- Contact Number Input -->
+          <div class="mb-6">
+            <label for="contactNumber" class="block text-base font-semibold text-gray-800 mb-2 text-left">Contact No.</label>
+            <input type="number" id="contactNumber" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.contactNumber" name="contactNumber" required />
+          </div>
 
-      <!-- Number of Guests Input -->
-      <div class="mb-6">
-        <label for="guests" class="block text-base font-semibold text-gray-800 mb-2 text-left">Number of Guests</label>
-        <input type="number" id="guests" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.numberOfPax" name="guests" required min="50" />
-      </div>
+          <!-- Number of Guests Input -->
+          <div class="mb-6">
+            <label for="guests" class="block text-base font-semibold text-gray-800 mb-2 text-left">Number of Guests</label>
+            <input type="number" id="guests" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.numberOfPax" name="guests" required min="1" />
+          </div>
 
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
+          <div class="flex justify-end">
+            <button mat-button matStepperNext class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Next</button>
+          </div>
+        </form>
+      </mat-step>
 
-  <!-- Step 2: Event Details -->
-  <mat-step label="Event Details">
-    <form>
-      <!-- Date Input -->
-      <div class="relative mb-6">
-        <label for="datepicker" class="block text-base font-semibold text-gray-800 mb-2 text-left">Date</label>
-        <mat-form-field appearance="outline" class="w-full">
-          <input matInput [matDatepicker]="datepicker" [(ngModel)]="reservation.eventDate" name="eventDate" placeholder="Select a date" class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-md" />
-          <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-          <mat-datepicker #datepicker></mat-datepicker>
-        </mat-form-field>
-      </div>
+      <mat-step label="Event Details">
+        <form>
+          <div class="relative mb-6">
+            <label for="datepicker" class="block text-base font-semibold text-gray-800 mb-2 text-left">Date</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput [matDatepicker]="datepicker" [(ngModel)]="reservation.eventDate" name="eventDate" placeholder="Select a date" class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-md" />
+              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-      <!-- Time Input -->
-      <div class="mb-6">
-        <label for="time" class="block text-base font-semibold text-gray-800 mb-2 text-left">Time</label>
-        <ul class="grid grid-cols-2 gap-4">
-          <!-- Radio buttons for time selection -->
-          <li *ngFor="let time of ['10:00 AM', '10:30 AM', '11:00 AM', '3:00 PM', '3:30 PM', '4:00 PM']">
-            <input type="radio" [id]="time" [value]="time" class="hidden peer" [(ngModel)]="reservation.eventTime" name="time" required />
-            <label [for]="time" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border rounded-lg cursor-pointer text-green-600 border-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500">{{ time }}</label>
-          </li>
-        </ul>
-      </div>
+          <div class="mb-6">
+            <label for="time" class="block text-base font-semibold text-gray-800 mb-2 text-left">Time</label>
+            <ul class="grid grid-cols-2 gap-4">
+              <li *ngFor="let time of ['10:00 AM', '10:30 AM', '11:00 AM', '3:00 PM', '3:30 PM', '4:00 PM']">
+                <input type="radio" [id]="time" [value]="time" class="hidden peer" [(ngModel)]="reservation.eventTime" name="time" required />
+                <label [for]="time" class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out">{{ time }}</label>
+              </li>
+            </ul>
+          </div>
 
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
+          <div class="flex justify-between">
+            <button mat-button matStepperPrevious class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Back</button>
+            <button mat-button matStepperNext class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Next</button>
+          </div>
+        </form>
+      </mat-step>
 
-  <!-- Step 3: Event Preferences -->
-  <mat-step label="Event Preferences">
-    <form>
-      <!-- Event Theme Input -->
-      <div class="mb-6">
-        <label for="eventTheme" class="block text-base font-semibold text-gray-800 mb-2 text-left">Theme of Event</label>
-        <input type="text" id="eventTheme" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.eventTheme" name="eventTheme" required />
-      </div>
+      <mat-step label="Event Preferences">
+        <form>
+          <div class="mb-6">
+            <label for="eventTheme" class="block text-base font-semibold text-gray-800 mb-2 text-left">Theme of Event</label>
+            <input type="text" id="eventTheme" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.eventTheme" name="eventTheme" required />
+          </div>
 
-      <!-- Cake Theme Input -->
-      <div class="mb-6">
-        <label for="cakeTheme" class="block text-base font-semibold text-gray-800 mb-2 text-left">Theme of Cake</label>
-        <input type="text" id="cakeTheme" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.cakeTheme" name="cakeTheme" required />
-      </div>
+          <div class="mb-6">
+            <label for="cakeTheme" class="block text-base font-semibold text-gray-800 mb-2 text-left">Theme of Cake</label>
+            <input type="text" id="cakeTheme" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.cakeTheme" name="cakeTheme" required />
+          </div>
 
-      <!-- Cake Message Input -->
-      <div class="mb-6">
-        <label for="cakeMessage" class="block text-base font-semibold text-gray-800 mb-2 text-left">Message on Cake</label>
-        <input type="text" id="cakeMessage" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.cakeMessage" name="cakeMessage" required />
-      </div>
+          <div class="mb-6">
+            <label for="cakeMessage" class="block text-base font-semibold text-gray-800 mb-2 text-left">Message on Cake</label>
+            <input type="text" id="cakeMessage" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.cakeMessage" name="cakeMessage" required />
+          </div>
 
-      <!-- Other Request Input -->
-      <div class="mb-6">
-        <label for="otherRequest" class="block text-base font-semibold text-gray-800 mb-2 text-left">Other Requests</label>
-        <input type="text" id="otherRequest" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.otherRequest" name="otherRequest" />
-      </div>
+          <div class="mb-6">
+            <label for="otherRequest" class="block text-base font-semibold text-gray-800 mb-2 text-left">Other Requests</label>
+            <input type="text" id="otherRequest" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.otherRequest" name="otherRequest" />
+          </div>
 
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md">Submit Reservation</button>
-      </div>
-    </form>
-  </mat-step>
-</mat-horizontal-stepper>
+          <div class="flex justify-between">
+            <button mat-button matStepperPrevious class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Back</button>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Submit Reservation</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>
+
+

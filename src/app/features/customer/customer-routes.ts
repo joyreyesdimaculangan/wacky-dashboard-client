@@ -17,5 +17,9 @@ export const CustomerRoutes: Routes = [
   {
     path: 'services',
     loadComponent: () => import('./wackys-services/services.component').then((m) => m.ServicesComponent),
+  },
+  {
+    path: 'reservations',
+    loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
   }
 ];
