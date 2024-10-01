@@ -77,7 +77,9 @@
         </table>
 
         <app-view-reservation-modal *ngIf="viewingItem" [item]="viewingItem" (close)="closeView()"></app-view-reservation-modal>
+
         <app-edit-reservation-modal *ngIf="editingItem" [item]="editingItem" (save)="saveEdit($event)" (cancel)="closeEdit()"></app-edit-reservation-modal>
+        
         <app-delete-reservation-modal *ngIf="deletingItem" [item]="deletingItem" (confirmDelete)="confirmDelete($event)" (cancelDelete)="closeDelete()"></app-delete-reservation-modal>
     </div>
     

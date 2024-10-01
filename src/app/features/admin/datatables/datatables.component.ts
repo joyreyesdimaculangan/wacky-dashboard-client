@@ -22,6 +22,7 @@ export class DatatablesComponent {
   viewingItem: any = null;
   editingItem: any = null;
   deletingItem: any = null;
+  selectedTab: string = 'all';
 
   data = [
     {
@@ -248,5 +249,20 @@ export class DatatablesComponent {
     // Remove the item from the data array
     this.data = this.data.filter(i => i.reservationID !== item.reservationID);
     this.closeDelete();
+  }
+
+  // Method to change the selected tab
+  selectTab(tab: string) {
+    this.selectedTab = tab;
+    this.currentPage = 1; // Reset to first page on tab change
+  }
+
+  // Method to get filtered data based on selected tab
+  getTabData() {
+    if (this.selectedTab === 'all') {
+      return this.filteredData();
+    } else {
+      return this.filteredData().filter(item => item.status.toLowerCase() === this.selectedTab);
+    }
   }
 }

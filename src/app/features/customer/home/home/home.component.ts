@@ -5,7 +5,7 @@ import { ReviewSectionComponent } from '../review-section/review-section.compone
 import { HeaderComponent } from '../../header/header.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { MenuComponent } from "../../menu/menu.component";
-import { ServicesComponent } from "../../services/services.component";
+import { ServicesComponent } from "../../wackys-services/services.component";
 
 import { ActivatedRoute } from '@angular/router';
 

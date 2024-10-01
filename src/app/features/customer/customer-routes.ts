@@ -16,6 +16,6 @@ export const CustomerRoutes: Routes = [
   },
   {
     path: 'services',
-    loadComponent: () => import('./services/services.component').then((m) => m.ServicesComponent),
+    loadComponent: () => import('./wackys-services/services.component').then((m) => m.ServicesComponent),
   }
 ];

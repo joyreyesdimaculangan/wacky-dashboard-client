@@ -15,11 +15,16 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class ReservationFormComponent {
   reservation = {
+    packageType: '',
     name: '',
-    email: '',
-    date: '',
-    guests: 1,
-    options: ''
+    contactNumber: '',
+    numberOfPax: '',
+    eventDate: '',
+    eventTime: '',
+    eventTheme: '',
+    cakeTheme: '',
+    cakeMessage: '',
+    otherRequest: '',
   };
   isReservationOpen = false;
 
