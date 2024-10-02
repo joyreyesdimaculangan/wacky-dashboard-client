@@ -21,5 +21,9 @@ export const CustomerRoutes: Routes = [
   {
     path: 'reservations',
     loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
+  },
+  {
+    path: 'confirmation',
+    loadComponent: () => import('./reservation-form/confirmation/confirmation.component').then((m) => m.ConfirmationComponent),
   }
 ];

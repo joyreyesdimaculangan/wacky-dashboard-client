@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawerComponent } from '../drawer/drawer.component';
+import { FormsModule } from '@angular/forms';
+
+interface Notification { // Define the Notification interface
+  message: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DrawerComponent, CommonModule],
+  imports: [DrawerComponent, CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss'] // Fixed 'styleUrl' to 'styleUrls'
 })
 export class DashboardComponent {
   cards = [
@@ -23,6 +28,15 @@ export class DashboardComponent {
 
   filteredCards = this.cards;
   activeFilter: string = 'all';
+  notifications: Notification[] = [
+    { message: '4 reservations made by August 15, 2024' },
+    { message: 'New reservation coming up' },
+    { message: '3 reservations made by August 14, 2024' },
+  ];
+  
+  adminEmail: string = '';
+  adminPassword: string = '';
+  admin: any;
 
   ngOnInit() {
     this.setFilter('all'); // Set the default filter to 'all' on component initialization
@@ -35,5 +49,10 @@ export class DashboardComponent {
     } else {
       this.filteredCards = this.cards.filter(card => card.category === filter);
     }
+  }
+
+  updateAccount(): void {
+    // Add logic to handle account update (e.g., API call)
+    console.log('Account updated:', { email: this.adminEmail, password: this.adminPassword });
   }
 }

@@ -74,7 +74,8 @@
                 [(ngModel)]="reservation.eventDate" 
                 name="eventDate" 
                 placeholder="Select a date" 
-                class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out" />
+                class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out" 
+                required />
               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
               <mat-datepicker #datepicker></mat-datepicker>
             </mat-form-field>
@@ -91,7 +92,7 @@
                   [value]="time" 
                   class="hidden peer" 
                   [(ngModel)]="reservation.eventTime" 
-                  name="time" 
+                  name="eventTime" 
                   required />
                 <label 
                   [for]="time" 
@@ -134,7 +135,7 @@
             <input 
               type="text" 
               id="cakeTheme" 
-              class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" 
+              class="w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500" 
               [(ngModel)]="reservation.cakeTheme" 
               name="cakeTheme" 
               placeholder="Enter cake theme"
@@ -146,23 +147,23 @@
             <input 
               type="text" 
               id="cakeMessage" 
-              class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" 
+              class="w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500" 
               [(ngModel)]="reservation.cakeMessage" 
               name="cakeMessage" 
-              placeholder="Enter message on the cake"
+              placeholder="Enter message on"
               required />
           </div>
 
           <div class="mb-6">
             <label for="otherRequest" class="block text-base font-semibold text-gray-800 mb-2 text-left">Other Requests</label>
-            <input type="text" id="otherRequest" class="w-full border border-gray-300 rounded-md p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.otherRequest" />
+            <input type="text" id="otherRequest" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500" [(ngModel)]="reservation.otherRequest" name="otherRequest" />
           </div>
           
           <div class="flex justify-between">
             <button mat-button matStepperPrevious class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
               Back
             </button>
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+            <button [routerLink]="['/customer/confirmation']" type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
               Submit Reservation
             </button>
           </div>

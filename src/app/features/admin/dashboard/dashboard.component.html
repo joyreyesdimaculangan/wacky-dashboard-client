@@ -30,28 +30,19 @@
       </div>
 
       <!-- Merged Card: Recent Activity and Notifications -->
-      <div class="flex-1 bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-green-600 mb-4">Notifications</h2>
-        <div class="space-y-6">
-          <ul class="space-y-3">
-            <li class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
-              4 reservations made by August 15, 2024
-            </li>
-            <li class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-bolt text-blue-500 mr-3"></i>
-              New reservation coming up
-            </li>
-            <li class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-tools text-orange-500 mr-3"></i>
-              3 reservations made by August 14, 2024
-            </li>
+        <div class="flex-1 bg-white shadow-lg rounded-lg p-6">
+          <h2 class="text-xl font-semibold text-green-600 mb-4">Notifications</h2>
+          <div class="space-y-6">
+            <ul class="space-y-3">
+              <li class="flex items-center text-gray-700 mb-2" *ngFor="let notification of notifications">
+                <i class="fas fa-bell text-green-500 mr-3"></i> <!-- Using a generic bell icon for notifications -->
+                {{ notification.message }}
+              </li>
             </ul>
           </div>
         </div>
       </div>
   
-
     <!-- Filter Buttons -->
     <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
       <button 
