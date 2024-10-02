@@ -10,16 +10,25 @@ import { MatStepperModule } from '@angular/material/stepper';
 @Component({
   selector: 'app-reservation-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatStepperModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
   templateUrl: './reservation-form.component.html',
-  styleUrl: './reservation-form.component.scss'
+  styleUrls: ['./reservation-form.component.scss'] // Corrected from styleUrl to styleUrls
 })
 export class ReservationFormComponent {
   reservation = {
     packageType: '',
     name: '',
     contactNumber: '',
-    numberOfPax: '',
+    numberOfPax: 50,
     eventDate: '',
     eventTime: '',
     eventTheme: '',
@@ -27,6 +36,7 @@ export class ReservationFormComponent {
     cakeMessage: '',
     otherRequest: '',
   };
+
   availableTimes = [
     { id: '10-am', value: '10:00 AM', label: '10:00 AM' },
     { id: '10-30am', value: '10:30 AM', label: '10:30 AM' },
@@ -35,6 +45,7 @@ export class ReservationFormComponent {
     { id: '3-30-pm', value: '3:30 PM', label: '3:30 PM' },
     { id: '4-00-pm', value: '4:00 PM', label: '4:00 PM' },
   ];
+
   isFirstStepComplete = false;
   isSecondStepComplete = false;
   isReservationOpen = false;
@@ -48,13 +59,15 @@ export class ReservationFormComponent {
   }
 
   goToNextStep() {
-    // Logic to move to the next step
     this.isFirstStepComplete = true;
   }
 
   goToPreviousStep() {
-    // Logic to move back to the previous step
     this.isFirstStepComplete = false;
+  }
+
+  goBack() {
+    window.history.back();
   }
 
   @Output() reservationSubmitted = new EventEmitter<any>();

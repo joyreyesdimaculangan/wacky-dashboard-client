@@ -13,7 +13,7 @@ export class OffersComponent implements OnInit, OnDestroy {
   offers = [
     {
       images: 'assets/images/Buffet.jpg',
-      title: '198 EAT-ALL-YOU-CAN BUFFET',
+      title: 'EAT-ALL-YOU-CAN BUFFET',
       description:
         "Wacky's Food House also offers event hosting for any occasion!",
     },

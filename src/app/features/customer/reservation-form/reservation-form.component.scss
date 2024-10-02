@@ -5,3 +5,32 @@
 .mat-step-label {
     color: #2c7a4e; /* Change to your desired label color */
 }
+
+.stepper-custom .mat-horizontal-stepper-header {
+    background-color: #f0fdf4; /* Light green background */
+    border-radius: 8px;
+    padding: 8px;
+    transition: background-color 0.3s;
+  }
+
+  .stepper-custom .mat-horizontal-stepper-header.mat-stepper-selected {
+    background-color: #86efac; /* Brighter green when selected */
+  }
+
+  .stepper-custom .mat-step-label {
+    font-weight: bold;
+    color: #065f46; /* Darker green text */
+  }
+
+  .stepper-custom .mat-horizontal-stepper-header:hover {
+    background-color: #a7f3d0; /* Soft hover effect */
+  }
+
+  .stepper-custom .mat-step-icon {
+    background-color: #10b981; /* Green step icons */
+    color: white;
+  }
+
+  .stepper-custom .mat-stepper-indicator {
+    background-color: #10b981;
+  }
