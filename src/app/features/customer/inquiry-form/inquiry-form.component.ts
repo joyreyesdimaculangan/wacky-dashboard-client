@@ -1,33 +1,53 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-inquiry-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './inquiry-form.component.html',
   styleUrls: ['./inquiry-form.component.scss'],
 })
 export class InquiryFormComponent {
-  inquiry = {
-    name: '',
-    email: '',
-    message: '',
-    minPrice: 0,
-    maxPrice: 0
-  };
+  inquiryForm: FormGroup;
 
-  onSubmit() {
-    console.log('Inquiry Submitted:', this.inquiry);
+  constructor(private fb: FormBuilder) {
+    this.inquiryForm = this.fb.group({
+      name: ['', Validators.required],
+      contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      eventDate: ['', Validators.required],
+      eventType: ['', Validators.required],
+      guestCount: [1, [Validators.required, Validators.min(1)]],
+      duration: ['', Validators.required],
+      budget: [0, [Validators.required, Validators.min(0)]],
+      method: ['', Validators.required],
+      message: ['', Validators.required],
+    });
   }
 
-  public packages = [
-    { image: "assets/images/Package 1_7th Birthday.jpg"},
-    { image: "assets/images/Package 2_Wedding.jpg"},
-    { image: "assets/images/Package 3_Simple Wedding.jpg"},
-    { image: "assets/images/Package 4_Christianing.jpg"},
-    { image: "assets/images/Package 5_Debut.jpg"},
-    { image: "assets/images/Event 2.jpg"}
-  ]
+  onSubmit() {
+    if (this.inquiryForm.valid) {
+      // Handle the form submission
+      console.log(this.inquiryForm.value);
+    } else {
+      // Display validation errors
+      this.inquiryForm.markAllAsTouched();
+    }
+  }
 }

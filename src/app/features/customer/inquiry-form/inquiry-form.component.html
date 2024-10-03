@@ -1,27 +1,180 @@
-<!-- Inquiry Form Container -->
-  <!-- Form Section -->
-  <div class="p-8 leading-normal">  
-    <form (submit)="onSubmit()">
-      <!-- Name Input -->
-      <div class="mb-4"> 
-        <label for="name" class="block text-sm font-medium text-gray-700 text-left">Name</label>
-        <input type="text" id="name" class="w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="inquiry.name" name="name" required>
-      </div>
-
-      <!-- Email Input -->
-      <div class="mb-4"> 
-        <label for="email" class="block text-sm font-medium text-gray-700 text-left">Email</label>
-        <input type="email" id="email" class="w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500" [(ngModel)]="inquiry.email" name="email" required>
-      </div>
-
-      <!-- Message Input -->
-      <div class="mb-4"> 
-        <label for="message" class="block text-sm font-medium text-gray-700 text-left">Message</label>
-        <textarea id="message" class="w-full h-40 border border-gray-300 rounded-md p-4 mt-1 focus:ring-green-500 focus:border-green-500 resize-none" [(ngModel)]="inquiry.message" name="message" required></textarea>
-      </div>
-
-      <!-- Submit Button -->
-      <button type="submit" class="w-full bg-green-600 text-white p-4 rounded-md hover:bg-green-700">Send</button>
-    </form>
+<section class="section-container py-20 px-20 md:px-8 lg:px-16 bg-gradient-to-b from-white to-gray-100 shadow-2xl rounded-lg">
+  <!-- Contact Us Header -->
+  <div class="text-center mb-12">
+    <h2 class="text-4xl font-bold font-serif mb-4 text-green-700 tracking-wider">Contact Us</h2>
+    <p class="text-2xl text-gray-700 mb-8 font-poppins font-semibold">We'd love to hear from you! Please fill out the form below to inquire about reservations or events at Wacky's Food House.</p>
   </div>
+
+  <!-- Inquiry Form Container -->
+  <div class="p-8 leading-normal mx-6">
+    <form [formGroup]="inquiryForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Left Column -->
+        <div>
+          <!-- Name Input -->
+          <div class="form-group mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700 text-left">Name</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="name"
+              placeholder="Enter your name"
+            />
+            <div *ngIf="inquiryForm.get('name')?.touched && inquiryForm.get('name')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('name')?.hasError('required')">Name is required.</div>
+            </div>
+          </div>
+
+          <!-- Contact Number Input -->
+          <div class="form-group mb-4">
+            <label for="contactNumber" class="block text-sm font-medium text-gray-700 text-left">Contact Number</label>
+            <input
+              type="tel"
+              id="contactNumber"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="contactNumber"
+              placeholder="Enter your contact number"
+            />
+            <div *ngIf="inquiryForm.get('contactNumber')?.touched && inquiryForm.get('contactNumber')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('contactNumber')?.hasError('required')">Contact Number is required.</div>
+              <div *ngIf="inquiryForm.get('contactNumber')?.hasError('pattern')">Contact Number must be numeric.</div>
+            </div>
+          </div>
+
+          <!-- Date Picker -->
+          <div class="form-group mb-4">
+            <label for="eventDate" class="block text-sm font-medium text-gray-700 text-left">Event Date</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input 
+                matInput 
+                [matDatepicker]="datepicker" 
+                formControlName="eventDate" 
+                placeholder="Select a date" 
+                class="text-sm p-4 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent w-full rounded-lg shadow-sm hover:shadow-md transition duration-200 ease-in-out" 
+              />
+              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker></mat-datepicker>
+              <div *ngIf="inquiryForm.get('eventDate')?.touched && inquiryForm.get('eventDate')?.invalid" class="text-red-500 text-sm">
+                <div *ngIf="inquiryForm.get('eventDate')?.hasError('required')">Event Date is required.</div>
+              </div>
+            </mat-form-field>
+          </div>
+
+          <!-- Event Type Input -->
+          <div class="form-group mb-4">
+            <label for="eventType" class="block text-sm font-medium text-gray-700 text-left">Event Type</label>
+            <select
+              id="eventType"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="eventType"
+            >
+              <option value="">Select Event Type</option>
+              <option value="wedding">Wedding</option>
+              <option value="birthday">Birthday</option>
+              <option value="corporate">Corporate Event</option>
+              <option value="other">Other</option>
+            </select>
+            <div *ngIf="inquiryForm.get('eventType')?.touched && inquiryForm.get('eventType')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('eventType')?.hasError('required')">Event Type is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div>
+          <!-- Number of Guests -->
+          <div class="form-group mb-4">
+            <label for="guestCount" class="block text-sm font-medium text-gray-700 text-left">Number of Guests</label>
+            <input
+              type="number"
+              id="guestCount"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="guestCount"
+              min="1"
+            />
+            <div *ngIf="inquiryForm.get('guestCount')?.touched && inquiryForm.get('guestCount')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('guestCount')?.hasError('required')">Number of Guests is required.</div>
+              <div *ngIf="inquiryForm.get('guestCount')?.hasError('min')">Number of Guests must be at least 1.</div>
+            </div>
+          </div>
+
+          <!-- Event Duration -->
+          <div class="form-group mb-4">
+            <label for="duration" class="block text-sm font-medium text-gray-700 text-left">Event Duration</label>
+            <select
+              id="duration"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="duration"
+            >
+              <option value="">Select Duration</option>
+              <option value="3 hours">3 hours</option>
+              <option value="4 hours">4 hours</option>
+              <option value="6 hours">6 hours</option>
+              <option value="8 hours">8 hours</option>
+              <option value="full day">Full Day</option>
+            </select>
+            <div *ngIf="inquiryForm.get('duration')?.touched && inquiryForm.get('duration')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('duration')?.hasError('required')">Event Duration is required.</div>
+            </div>
+          </div>
+
+          <!-- Budget Input -->
+          <div class="form-group mb-4">
+            <label for="budget" class="block text-sm font-medium text-gray-700 text-left">Budget</label>
+            <input
+              type="number"
+              id="budget"
+              class="form-control w-full border border-gray-300 rounded-md p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 shadow-sm hover:shadow-md"
+              formControlName="budget"
+              min="0"
+            />
+            <div *ngIf="inquiryForm.get('budget')?.touched && inquiryForm.get('budget')?.invalid" class="text-red-500 text-sm">
+              <div *ngIf="inquiryForm.get('budget')?.hasError('required')">Budget is required.</div>
+              <div *ngIf="inquiryForm.get('budget')?.hasError('min')">Budget must be at least 0.</div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="form-group mb-4">
+            <label for="method" class="block text-sm font-medium text-gray-700 text-left">Are you willing to pay externally?</label>
+            <select
+            id="method"
+            class="form-control w-full border border-gray-300 rounded-lg p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+            formControlName="method"
+          >
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+          <div *ngIf="inquiryForm.get('method')?.touched && inquiryForm.get('method')?.invalid" class="text-red-500 text-sm">
+            <div *ngIf="inquiryForm.get('method')?.hasError('required')">Method of payment is required.</div>
+          </div>
+        </div>
+        <!-- Additional Comments -->
+        <div class="form-group mb-5">
+          <label for="comments" class="block text-sm font-medium text-gray-700 text-left">Additional Comments</label>
+          <textarea
+            id="comments"
+            class="form-control w-full border-gray-300 rounded-lg p-4 mt-1 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+            formControlName="comments"
+            rows="4"
+            placeholder="Any additional details or requests..."
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-center">
+      <button
+        type="submit"
+        class="w-full bg-green-600 text-white p-4 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
+        [disabled]="inquiryForm.invalid"
+      >
+        Send
+    </button>
+  </div>
+</form>
+
 

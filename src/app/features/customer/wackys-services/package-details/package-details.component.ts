@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { ReservationFormComponent } from "../reservation-form/reservation-form.component";
+import { ReservationFormComponent } from "../../reservation-form/reservation-form.component";
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class PackageDetailsComponent {
   isOpen: boolean = false;
-  isReservationOpen: boolean = false;
+  // isReservationOpen: boolean = false;
   packageDetails: any = {
     additionalInclusions: [] // Initialize to ensure it exists
   };
@@ -21,7 +21,7 @@ export class PackageDetailsComponent {
     name: '',
     email: '',
     date: '',
-    guests: 1,
+    guests: 50,
     options: ''
   };
   constructor(private cdr: ChangeDetectorRef) {}
@@ -39,25 +39,25 @@ export class PackageDetailsComponent {
 
   closeModal() {
     this.isOpen = false;
-    this.isReservationOpen = false; // Close reservation form when closing package modal
+  // this.isReservationOpen = false; // Close reservation form when closing package modal
   }
 
   // Method to open the reservation form modal
-  openReservationForm() {
-    this.isReservationOpen = true;
-  }
+  // openReservationForm() {
+  //   this.isReservationOpen = true;
+  // }
 
   // Method to close the reservation form modal
-  closeReservationForm() {
-    this.isReservationOpen = false;
-  }
+  // closeReservationForm() {
+  //   this.isReservationOpen = false;
+  // }
 
   // Method to handle form submission
-  onSubmit(event: any) {
+  // onSubmit(event: any) {
     // Form submission logic
-    console.log("Form Submitted", this.reservation);
-    this.closeReservationForm();
-  }
+  //  console.log("Form Submitted", this.reservation);
+  //  this.closeReservationForm();
+  // }
 
   toggleEditMode() {
     this.editMode = !this.editMode;

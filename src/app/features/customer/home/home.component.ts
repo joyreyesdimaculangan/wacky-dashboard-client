@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AboutComponent } from '../about/about.component';
-import { OffersComponent } from '../offers/offers.component';
-import { ReviewSectionComponent } from '../review-section/review-section.component';
-import { HeaderComponent } from '../../header/header.component';
-import { FooterComponent } from '../../footer/footer.component';
-import { MenuComponent } from "../../menu/menu.component";
-import { ServicesComponent } from "../../wackys-services/services.component";
+import { OffersComponent } from './offers-carousel/offers.component';
+import { MenuComponent } from '../menu/menu.component';
+import { ServicesComponent } from '../wackys-services/services.component';
+import { ReviewSectionComponent } from './review-section/review-section.component';
+import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,14 +13,15 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-home',
   standalone: true,
   imports: [
-    AboutComponent,
     OffersComponent,
     ReviewSectionComponent,
     HeaderComponent,
     FooterComponent,
     MenuComponent,
-    ServicesComponent
-  ],
+    ServicesComponent,
+    InquiryFormComponent,
+    HeaderComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

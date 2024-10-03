@@ -8,7 +8,7 @@ export const CustomerRoutes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/home/home.component').then((m) => m.HomeComponent),
+    loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'menu',

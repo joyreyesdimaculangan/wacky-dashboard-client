@@ -13,19 +13,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
-  activeRoute: ActivatedRoute = inject(ActivatedRoute);
-  isDropdownOpen = false;
-  selectedCategory: string | null = null;
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-  selectCategory(category: string) {
-    this.selectedCategory = category;
-    this.isDropdownOpen = false; 
-  }
-
   public menu = [
     { name: "Afritada", image: "assets/images/Afritada.jpg", description: "Stew made with meat, vegetables, and tomato sauce" },
     { name: "Boiled Crabs", image: "assets/images/Boiled Crabs.jpg", description: "Boiling crab in salted water" },

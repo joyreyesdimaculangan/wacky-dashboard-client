@@ -11,22 +11,22 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 })
 export class HeaderComponent {
   currentFragment: string | null = null;
-  isDropdownOpen = false;
+  // isDropdownOpen = false;
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
+  // toggleDropdown() {
+  // this.isDropdownOpen = !this.isDropdownOpen;
+  // }
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const dropdownButton = document.getElementById('user-menu-button');
+  // @HostListener('document:click', ['$event'])
+  // onClick(event: Event) {
+  //  const target = event.target as HTMLElement;
+    // const dropdownButton = document.getElementById('user-menu-button');
 
     // Close the dropdown if the click is outside the dropdown and the button
-    if (!dropdownButton?.contains(target)) {
-      this.isDropdownOpen = false;
-    }
-  }
+    // if (!dropdownButton?.contains(target)) {
+    // this.isDropdownOpen = false;
+    // }
+  // }
 
   constructor(private route: ActivatedRoute) {}
 

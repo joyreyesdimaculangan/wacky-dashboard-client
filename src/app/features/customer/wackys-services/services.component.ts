@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InquiryFormComponent } from "../inquiry-form/inquiry-form.component";
-import { PackageDetailsComponent } from "../package-details/package-details.component";
+import { PackageDetailsComponent } from "./package-details/package-details.component";
 
 declare const Flowbite: any;
 
