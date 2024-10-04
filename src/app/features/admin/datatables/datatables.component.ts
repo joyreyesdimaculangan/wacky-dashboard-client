@@ -3,14 +3,26 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
 import { ViewReservationModalComponent } from "../reservation-modal-forms/view-reservation-modal.component";
+import { AddReservationModalComponent } from '../reservation-modal-forms/add-reservation-modal.component';
 import { EditReservationModalComponent } from "../reservation-modal-forms/edit-reservation-modal.component";
 import { DeleteReservationModalComponent } from "../reservation-modal-forms/delete-reservation-modal.component";
+import { RouterModule } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-datatables',
   standalone: true,
-  imports: [DrawerComponent, CommonModule, FormsModule, ViewReservationModalComponent, EditReservationModalComponent, DeleteReservationModalComponent],
+  imports: [
+    DrawerComponent, 
+    CommonModule, 
+    FormsModule, 
+    ViewReservationModalComponent, 
+    AddReservationModalComponent,
+    EditReservationModalComponent, 
+    DeleteReservationModalComponent,
+    RouterModule
+  ],
   templateUrl: './datatables.component.html',
   styleUrl: './datatables.component.scss'
 })
@@ -20,9 +32,11 @@ export class DatatablesComponent {
   itemsPerPage: number = 5;
   itemsPerPageOptions: number[] = [5, 10, 15, 20];
   viewingItem: any = null;
+  addingItem: any = null;
   editingItem: any = null;
   deletingItem: any = null;
   selectedTab: string = 'all';
+  router: any;
 
   data = [
     {
@@ -240,6 +254,7 @@ export class DatatablesComponent {
   
 
 @Output() viewItemEvent = new EventEmitter<any>();
+@Output() addItemEvent = new EventEmitter<any>();
 @Output() editItemEvent = new EventEmitter<any>();
 @Output() deleteItemEvent = new EventEmitter<any>();
 
@@ -290,6 +305,19 @@ export class DatatablesComponent {
     this.searchText = '';
   }
 
+  openAdd(item: any) {
+    console.log('Opening view for:', item); // Debugging
+    this.addingItem = item;
+  }
+
+  handleAdd(newItem: any) {
+    this.data.push(newItem);
+    this.closeAdd();
+  }
+
+  closeAdd() {
+    this.addingItem = null;
+  }
  
   openView(item: any) {
     console.log('Opening view for:', item); // Debugging

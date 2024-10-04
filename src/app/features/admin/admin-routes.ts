@@ -21,5 +21,9 @@ export const AdminRoutes: Routes = [
   {
     path: 'customer_reviews',
     loadComponent: () => import('./admin-review/admin-review.component').then((m) => m.AdminReviewComponent),
+  },
+  {
+    path: 'add-reservations',
+    loadComponent: () => import('./reservation-modal-forms/add-reservation-modal.component').then((m) => m.AddReservationModalComponent),
   }
 ];

@@ -91,6 +91,16 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
             <input id="status" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900" 
               [value]="item.status" readonly>
           </div>
+
+          <!-- Event Details (if needed) -->
+          <div *ngIf="selectedEvent">
+            <h3 class="text-lg font-semibold mt-4">Event Details:</h3>
+            <div class="mt-2 text-gray-700">
+              <p><strong>Event Name:</strong> {{ selectedEvent.name }}</p>
+              <p><strong>Event Description:</strong> {{ selectedEvent.description }}</p>
+              <!-- Add more fields as needed -->
+            </div>
+          </div>
         </div>
 
         <!-- Modal Footer with Close Button (Bottom Right) -->
@@ -106,6 +116,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ViewReservationModalComponent {
   @Input() item: any; // Input to receive the data from the parent
+  @Input() selectedEvent: any; // Input to receive the selected event
   @Output() close = new EventEmitter<void>(); // Event emitter to close the modal
 
   closeView() {

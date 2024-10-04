@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-edit-reservation-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule],
   template: `
     <!-- Modal Background -->
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="item">
@@ -55,17 +55,18 @@ import { MatInputModule } from '@angular/material/input';
 
           <!-- Reservation Date Input -->
           <div>
-            <label for="eventDate" class="block text-sm font-medium text-gray-700">Reservation Date:</label>
+            <label for="datepicker" class="block text-sm font-medium text-gray-700">Reservation Date:</label>
             <mat-form-field appearance="outline" class="w-full">
               <input
                 id="eventDate" 
+                [matDatepicker]="datepicker"
                 [(ngModel)]="editedItem.eventDate" 
                 name="eventDate" 
                 matInput
                 placeholder="Select a date"
                 class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
-              <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix     [for]="datepicker"></mat-datepicker-toggle>
               <mat-datepicker #datepicker></mat-datepicker>
             </mat-form-field>
           </div>
@@ -142,13 +143,13 @@ import { MatInputModule } from '@angular/material/input';
 
           <!-- Modal Footer with Buttons -->
           <div class="mt-8 flex justify-end space-x-4">
-            <button type="button" (click)="saveChanges()" 
-              class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none">
-              Save
-            </button>
             <button type="button" (click)="cancelEdit()" 
               class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none">
               Cancel
+            </button>
+            <button type="button" (click)="saveChanges()" 
+              class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none">
+              Save
             </button>
           </div>
         </form>

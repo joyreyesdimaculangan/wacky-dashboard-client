@@ -1,35 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Calendar } from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import { DrawerComponent } from "../drawer/drawer.component";
+import { ViewReservationModalComponent } from '../reservation-modal-forms/view-reservation-modal.component'; // Import your modal component
 
 @Component({
   selector: 'app-admin-calendar',
   standalone: true,
-  imports: [CommonModule, DrawerComponent],
+  imports: [CommonModule, DrawerComponent, ViewReservationModalComponent], // Include the modal component
   templateUrl: './admin-calendar.component.html',
   styleUrls: ['./admin-calendar.component.scss']
 })
 export class AdminCalendarComponent implements OnInit {
   calendar!: Calendar;
-
   schedulerLicenseKey: string = 'GPL-My-Project-Is-Open-Source';
-
+  showModal: boolean = false; // Flag for modal visibility
+  selectedEvent: any; // Store selected event data
+  
   ngOnInit() {
     const calendarEl: HTMLElement | null = document.getElementById('calendar');
 
     if (calendarEl) {
       this.calendar = new Calendar(calendarEl, {
         schedulerLicenseKey: this.schedulerLicenseKey,
-        plugins: [resourceTimelinePlugin, dayGridPlugin], // Include dayGrid plugin
-        initialView: 'resourceTimeline',  // Set your default view
+        plugins: [resourceTimelinePlugin, dayGridPlugin],
+        initialView: 'resourceTimeline',
         resourceAreaHeaderContent: 'Venue',
         headerToolbar: {
-          left: 'prev,next today', // Previous, Next, Today buttons
-          center: 'title',         // Title in the center
-          right: 'dayGridMonth,resourceTimelineWeek,resourceTimelineDay' // Add month and resource timeline views
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,resourceTimelineWeek,resourceTimelineDay'
         },
         resources: [
           { id: 'a', title: 'Room A' },
@@ -66,6 +68,12 @@ export class AdminCalendarComponent implements OnInit {
   }
 
   handleEventClick(info: any) {
-    // Logic for handling event clicks
+    this.selectedEvent = info.event; // Store the clicked event
+    this.showModal = true; // Show the modal
+  }
+
+  closeModal() {
+    this.showModal = false; // Hide the modal
+    this.selectedEvent = null; // Clear the selected event
   }
 }

@@ -11,7 +11,7 @@
         <!-- Products Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 m-2"> 
             @for (dishes of menu; track $index) {
-                <div class="relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2"> <!-- Added margin to each container -->
+                <div class="relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2"> 
                     <img [src]="dishes.image" class="square-image w-full object-cover rounded-lg" alt="Product Image">
                     <div class="mt-4 p-4 flex flex-col justify-between h-35"> 
                         <h4 class="text-2xl font-semibold font-serif text-green-700">{{dishes.name}}</h4>
@@ -19,6 +19,13 @@
                     </div>
                 </div>
             }
+
+            <!-- Enhanced Card Button -->
+            <div class="relative bg-green-200 bg-opacity-50 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2 flex flex-col items-center justify-center p-4">
+                <svg class="w-16 h-16 text-green-700 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a1 1 0 011 1v8h8a1 1 0 110 2h-8v8a1 1 0 11-2 0v-8H3a1 1 0 110-2h8V3a1 1 0 011-1z" /></svg>
+                <h4 class="text-2xl font-semibold font-serif text-green-700 text-center">Add New Dish</h4>
+                <p class="font-poppins text-gray-600 text-center mt-1">Click here to add a new dish.</p>
+            </div>
         </div>
     </div>
 </section>

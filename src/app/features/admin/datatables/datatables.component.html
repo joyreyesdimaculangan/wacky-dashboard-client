@@ -112,5 +112,22 @@
                 </button>
             </div>
         </div>
+
+        <div class="relative group">
+            <!-- Button with Enhanced Floating Effect and Shadow -->
+            <button 
+                (click)="openAdd(addItemEvent)"
+                class="fixed bottom-6 right-6 bg-green-500 text-white p-6 rounded-lg shadow-2xl hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-3xl">
+                <i class="material-icons text-4xl">add</i>
+            </button>
+        </div>
+
+        <div class="modal-container overflow-auto max-h-screen z-50">
+            <app-add-reservation-modal
+                *ngIf="addingItem"
+                (close)="closeAdd()"
+                (add)="handleAdd($event)">
+            </app-add-reservation-modal>
+        </div>
     </div>
 </div>

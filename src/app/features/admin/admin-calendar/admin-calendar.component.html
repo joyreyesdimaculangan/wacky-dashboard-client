@@ -6,8 +6,7 @@
   <div class="flex-grow bg-white shadow-lg rounded-lg p-4 m-4 overflow-auto">
     <!-- Header for the Calendar -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-semibold text-green-600">Reservation Calendar</h2>
-      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200">Add Reservation</button>
+      <h1 class="py-5 text-2xl font-bold text-green-600">Reservation Calendar</h1>
     </div>
 
     <!-- Calendar Display with green accent and margin -->
@@ -15,9 +14,11 @@
       <!-- Optional Calendar Initialization Here -->
     </div>
 
-    <!-- Optional Footer or Additional Information -->
-    <div class="mt-4 text-gray-600 text-sm">
-      <p>Select a date to view or create reservations. Use the button above to add a new reservation.</p>
-    </div>
+    <app-view-reservation-modal 
+      *ngIf="showModal"
+      [item]="calendar"  
+      (close)="closeModal()">
+    </app-view-reservation-modal>
+
   </div>
 </div>

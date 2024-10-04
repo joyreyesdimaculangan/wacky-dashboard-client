@@ -39,12 +39,8 @@
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
                 formControlName="name"
                 placeholder="Enter your name"
-                required
               />
-              <mat-error
-                *ngIf="reservationForm.get('name')?.hasError('required')"
-                >Name is required</mat-error
-              >
+              <mat-error *ngIf="step1.get('name')?.hasError('required')">Name is required</mat-error>
             </div>
 
             <!-- Contact Number Input -->
@@ -62,9 +58,9 @@
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
                 formControlName="contactNumber"
                 placeholder="Enter your contact number"
-                required
               />
-              <!-- <mat-error *ngIf="this.reservationForm.get('contactNumber')?.hasError('required')">Contact number is required</mat-error> -->
+              <mat-error *ngIf="step1.get('contactNumber')?.hasError('required')">Contact number is required</mat-error>
+              <mat-error *ngIf="step1.get('contactNumber')?.hasError('pattern')">Invalid contact number</mat-error>
             </div>
 
             <!-- Number of Guests Input -->
@@ -81,10 +77,10 @@
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
                 formControlName="numberOfPax"
                 placeholder="Enter the number of guests"
-                required
                 min="50"
               />
-              <!-- <mat-error *ngIf="reservationForm.get('numberOfPax')?.hasError('required')">Number of guests is required</mat-error> -->
+              <mat-error *ngIf="step1.get('numberOfPax')?.hasError('required')">Number of guests is required</mat-error>
+              <mat-error *ngIf="step1.get('numberOfPax')?.hasError('min')">Minimum of 50 guests required</mat-error>
             </div>
 
             <div class="flex justify-end">
@@ -117,9 +113,8 @@
                   formControlName="eventDate"
                   placeholder="Select a date"
                   class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out"
-                  required
                 />
-                <mat-error *ngIf="">Event date is required</mat-error>
+                <mat-error *ngIf="step2.get('eventDate')?.hasError('required')">Event date is required</mat-error>
                 <mat-datepicker-toggle
                   matSuffix
                   [for]="datepicker"
@@ -156,7 +151,7 @@
                     formControlName="eventTime"
                     required
                   />
-                  <!-- <mat-error *ngIf="eventDetailsFormGroup.get('eventTime')?.hasError('required')">Event time is required</mat-error> -->
+                  <mat-error *ngIf="step2.get('eventTime')?.hasError('required')">Event time is required</mat-error>
                   <label
                     [for]="'time' + i"
                     class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
@@ -205,9 +200,8 @@
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
                 formControlName="eventTheme"
                 placeholder="Enter event theme"
-                required
               />
-              <!-- <mat-error *ngIf="preferencesFormGroup.get('eventTheme')?.hasError('required')">Event theme is required</mat-error> -->
+              <mat-error *ngIf="step3.get('eventTheme')?.hasError('required')">Event theme is required</mat-error>
             </div>
 
             <!-- Cake Theme Input -->
@@ -224,11 +218,8 @@
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500"
                 formControlName="cakeTheme"
                 placeholder="Enter cake theme"
-                required
               />
-              <mat-error *ngIf="step3.get('cakeTheme')?.hasError('required')"
-                >Cake theme is required</mat-error
-              >
+              <mat-error *ngIf="step3.get('cakeTheme')?.hasError('required')">Cake theme is required</mat-error>
             </div>
 
             <!-- Special Requests Input -->
@@ -246,6 +237,7 @@
                 rows="3"
               >
               </textarea>
+              <mat-error *ngIf="step3.get('additionalRequirements')?.hasError('required')">Additional requirements are required</mat-error>
             </div>
 
             <div class="flex justify-between">
@@ -269,45 +261,80 @@
         <!-- Confirm and Submit Step -->
         <mat-step linear>
           <ng-template matStepLabel>Confirm and Submit</ng-template>
-          <div class="flex flex-col items-start mb-6">
-            <p class="text-lg font-semibold text-gray-800">
+          <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-6 w-full">
+            <p class="text-xl font-bold text-green-600 mb-4">
               Please review your reservation details:
             </p>
-            <p>
-              <strong>Name:</strong>
-              {{ this.step1.get("name")?.value }}
-            </p>
-            <p>
-              <strong>Contact Number:</strong>
-              {{ this.step1.get("contactNumber")?.value }}
-            </p>
-            <p>
-              <strong>Number of Guests:</strong>
-              {{ this.step1.get("numberOfPax")?.value }}
-            </p>
-            <p>
-              <strong>Event Date:</strong>
-              {{ this.step2.get("eventDate")?.value | date }}
-            </p>
-            <p>
-              <strong>Event Time:</strong>
-              {{ this.step2.get("eventTime")?.value }}
-            </p>
-            <p>
-              <strong>Event Theme:</strong>
-              {{ this.step3.get("eventTheme")?.value }}
-            </p>
-            <p>
-              <strong>Cake Theme:</strong>
-              {{ this.step3.get("cakeTheme")?.value }}
-            </p>
-            <p>
-              <strong>Special Requests:</strong>
-              {{ this.step3.get("otherRequest")?.value || "None" }}
-            </p>
+
+            <div class>
+              <!-- Name -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Name: </strong>
+                  <span class="text-gray-900">{{ this.step1.get("name")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Contact Number -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Contact Number: </strong>
+                  <span class="text-gray-900">{{ this.step1.get("contactNumber")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Number of Guests -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Number of Guests: </strong>
+                  <span class="text-gray-900">{{ this.step1.get("numberOfPax")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Event Date -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Event Date: </strong>
+                  <span class="text-gray-900">{{ this.step2.get("eventDate")?.value | date }}</span>
+                </p>
+              </div>
+
+              <!-- Event Time -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Event Time: </strong>
+                  <span class="text-gray-900">{{ this.step2.get("eventTime")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Event Theme -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Event Theme: </strong>
+                  <span class="text-gray-900">{{ this.step3.get("eventTheme")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Cake Theme -->
+              <div class="border-b-2 border-gray-300 py-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Cake Theme: </strong>
+                  <span class="text-gray-900">{{ this.step3.get("cakeTheme")?.value }}</span>
+                </p>
+              </div>
+
+              <!-- Special Requests -->
+              <div class="border-gray-300 py-2 col-span-2">
+                <p class="text-base font-medium text-gray-700">
+                  <strong>Special Requests: </strong>
+                  <span class="text-gray-900">{{ this.step3.get("otherRequest")?.value || "None" }}</span>
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div class="flex justify-between">
+          <!-- Action Buttons -->
+          <div class="flex justify-between mt-6">
             <button
               mat-button
               matStepperPrevious
@@ -320,56 +347,14 @@
               (click)="onSubmit()"
               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
             >
-              Submit Reservation
+              Confirm & Submit
             </button>
           </div>
         </mat-step>
+
+
+      
       </mat-stepper>
-      <!-- <mat-stepper linear #stepper>
-        <mat-step [stepControl]="step1">
-          <form [formGroup]="step2">
-            <ng-template matStepLabel>Fill out your name</ng-template>
-            <mat-form-field>
-              <mat-label>Name</mat-label>
-              <input
-                matInput
-                formControlName="firstCtrl"
-                placeholder="Last name, First name"
-                required
-              />
-            </mat-form-field>
-            <div>
-              <button mat-button matStepperNext>Next</button>
-            </div>
-          </form>
-        </mat-step>
-        <mat-step [stepControl]="step2">
-          <form [formGroup]="step2">
-            <ng-template matStepLabel>Fill out your address</ng-template>
-            <mat-form-field>
-              <mat-label>Address</mat-label>
-              <input
-                matInput
-                formControlName="secondCtrl"
-                placeholder="Ex. 1 Main St, New York, NY"
-                required
-              />
-            </mat-form-field>
-            <div>
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
-            </div>
-          </form>
-        </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Done</ng-template>
-          <p>You are now done.</p>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
-          </div>
-        </mat-step>
-      </mat-stepper> -->
     </div>
   </div>
 </div>
