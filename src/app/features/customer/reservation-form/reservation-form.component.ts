@@ -1,6 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,34 +35,19 @@ import { ReservationService } from './reservation.service';
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './reservation-form.component.html',
-  styleUrls: ['./reservation-form.component.scss'] // Corrected from styleUrl to styleUrls
+  styleUrls: ['./reservation-form.component.scss'], // Corrected from styleUrl to styleUrls
 })
 export class ReservationFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
-  reservationFormGroup: FormGroup; // Use definite assignment operator
-  eventDetailsFormGroup: FormGroup; // Use definite assignment operator
-  preferencesFormGroup: FormGroup; // Use definite assignment operator
-  confirmationForm: FormGroup;
+  reservationForm!: FormGroup; // Use definite assignment operator
+  confirmReservationForm!: FormGroup; // Use definite assignment operator
 
-  @Input() item: any; 
+  @Input() item: any;
   @Output() reservationSubmitted = new EventEmitter<any>();
   @Output() close = new EventEmitter<void>();
-
-  reservation = {
-    packageType: '',
-    name: '',
-    contactNumber: '',
-    numberOfPax: 50,
-    eventDate: '',
-    eventTime: '',
-    eventTheme: '',
-    cakeTheme: '',
-    cakeMessage: '',
-    otherRequest: '',
-  };
 
   availableTimes = [
     { id: '10-am', value: '10:00 AM', label: '10:00 AM' },
@@ -59,51 +58,51 @@ export class ReservationFormComponent implements OnInit {
     { id: '4-00-pm', value: '4:00 PM', label: '4:00 PM' },
   ];
 
-
-  constructor(private fb: FormBuilder, private router: Router, private reservationService: ReservationService) {
-
-  ngOnInit () {
-    this.reservationForm = this.fb.group ({
-      reservationFormGroup: this.fb.group({
-        name: new FormControl['', Validators.required],
-        contactNumber: new FormControl['', [Validators.required, Validators.pattern('^[0-9]+$')]], // Ensure only numbers
-        numberOfPax: new FormControl[50, [Validators.required, Validators.min(50)]], // Minimum number of pax
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private reservationService: ReservationService
+  ) {}
+  ngOnInit() {
+    this.confirmReservationForm = this.fb.group({
+      name: ['', Validators.required],
+      contactNumber: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]+$')],
+      ],
+      numberOfPax: [50, [Validators.required, Validators.min(50)]],
+      eventDate: ['', Validators.required],
+      eventTime: ['', Validators.required],
+      eventTheme: ['', Validators.required],
+      cakeTheme: ['', Validators.required],
+      cakeMessage: ['', Validators.required],
+      otherRequest: [''],
+    });
+    this.reservationForm = new FormGroup({
+      customerDetails: new FormGroup({
+        name: new FormControl('', [Validators.required]),
+        contactNumber: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[0-9]+$'),
+        ]), // Ensure only numbers
+        numberOfPax: new FormControl(50, [
+          Validators.required,
+          Validators.min(50),
+        ]), // Minimum number of pax
       }),
 
-      this.eventDetailsFormGroup = this.fb.group({
-        eventDate: new FormControl['', Validators.required],
-        eventTime: new FormControl['', Validators.required]
+      eventDetailsForm: new FormGroup({
+        eventDate: new FormControl('', [Validators.required]),
+        eventTime: new FormControl('', [Validators.required]),
       }),
 
-      this.preferencesFormGroup = this.fb.group({
-        eventTheme: new FormControl['', Validators.required],
-        cakeTheme: new FormControl['', Validators.required],
-        cakeMessage: new FormControl['', Validators.required],
-        otherRequest: ['']
+      preferencesForm: new FormGroup({
+        eventTheme: new FormControl('', Validators.required),
+        cakeTheme: new FormControl('', Validators.required),
+        otherRequest: new FormControl(''),
       }),
-
-      this.confirmationForm = this.fb.group({ 
-        name: '',
-        contactNumber: '',
-        numberOfPax: '',
-        eventDate: '',
-        eventTime: '',
-        eventTheme: '',
-        cakeTheme: '',
-        cakeMessage: '',
-        otherRequest: ''
-      });
-    })
-      
-    
-   
-
-     
-
-     
-    }
+    });
   }
-  
   isFirstStepComplete = false;
   isSecondStepComplete = false;
   isReservationOpen = false;
@@ -117,24 +116,18 @@ export class ReservationFormComponent implements OnInit {
   }
 
   goToNextStep() {
-    if (this.stepper.selectedIndex === 0 && this.reservationFormGroup.valid) {
-      console.log('It works', this.reservationFormGroup.valid);
+    console.log(this.stepper)
+    console.log('Current step index:', this.stepper.selectedIndex);
+    if (this.stepper.selectedIndex === 0 && this.step1.valid) {
+      console.log('It works', this.step1.valid);
       this.stepper.selectedIndex = 1; // Move to Event Details
-    } else if (this.stepper.selectedIndex === 1 && this.eventDetailsFormGroup.valid) {
-      console.log('It works', this.reservationFormGroup.valid);
+    } else if (this.stepper.selectedIndex === 1 && this.step2.valid) {
+      console.log('It works', this.step2.valid);
       this.stepper.selectedIndex = 2; // Move to Event Preferences
-    } else if (this.stepper.selectedIndex === 2 && this.preferencesFormGroup.valid) {
-      console.log('It works', this.reservationFormGroup.valid);
+    } else if (this.stepper.selectedIndex === 2) {
+      console.log(this.stepper.selectedIndex);
       this.stepper.selectedIndex = 3; // Move to Confirmation
-    } else if (this.stepper.selectedIndex === 3 && this.confirmationForm.valid) {
-      console.log('It works', this.reservationFormGroup.valid);
-      this.stepper.selectedIndex = 4;
-    }
-    else {
-      console.log('Error', this.reservationFormGroup.invalid);
-      this.reservationFormGroup.markAllAsTouched(); // Mark all fields as touched to show errors
-      // Optionally, you can show specific error messages for better user feedback
-      this.displayErrorMessages();
+      
     }
   }
 
@@ -147,42 +140,47 @@ export class ReservationFormComponent implements OnInit {
   }
 
   displayErrorMessages() {
-    const errors = this.reservationFormGroup.errors;
+    const errors = this.reservationForm.errors;
     if (errors) {
-        // You can handle specific error messages based on the errors
-        if (this.reservationFormGroup.get('name')?.hasError('required')) {
-            console.log('Name is required.');
-        }
-        if (this.reservationFormGroup.get('contactNumber')?.hasError('required')) {
-            console.log('Contact number is required.');
-        }
-        if (this.reservationFormGroup.get('contactNumber')?.hasError('pattern')) {
-            console.log('Contact number must be numeric.');
-        }
-        if (this.reservationFormGroup.get('numberOfPax')?.hasError('required')) {
-            console.log('Number of pax is required.');
-        }
-        if (this.reservationFormGroup.get('numberOfPax')?.hasError('min')) {
-            console.log('Number of pax must be at least 1.');
-        }
+      // You can handle specific error messages based on the errors
+      if (this.reservationForm.get('name')?.hasError('required')) {
+        console.log('Name is required.');
+      }
+      if (this.reservationForm.get('contactNumber')?.hasError('required')) {
+        console.log('Contact number is required.');
+      }
+      if (this.reservationForm.get('contactNumber')?.hasError('pattern')) {
+        console.log('Contact number must be numeric.');
+      }
+      if (this.reservationForm.get('numberOfPax')?.hasError('required')) {
+        console.log('Number of pax is required.');
+      }
+      if (this.reservationForm.get('numberOfPax')?.hasError('min')) {
+        console.log('Number of pax must be at least 1.');
+      }
     }
   }
-
+  get step1() {
+    return this.reservationForm.get('customerDetails') as FormGroup;
+  }
+  get step2() {
+    return this.reservationForm.get('eventDetailsForm') as FormGroup;
+  }
+  get step3() {
+    return this.reservationForm.get('preferencesForm') as FormGroup;
+  }
   onSubmit() {
-    if (this.reservationFormGroup.valid && this.eventDetailsFormGroup.valid && this.preferencesFormGroup.valid) {
+    if (this.reservationForm.valid) {
       const reservationData = {
-        ...this.reservationFormGroup.value,
-        ...this.eventDetailsFormGroup.value,
-        ...this.preferencesFormGroup.value,
+        ...this.reservationForm.value,
       };
-      this.reservation = { ...reservationData };
 
       console.log('Reservation submitted:', reservationData);
       this.reservationService.setReservationData(reservationData); // Use reservationData instead of this.reservationForm.value
       this.router.navigate(['/confirmation']);
 
       this.reservationSubmitted.emit(reservationData);
-      this.close.emit(); 
+      this.close.emit();
     } else {
       console.log('Please complete all steps before submitting.');
       this.displayErrorMessages();
