@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,7 @@ import { ReservationService } from './reservation.service';
   templateUrl: './reservation-form.component.html',
   styleUrls: ['./reservation-form.component.scss'] // Corrected from styleUrl to styleUrls
 })
-export class ReservationFormComponent {
+export class ReservationFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
   reservationFormGroup: FormGroup; // Use definite assignment operator
   eventDetailsFormGroup: FormGroup; // Use definite assignment operator
@@ -61,35 +61,47 @@ export class ReservationFormComponent {
 
 
   constructor(private fb: FormBuilder, private router: Router, private reservationService: ReservationService) {
-    this.reservationFormGroup = this.fb.group({
-      name: ['', Validators.required],
-      contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], // Ensure only numbers
-      numberOfPax: [50, [Validators.required, Validators.min(50)]], // Minimum number of pax
-  });
-  
-    this.eventDetailsFormGroup = this.fb.group({
-      eventDate: ['', Validators.required],
-      eventTime: ['', Validators.required]
-    });
 
-    this.preferencesFormGroup = this.fb.group({
-      eventTheme: ['', Validators.required],
-      cakeTheme: ['', Validators.required],
-      cakeMessage: ['', Validators.required],
-      otherRequest: ['']
-    });
+  ngOnInit () {
+    this.reservationForm = this.fb.group ({
+      reservationFormGroup: this.fb.group({
+        name: new FormControl['', Validators.required],
+        contactNumber: new FormControl['', [Validators.required, Validators.pattern('^[0-9]+$')]], // Ensure only numbers
+        numberOfPax: new FormControl[50, [Validators.required, Validators.min(50)]], // Minimum number of pax
+      }),
 
-    this.confirmationForm = this.fb.group({ 
-      name: '',
-      contactNumber: '',
-      numberOfPax: '',
-      eventDate: '',
-      eventTime: '',
-      eventTheme: '',
-      cakeTheme: '',
-      cakeMessage: '',
-      otherRequest: ''
-    });
+      this.eventDetailsFormGroup = this.fb.group({
+        eventDate: new FormControl['', Validators.required],
+        eventTime: new FormControl['', Validators.required]
+      }),
+
+      this.preferencesFormGroup = this.fb.group({
+        eventTheme: new FormControl['', Validators.required],
+        cakeTheme: new FormControl['', Validators.required],
+        cakeMessage: new FormControl['', Validators.required],
+        otherRequest: ['']
+      }),
+
+      this.confirmationForm = this.fb.group({ 
+        name: '',
+        contactNumber: '',
+        numberOfPax: '',
+        eventDate: '',
+        eventTime: '',
+        eventTheme: '',
+        cakeTheme: '',
+        cakeMessage: '',
+        otherRequest: ''
+      });
+    })
+      
+    
+   
+
+     
+
+     
+    }
   }
   
   isFirstStepComplete = false;
@@ -114,7 +126,11 @@ export class ReservationFormComponent {
     } else if (this.stepper.selectedIndex === 2 && this.preferencesFormGroup.valid) {
       console.log('It works', this.reservationFormGroup.valid);
       this.stepper.selectedIndex = 3; // Move to Confirmation
-    } else {
+    } else if (this.stepper.selectedIndex === 3 && this.confirmationForm.valid) {
+      console.log('It works', this.reservationFormGroup.valid);
+      this.stepper.selectedIndex = 4;
+    }
+    else {
       console.log('Error', this.reservationFormGroup.invalid);
       this.reservationFormGroup.markAllAsTouched(); // Mark all fields as touched to show errors
       // Optionally, you can show specific error messages for better user feedback
