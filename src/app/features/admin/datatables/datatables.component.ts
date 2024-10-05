@@ -51,7 +51,8 @@ export class DatatablesComponent {
       cakeTheme: "White & Gold",
       cakeMessage: "Congratulations, Kariza & John!",
       otherRequest: "Extra floral decorations",
-      status: "Pending"
+      status: "Pending",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24122,
@@ -65,7 +66,8 @@ export class DatatablesComponent {
       cakeTheme: "Silver & Blue",
       cakeMessage: "Best Wishes, Michael & Sarah!",
       otherRequest: "Additional lighting",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24123,
@@ -79,7 +81,8 @@ export class DatatablesComponent {
       cakeTheme: "Pink Castle",
       cakeMessage: "Happy 7th Birthday, Mercy!",
       otherRequest: "Balloon arch at entrance",
-      status: "Cancelled"
+      status: "Cancelled",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24124,
@@ -93,7 +96,8 @@ export class DatatablesComponent {
       cakeTheme: "Superhero Logo",
       cakeMessage: "Happy 7th Birthday, Pia!",
       otherRequest: "Face painting station",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24125,
@@ -107,7 +111,8 @@ export class DatatablesComponent {
       cakeTheme: "Baby Animals",
       cakeMessage: "Happy 1st Birthday, Jonnabel!",
       otherRequest: "Photo booth with animal props",
-      status: "Pending"
+      status: "Pending",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24126,
@@ -121,7 +126,8 @@ export class DatatablesComponent {
       cakeTheme: "Fairy Castle",
       cakeMessage: "Happy 7th Birthday, Kariza!",
       otherRequest: "Magician show",
-      status: "Cancelled"
+      status: "Cancelled",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24127,
@@ -135,7 +141,8 @@ export class DatatablesComponent {
       cakeTheme: "Safari Animals",
       cakeMessage: "Happy 1st Birthday, Michael!",
       otherRequest: "Animal mascot appearance",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24128,
@@ -149,7 +156,8 @@ export class DatatablesComponent {
       cakeTheme: "Floral Design",
       cakeMessage: "Happy Celebration, Mercy!",
       otherRequest: "String lights for ambiance",
-      status: "Pending"
+      status: "Pending",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24129,
@@ -163,7 +171,8 @@ export class DatatablesComponent {
       cakeTheme: "Mermaid",
       cakeMessage: "Happy 1st Birthday, Pia!",
       otherRequest: "Mermaid performer",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24130,
@@ -177,7 +186,8 @@ export class DatatablesComponent {
       cakeTheme: "Pirate Ship",
       cakeMessage: "Happy 7th Birthday, Jonnabel!",
       otherRequest: "Treasure hunt game",
-      status: "Cancelled"
+      status: "Cancelled",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24131,
@@ -191,7 +201,8 @@ export class DatatablesComponent {
       cakeTheme: "Rocket Ship",
       cakeMessage: "Happy 7th Birthday, Kariza!",
       otherRequest: "Astronaut performer",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "Fully Paid"
     },
     {
       reservationID: 24132,
@@ -205,7 +216,8 @@ export class DatatablesComponent {
       cakeTheme: "Woodland Theme",
       cakeMessage: "Congratulations, Michael & Anna!",
       otherRequest: "Rustic wooden decor",
-      status: "Pending"
+      status: "Pending",
+      paymentStatus: "50% Downpayment"
     },
     {
       reservationID: 24133,
@@ -219,7 +231,8 @@ export class DatatablesComponent {
       cakeTheme: "Checkered Picnic",
       cakeMessage: "Happy Celebration, Mercy!",
       otherRequest: "Picnic-style seating",
-      status: "Cancelled"
+      status: "Cancelled",
+      paymentStatus: "Fully Paid"
     },
     {
       reservationID: 24134,
@@ -233,7 +246,8 @@ export class DatatablesComponent {
       cakeTheme: "Rainbow Cake",
       cakeMessage: "Happy 1st Birthday, Pia!",
       otherRequest: "Rainbow balloon arch",
-      status: "Approved"
+      status: "Approved",
+      paymentStatus: "Fully Paid"
     },
     {
       reservationID: 24135,
@@ -247,7 +261,8 @@ export class DatatablesComponent {
       cakeTheme: "Dinosaur Cake",
       cakeMessage: "Happy 7th Birthday, Jonnabel!",
       otherRequest: "Dinosaur performer",
-      status: "Pending"
+      status: "Pending",
+      paymentStatus: "Fully Paid"
     }
   ];
   

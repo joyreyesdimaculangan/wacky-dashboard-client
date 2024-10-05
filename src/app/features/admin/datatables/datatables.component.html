@@ -36,7 +36,6 @@
             <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-left">
                 <thead class="bg-green-500 text-white">
                     <tr>
-                        <th class="p-4 text-sm font-medium">Reservation ID</th>
                         <th class="p-4 text-sm font-medium">Package Type</th>
                         <th class="p-4 text-sm font-medium">Customer Name</th>
                         <th class="p-4 text-sm font-medium">Contact No.</th>
@@ -44,12 +43,12 @@
                         <th class="p-4 text-sm font-medium">Date</th>
                         <th class="p-4 text-sm font-medium">Time</th>
                         <th class="p-4 text-sm font-medium">Status</th>
+                        <th class="p-4 text-sm font-medium">Payment Status</th>
                         <th class="p-4 text-sm font-medium">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700 divide-y divide-gray-200">
                     <tr *ngFor="let item of pagedData()" class="hover:bg-gray-50 transition duration-200">
-                        <td class="p-4">{{ item.reservationID }}</td>
                         <td class="p-4">{{ item.packageType }}</td>
                         <td class="p-4">{{ item.name }}</td>
                         <td class="p-4">{{ item.contactNumber }}</td>
@@ -63,6 +62,14 @@
                                 'bg-red-100 text-red-600': item.status === 'Cancelled'
                             }" class="px-3 py-1 text-xs font-medium rounded-lg">
                                 {{ item.status }}
+                            </span>
+                        </td>
+                        <td class="p-4">
+                            <span [ngClass]="{
+                                'bg-yellow-100 text-yellow-600': item.paymentStatus === '50% Downpayment',
+                                'bg-green-100 text-green-600': item.paymentStatus === 'Fully Paid',
+                            }" class="px-3 py-1 text-xs font-medium rounded-lg">
+                                {{ item.paymentStatus }}
                             </span>
                         </td>
                         <td class="p-4 space-x-1">

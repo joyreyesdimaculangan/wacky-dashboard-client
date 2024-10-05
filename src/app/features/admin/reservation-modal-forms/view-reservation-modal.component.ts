@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     <!-- Modal Background -->
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="item">
       <!-- Modal Content -->
-      <div class="relative bg-white p-6 rounded-lg shadow-lg max-w-lg w-[800px] max-w-full relative max-h-[90vh] overflow-y-auto">
+      <div class="modal-content w-[800px] max-w-full relative">
         <!-- Close Button ('X') -->
         <button (click)="closeView()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none">
           &times;
@@ -19,7 +19,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <h2 class="text-xl font-bold mb-6 text-green-700">View Reservation</h2>
 
         <!-- Reservation Details (Pre-filled Input Fields) -->
-        <div class="space-y-4">
+        <div class="space-y-5">
           <div>
             <label for="reservationID" class="block text-sm font-medium text-gray-700">Reservation ID</label>
             <input id="reservationID" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900" 
@@ -92,20 +92,16 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
               [value]="item.status" readonly>
           </div>
 
-          <!-- Event Details (if needed) -->
-          <div *ngIf="selectedEvent">
-            <h3 class="text-lg font-semibold mt-4">Event Details:</h3>
-            <div class="mt-2 text-gray-700">
-              <p><strong>Event Name:</strong> {{ selectedEvent.name }}</p>
-              <p><strong>Event Description:</strong> {{ selectedEvent.description }}</p>
-              <!-- Add more fields as needed -->
-            </div>
+          <div>
+            <label for="paymentStatus" class="block text-sm font-medium text-gray-700">Payment Status</label>
+            <input id="paymentStatus" type="text" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900" 
+              [value]="item.paymentStatus" readonly>
           </div>
         </div>
 
         <!-- Modal Footer with Close Button (Bottom Right) -->
         <div class="mt-6 flex justify-end">
-          <button (click)="closeView()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+          <button (click)="closeView()" class="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600">
             Close
           </button>
         </div>
@@ -116,7 +112,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ViewReservationModalComponent {
   @Input() item: any; // Input to receive the data from the parent
-  @Input() selectedEvent: any; // Input to receive the selected event
   @Output() close = new EventEmitter<void>(); // Event emitter to close the modal
 
   closeView() {

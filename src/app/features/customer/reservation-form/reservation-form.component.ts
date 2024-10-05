@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
-import { ReservationService } from './reservation.service';
+import { ReservationService } from '../../../core/reservation-services/reservation.service';
 
 @Component({
   selector: 'app-reservation-form',

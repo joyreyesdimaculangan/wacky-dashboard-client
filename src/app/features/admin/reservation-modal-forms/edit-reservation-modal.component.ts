@@ -141,6 +141,16 @@ import { MatInputModule } from '@angular/material/input';
             </select>
           </div>
 
+          <!-- Payment Status Input -->
+          <div>
+            <label for="paymentStatus" class="block text-sm font-medium text-gray-700">Payment Status:</label>
+            <select id="paymentStatus" [(ngModel)]="editedItem.paymentStatus" name="paymentStatus" 
+              class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500">
+              <option value="50% Downpayment">50% Downpayment</option>
+              <option value="Fully Paid">Fully Paid</option>
+            </select>
+          </div>
+
           <!-- Modal Footer with Buttons -->
           <div class="mt-8 flex justify-end space-x-4">
             <button type="button" (click)="cancelEdit()" 
@@ -148,7 +158,7 @@ import { MatInputModule } from '@angular/material/input';
               Cancel
             </button>
             <button type="button" (click)="saveChanges()" 
-              class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none">
+              class="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none">
               Save
             </button>
           </div>

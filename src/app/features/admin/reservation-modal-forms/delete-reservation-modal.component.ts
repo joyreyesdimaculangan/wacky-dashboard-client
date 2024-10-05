@@ -11,23 +11,21 @@ import { FormsModule } from '@angular/forms';
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="item">
 
     <!-- Modal Content -->
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
-
-      <!-- Modal Header -->
-      <h2 class="text-lg font-bold text-green-700 mb-4 flex items-center">
-        <svg class="w-6 h-6 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15h-2v-2h2v2zm0-4h-2V5h2v6z" />
-        </svg>
-        Delete Reservation
-      </h2>
-
-      <!-- Modal Body -->
-      <p class="text-gray-700 mb-4">Are you sure you want to delete this reservation?</p>
-      <p class="text-gray-700 font-semibold mb-6">Reservation ID: <span class="text-green-600">{{ item.reservationID }}</span></p>
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <button (click)="cancelDeletion()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none">
+            &times;
+          </button>
+  
+          <div class="p-4 md:p-5 text-center">
+            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+          <h3 class="mb-5 text-lg font-normal text-gray-800 dark:text-gray-800">Are you sure you want to delete this product?</h3>
 
       <!-- Modal Footer with Buttons -->
       <div class="flex justify-center space-x-4">
-        <button (click)="deleteItem()" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
+        <button (click)="deleteItem()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
           Confirm
         </button>
         <button (click)="cancelDeletion()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
