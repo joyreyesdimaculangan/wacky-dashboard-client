@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
-import { ReservationService } from '../../../core/reservation-services/reservation.service';
+import { ReservationService } from '../../../services/reservation.service';
 
 interface Notification { 
   title: string;      

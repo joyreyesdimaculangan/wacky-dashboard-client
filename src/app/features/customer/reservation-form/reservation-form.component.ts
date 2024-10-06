@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
-import { ReservationService } from '../../../core/reservation-services/reservation.service';
+import { ReservationService } from '../../../services/reservation.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -35,12 +35,13 @@ import { ReservationService } from '../../../core/reservation-services/reservati
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
-    RouterModule,
+    RouterModule
   ],
   templateUrl: './reservation-form.component.html',
   styleUrls: ['./reservation-form.component.scss'], // Corrected from styleUrl to styleUrls
 })
 export class ReservationFormComponent implements OnInit {
+
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
   confirmReservationForm!: FormGroup; // Use definite assignment operator
@@ -75,7 +76,6 @@ export class ReservationFormComponent implements OnInit {
       eventTime: ['', Validators.required],
       eventTheme: ['', Validators.required],
       cakeTheme: ['', Validators.required],
-      cakeMessage: ['', Validators.required],
       otherRequest: [''],
     });
     this.reservationForm = new FormGroup({
@@ -139,36 +139,18 @@ export class ReservationFormComponent implements OnInit {
     this.router.navigate(['customer/home']);
   }
 
-  displayErrorMessages() {
-    const errors = this.reservationForm.errors;
-    if (errors) {
-      // You can handle specific error messages based on the errors
-      if (this.reservationForm.get('name')?.hasError('required')) {
-        console.log('Name is required.');
-      }
-      if (this.reservationForm.get('contactNumber')?.hasError('required')) {
-        console.log('Contact number is required.');
-      }
-      if (this.reservationForm.get('contactNumber')?.hasError('pattern')) {
-        console.log('Contact number must be numeric.');
-      }
-      if (this.reservationForm.get('numberOfPax')?.hasError('required')) {
-        console.log('Number of pax is required.');
-      }
-      if (this.reservationForm.get('numberOfPax')?.hasError('min')) {
-        console.log('Number of pax must be at least 1.');
-      }
-    }
-  }
   get step1() {
     return this.reservationForm.get('customerDetails') as FormGroup;
   }
+
   get step2() {
     return this.reservationForm.get('eventDetailsForm') as FormGroup;
   }
+
   get step3() {
     return this.reservationForm.get('preferencesForm') as FormGroup;
   }
+
   onSubmit() {
     if (this.reservationForm.valid) {
       const reservationData = {
@@ -176,14 +158,45 @@ export class ReservationFormComponent implements OnInit {
       };
 
       console.log('Reservation submitted:', reservationData);
-      this.reservationService.setReservationData(reservationData); // Use reservationData instead of this.reservationForm.value
-      this.router.navigate(['/confirmation']);
-
-      this.reservationSubmitted.emit(reservationData);
-      this.close.emit();
+      
+      // Call the service to create a reservation
+      this.reservationService.createReservation(reservationData).subscribe({
+        next: (response) => {
+          console.log('Reservation created successfully:', response);
+          this.router.navigate(['/confirmation']);
+          this.reservationSubmitted.emit(reservationData);
+          this.close.emit();
+        },
+        error: (error) => {
+          console.error('Error creating reservation:', error);
+          // You can also handle error messages here for the user
+        },
+      });
     } else {
       console.log('Please complete all steps before submitting.');
       this.displayErrorMessages();
+    }
+  }
+
+  displayErrorMessages() {
+    const errors = this.reservationForm.errors;
+    if (errors) {
+      // You can handle specific error messages based on the errors
+      if (this.step1.get('name')?.hasError('required')) {
+        console.log('Name is required.');
+      }
+      if (this.step1.get('contactNumber')?.hasError('required')) {
+        console.log('Contact number is required.');
+      }
+      if (this.step1.get('contactNumber')?.hasError('pattern')) {
+        console.log('Contact number must be numeric.');
+      }
+      if (this.step1.get('numberOfPax')?.hasError('required')) {
+        console.log('Number of pax is required.');
+      }
+      if (this.step1.get('numberOfPax')?.hasError('min')) {
+        console.log('Number of pax must be at least 1.');
+      }
     }
   }
 }
