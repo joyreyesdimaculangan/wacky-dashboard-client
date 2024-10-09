@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InquiryFormComponent } from "../inquiry-form/inquiry-form.component";
 import { PackageDetailsComponent } from "./package-details/package-details.component";
+import { PackagesCrmComponent } from '../../admin/packages-crm/packages-crm.component';
 
 declare const Flowbite: any;
 
@@ -10,7 +11,7 @@ declare const Flowbite: any;
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, RouterModule, InquiryFormComponent, PackageDetailsComponent],
+  imports: [CommonModule, RouterModule, InquiryFormComponent, PackageDetailsComponent, PackagesCrmComponent],
   templateUrl: './services.component.html',
   styleUrl: './services.component.scss'
 })
@@ -146,8 +147,25 @@ export class ServicesComponent {
   ];
 
   @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
+  isAddPackagesModalOpen: boolean = false;
+  additionalPackages!: { imageUrl: string; title: string; description: string; additionalInclusions: string[]; addOns: string[]; };
 
   openPackageModal(offer: any) {
     this.packageModal.openModal(offer);
+  }
+
+  openAddPackages(packages: any) {
+    this.isAddPackagesModalOpen = true;
+    this.additionalPackages = {
+      imageUrl: '',
+      title: '',
+      description: '',
+      additionalInclusions: [],
+      addOns: []
+    }
+  }
+
+  closeAddPackages() {
+    this.isAddPackagesModalOpen = false;
   }
 }

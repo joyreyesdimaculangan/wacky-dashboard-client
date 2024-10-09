@@ -14,8 +14,14 @@
 
   <!-- Add button -->
   <div class="absolute bottom-7 right-7">
-    <button class="bg-green-300 bg-opacity-75 text-green-900 font-bold py-3 px-8 rounded-lg shadow-2xl hover:bg-green-400 hover:bg-opacity-100 transform hover:scale-105 transition duration-200 border-2 border-green-500">
+    <button (click)="openAddContent(offers)" class="bg-green-300 bg-opacity-75 text-green-900 font-bold py-3 px-8 rounded-lg shadow-2xl hover:bg-green-400 hover:bg-opacity-100 transform hover:scale-105 transition duration-200 border-2 border-green-500">
       Add Content
     </button>
   </div>
+
+<app-offers-crm
+  [showModal]="isAddContentModalOpen"
+  (closeModal)="closeAddContent()">
+</app-offers-crm>
 </section>
+

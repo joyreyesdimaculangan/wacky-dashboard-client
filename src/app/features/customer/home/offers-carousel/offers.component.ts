@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { OffersCrmComponent } from '../../../admin/offers-crm/offers-crm.component';
 
 @Component({
   selector: 'app-offers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, OffersCrmComponent],
   templateUrl: './offers.component.html',
   styleUrl: './offers.component.scss',
 })
 export class OffersComponent implements OnInit, OnDestroy {
   slideIndex: number = 1;
+  image = signal<string>('');
+  autoplayInterval: any;
+  isAddContentModalOpen: boolean = false;
+  additionalContent!: { imageUrl: string; title: string; description: string; };
   offers = [
     {
       images: 'assets/images/Buffet.jpg',
@@ -29,8 +34,29 @@ export class OffersComponent implements OnInit, OnDestroy {
     },
   ];
 
-  image = signal<string>('');
-  autoplayInterval: any;
+  openAddContent(offers: any) {
+    this.isAddContentModalOpen = true;
+    this.additionalContent = {
+      imageUrl: '',
+      title: '',
+      description: '',
+    }
+  }
+
+  closeAddContent() {
+    this.isAddContentModalOpen = false;
+  }
+
+  // saveContent() {
+  //  if (this.additionalContent.imageUrl && this.additionalContent.title && this.additionalContent.description) {
+  //    this.offers.push({
+  //      images: this.additionalContent.imageUrl,
+  //      title: this.additionalContent.title,
+  //      description: this.additionalContent.description,
+  //    });
+  //    this.closeAddContent();
+  // }
+  // }
 
   ngOnInit() {
     this.startAutoplay(); 

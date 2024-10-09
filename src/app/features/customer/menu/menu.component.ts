@@ -3,16 +3,20 @@ import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OffersCrmComponent } from '../../admin/offers-crm/offers-crm.component';
 
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, CommonModule],
+  imports: [HeaderComponent, FooterComponent, CommonModule, FormsModule, ReactiveFormsModule, OffersCrmComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
+  isAddContentModalOpen: boolean = false;
+  additionalContent!: { imageUrl: string; title: string; description: string; };
   public menu = [
     { name: "Afritada", image: "assets/images/Afritada.jpg", description: "Stew made with meat, vegetables, and tomato sauce" },
     { name: "Boiled Crabs", image: "assets/images/Boiled Crabs.jpg", description: "Boiling crab in salted water" },
@@ -36,4 +40,17 @@ export class MenuComponent {
     { name: "Shrimp", image: "assets/images/Shrimp.jpg", description: "Shrimp cooked in a sweet and savory sauce" },
     { name: "Spaghetti", image: "assets/images/Spaghetti.jpg", description: "Pasta served with tomato sauce" },
   ];
+
+  openAddContent(menu: any) {
+    this.isAddContentModalOpen = true;
+    this.additionalContent = {
+      imageUrl: '',
+      title: '',
+      description: '',
+    }
+  }
+
+  closeAddContent() {
+    this.isAddContentModalOpen = false;
+  }
 }

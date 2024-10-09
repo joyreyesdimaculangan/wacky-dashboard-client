@@ -22,10 +22,15 @@
 
             <!-- Enhanced Card Button -->
             <div class="relative bg-green-200 bg-opacity-50 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2 flex flex-col items-center justify-center p-4">
-                <svg class="w-16 h-16 text-green-700 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a1 1 0 011 1v8h8a1 1 0 110 2h-8v8a1 1 0 11-2 0v-8H3a1 1 0 110-2h8V3a1 1 0 011-1z" /></svg>
-                <h4 class="text-2xl font-semibold font-serif text-green-700 text-center">Add New Dish</h4>
-                <p class="font-poppins text-gray-600 text-center mt-1">Click here to add a new dish.</p>
+                <svg (click)="openAddContent(menu)" class="w-16 h-16 text-green-700 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a1 1 0 011 1v8h8a1 1 0 110 2h-8v8a1 1 0 11-2 0v-8H3a1 1 0 110-2h8V3a1 1 0 011-1z" /></svg>
+                <h4 (click)="openAddContent(menu)" class="text-2xl font-semibold font-serif text-green-700 text-center">Add New Dish</h4>
+                <button (click)="openAddContent(menu)" class="font-poppins text-gray-600 text-center mt-1">Click here to add a new dish.</button>
             </div>
         </div>
     </div>
+
+    <app-offers-crm
+        [showModal]="isAddContentModalOpen"
+        (closeModal)="closeAddContent()">
+    </app-offers-crm>
 </section>

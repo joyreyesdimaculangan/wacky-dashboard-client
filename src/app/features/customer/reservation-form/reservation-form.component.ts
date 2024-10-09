@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
+import { ReservationForm } from '../../../models/reservation-form';
 
 @Component({
   selector: 'app-reservation-form',
@@ -153,23 +154,39 @@ export class ReservationFormComponent implements OnInit {
 
   onSubmit() {
     if (this.reservationForm.valid) {
-      const reservationData = {
-        ...this.reservationForm.value,
+      // Ensure the status is properly set, defaulting to 'Pending' if undefined
+      const statusValue: 'Pending' = this.reservationForm.value.status || 'Pending'; 
+
+      // Map form values to the ReservationForm interface
+      const reservationData: ReservationForm = {
+        numberOfPax: this.step1.get("numberOfPax")?.value,
+        packageType: "Standard Type",
+        name: this.step1.get("name")?.value,
+        contactNumber: this.step1.get("contactNumber")?.value,
+        eventDate: this.step2.get("eventDate")?.value,
+        eventTime: this.step2.get("eventTime")?.value,
+        eventTheme: this.reservationForm.value.eventTheme,
+        cakeTheme: this.step3.get("eventTheme")?.value,
+        cakeMessage: this.reservationForm.value.cakeMessage,
+        otherRequest: this.step3.get("otherRequest")?.value,
+        packageID: 'test',
+        accountProfileId: "cff20a45-a425-47f5-9240-d9cab05e1af8",
+        status: "Pending" // Ensure status is either 'Pending' or the provided value
       };
 
       console.log('Reservation submitted:', reservationData);
-      
+
       // Call the service to create a reservation
       this.reservationService.createReservation(reservationData).subscribe({
         next: (response) => {
           console.log('Reservation created successfully:', response);
-          this.router.navigate(['/confirmation']);
+          // this.router.navigate(['/confirmation']);
           this.reservationSubmitted.emit(reservationData);
           this.close.emit();
         },
         error: (error) => {
           console.error('Error creating reservation:', error);
-          // You can also handle error messages here for the user
+          // Handle error messages here
         },
       });
     } else {

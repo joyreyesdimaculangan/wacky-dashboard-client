@@ -266,8 +266,6 @@ export class DatatablesComponent {
     }
   ];
   
-  
-
 @Output() viewItemEvent = new EventEmitter<any>();
 @Output() addItemEvent = new EventEmitter<any>();
 @Output() editItemEvent = new EventEmitter<any>();

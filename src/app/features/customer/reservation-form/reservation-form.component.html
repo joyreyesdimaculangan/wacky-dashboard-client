@@ -151,7 +151,6 @@
                     formControlName="eventTime"
                     required
                   />
-                  <mat-error *ngIf="step2.get('eventTime')?.hasError('required')">Event time is required</mat-error>
                   <label
                     [for]="'time' + i"
                     class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
@@ -159,6 +158,7 @@
                     {{ time }}
                   </label>
                 </li>
+                <mat-error *ngIf="step2.get('eventTime')?.hasError('required')">Event time is required</mat-error>
               </ul>
             </div>
 
