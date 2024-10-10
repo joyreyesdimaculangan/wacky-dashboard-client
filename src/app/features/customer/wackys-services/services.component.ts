@@ -148,21 +148,13 @@ export class ServicesComponent {
 
   @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
   isAddPackagesModalOpen: boolean = false;
-  additionalPackages!: { imageUrl: string; title: string; description: string; additionalInclusions: string[]; addOns: string[]; };
-
+  additionalPackages!: { image_url: string; name: string; description: string; };
   openPackageModal(offer: any) {
     this.packageModal.openModal(offer);
   }
 
   openAddPackages(packages: any) {
     this.isAddPackagesModalOpen = true;
-    this.additionalPackages = {
-      imageUrl: '',
-      title: '',
-      description: '',
-      additionalInclusions: [],
-      addOns: []
-    }
   }
 
   closeAddPackages() {

@@ -56,7 +56,6 @@
                 id="contactNumber"
                 formControlName="contactNumber"
                 class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                formControlName="contactNumber"
                 placeholder="Enter your contact number"
               />
               <mat-error *ngIf="step1.get('contactNumber')?.hasError('required')">Contact number is required</mat-error>

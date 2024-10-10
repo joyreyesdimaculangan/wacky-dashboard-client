@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development'; // Adjust based on your environment files
+import { environment } from '../../environments/environment.development'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
+  private readonly http = inject(HttpClient)
   private reservation: any = {
     inquiries: 0,
     pending: 0,
@@ -15,21 +16,14 @@ export class ReservationService {
 
   private apiUrl = environment.apiUrl + '/reservation'; // NestJS API endpoint
 
-  constructor(private http: HttpClient) {}
-
-  // Set the reservation data locally
-  setReservationData(data: any) {
-    this.reservation = data;
-  }
-
   // Get all reservation data locally
-  getReservationData() {
-    return this.reservation;
-  }
+  // getReservationData() {
+  //   return this.reservation;
+  // }
 
   // Get specific statistics locally
   getStatistics() {
-    return {
+  return {
       inquiries: this.reservation.inquiries,
       pending: this.reservation.pending,
       approved: this.reservation.approved,
@@ -55,7 +49,7 @@ export class ReservationService {
 
   // Update an existing reservation
   updateReservation(id: string, reservationData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, reservationData); // PUT request to update a reservation
+    return this.http.put<any>(`${this.apiUrl}/${id}`, reservationData); // PATCH request to update a reservation
   }
 
   // Delete a reservation
