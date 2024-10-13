@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { PackagesService } from '../../../services/packages.service';
+import { PackagesService } from '../../../../services/packages.service';
 
 @Component({
   selector: 'app-packages-crm',

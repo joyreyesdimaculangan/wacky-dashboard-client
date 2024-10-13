@@ -1,28 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { MenuService } from '../../../services/menu.service';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuService } from '../../../../../services/menu.service';
+import { EditMenuValues, Menu } from '../../../../../models/menu';
+
 
 @Component({
-  selector: 'app-offers-crm',
+  selector: 'app-edit-offers',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule
+    CommonModule, ReactiveFormsModule
   ],
   template: `
-  <!-- Modal Background -->
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="showModal">
-        <!-- Modal Content -->
+    <div class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50">
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" >
         <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-          <!-- Close Button ('X') -->
-          <button (click)="closeAddContent()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none">
+          <button (click)="closeEditContent()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none">
             &times;
           </button>
-          <!-- Modal Header -->
-          <h2 class="text-2xl font-bold mb-6 text-green-700">Add Content</h2>
-            <!-- Modal body -->
-            <form [formGroup]="addContentForm" class="p-4 md:p-5" (submit)="submitForm()">
+          <h2 class="text-2xl font-bold mb-6 text-green-700">Edit Content</h2>
+            <form [formGroup]="editMenuForm" (ngSubmit)="submitForm()" class="p-4 md:p-5" >
               <div class="grid gap-4 mb-4 grid-cols-2">
                 <div class="col-span-2">
                   <label 
@@ -34,7 +32,10 @@ import { MenuService } from '../../../services/menu.service';
                     name="name" 
                     id="name" 
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" 
-                    required="">
+                    >
+                    @if (nameControl.hasError('required') && (nameControl.dirty || nameControl.touched)) {
+                      <div class="text-red-500 text-sm mt-1">Name is required</div>
+                    }
                 </div>
                 <div class="col-span-2">
                   <label 
@@ -82,6 +83,12 @@ import { MenuService } from '../../../services/menu.service';
                 <div class="flex justify-end mt-4">
                     <button 
                         type="button" 
+                        (click)="closeEditContent()" 
+                        class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2">
+                        Cancel
+                    </button>
+                    <button 
+                        type="button" 
                         (click)="submitForm()" 
                         class="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Save Content
@@ -89,43 +96,50 @@ import { MenuService } from '../../../services/menu.service';
                 </div>
               </form>
           </div>
-      </div>`,
-  styleUrls: ['./offers-crm.component.scss'],
+      </div>
+    </div>`,
+  styleUrl: './edit-offers.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OffersCrmComponent { 
-  public isLoadingButton = signal(false);
-  addMenuSubscription = new Subscription();
-  menuService = inject(MenuService);
-  addContentForm!: FormGroup;
-  @Input() showModal: boolean = true; 
-  @Output() closeModal = new EventEmitter<void>();
+export class EditOffersComponent { 
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly menuService = inject(MenuService);
+  private readonly router = inject(Router);
+  public readonly editMenuForm = this.fb.nonNullable.group<Menu>({
+    menuID: this.fb.nonNullable.control('', [Validators.required]),
+    name: this.fb.nonNullable.control('', Validators.required),
+    image_url: this.fb.nonNullable.control('', Validators.required),
+    description: this.fb.nonNullable.control('', Validators.required),
+  });
 
-  constructor(private fb: FormBuilder) {
-    this.addContentForm = this.fb.group({
-      name: ['', Validators.required],
-      image_url: ['', Validators.required],
-      description: ['', Validators.required],
+  ngOnInit() {
+    this.getMenuByMenuID();
+  }
+
+  get nameControl() {
+    return this.editMenuForm.controls.name as FormControl;
+  }
+
+  getMenuByMenuID() {
+    const menuID = this.route.snapshot.params['menuID'];
+    console.log(this.route.snapshot);
+    this.menuService.getMenuByMenuID(menuID).subscribe(menu => {
+      console.log(menu, 'menu');
+     this.editMenuForm.patchValue(menu);
     });
   }
 
-  additionalContent: { image_url: string; name: string; description: string } = {
-    image_url: '',
-    name: '',
-    description: '',
-  };
-
-  closeAddContent() {
-    this.closeModal.emit(); 
+  closeEditContent() {
+    this.editMenuForm.reset();
+    this.router.navigate(['/customer/home']);
   }
 
   submitForm() {
-    this.isLoadingButton.set(true);
-    this.addMenuSubscription.add(
-      this.menuService.createMenu(this.addContentForm.value).subscribe(() => {
-        this.isLoadingButton.set(false);
-      })
-    )
-    this.closeAddContent(); 
-  }
+      const menuID = this.route.snapshot.params['menuID'];
+      this.menuService.updateMenu(menuID, (this.editMenuForm.value as EditMenuValues)).subscribe(() => {
+        console.log('Menu updated successfully');
+        this.editMenuForm.reset();
+      });
+    }
 }

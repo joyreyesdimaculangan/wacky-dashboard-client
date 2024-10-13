@@ -1,4 +1,5 @@
 export interface Packages { 
+    packageID: string,
     name: string,
     description: string,
     capacity: 0,

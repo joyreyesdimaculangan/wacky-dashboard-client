@@ -3,8 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { InquiryFormComponent } from "../inquiry-form/inquiry-form.component";
 import { PackageDetailsComponent } from "./package-details/package-details.component";
-import { PackagesCrmComponent } from '../../admin/packages-crm/packages-crm.component';
-
+import { PackagesCrmComponent } from '../../admin/admin-crm/packages-crm/packages-crm.component';
 declare const Flowbite: any;
 
 

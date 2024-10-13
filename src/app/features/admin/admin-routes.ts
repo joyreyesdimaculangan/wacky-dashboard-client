@@ -25,5 +25,13 @@ export const AdminRoutes: Routes = [
   {
     path: 'add-reservations',
     loadComponent: () => import('./reservation-modal-forms/add-reservation-modal.component').then((m) => m.AddReservationModalComponent),
+  },
+  {
+    path: 'add-menu',
+    loadComponent: () => import('./admin-crm/menu-crm/createAddedMenu/offers-crm.component').then((m) => m.OffersCrmComponent),
+  },
+  {
+    path: 'edit-menu/:menuID',
+    loadComponent: () => import('./admin-crm/menu-crm/patchMenu/edit-offers.component').then((m) => m.EditOffersComponent),
   }
 ];
