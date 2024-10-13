@@ -1,15 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private readonly http = inject(HttpClient)
-  private URL = environment.baseURL
+  private http = inject(HttpClient);
 
-  public login( email: string, password: string ) {
-    return this.http.post(`${this.URL}/auth/login`, { email: email, password: password })
+  public login(email: string, password: string): Observable<any> {
+    return this.http.post(`${environment.baseURL}/auth/login`, { email: email, password: password });
+  }
+
+  public register(name: string, email: string, password: string, confirmPassword: string): Observable<any> {
+    return this.http.post(`${environment.baseURL}/auth/register`, { name: name, email: email, password: password, confirmPassword: confirmPassword });
   }
 }

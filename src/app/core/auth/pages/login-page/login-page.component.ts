@@ -14,7 +14,12 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    ReactiveFormsModule, 
+    FormsModule
+  ],
   template: `<div
     class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
     style="background-image: url('assets/images/Food House.jpg')"
@@ -127,8 +132,8 @@ import { AuthService } from '../../services/auth.service';
         <!-- Sign Up Link -->
         <p class="text-center text-green-900 mt-8">
           Don't have an account?
-        <a href="#" class="text-green-700 hover:text-green-500 font-bold"
-          >Sign Up</a
+        <button [routerLink]="['/auth/register']" class="text-green-700 hover:text-green-500 font-bold"
+          >Sign Up</button
           >
         </p>
     </form>
@@ -171,7 +176,7 @@ export class LoginPageComponent {
             return throwError(error);
           })
         )
-        .subscribe((response) => {
+        .subscribe((response: any) => {
           if (response['status'] == 200) {
             this.isLoadingButton.set(false);
             if (this.authService.user()?.account_type === 'admin') {

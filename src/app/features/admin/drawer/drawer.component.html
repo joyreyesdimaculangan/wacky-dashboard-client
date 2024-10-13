@@ -52,7 +52,7 @@
         <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
             routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
           <i class="fas fa-sign-out-alt mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/logout']" class="text-gray-800 font-medium text-lg">
+          <button (click)="logout()" class="text-gray-800 font-medium text-lg">
             Sign Out
           </button>
         </li>

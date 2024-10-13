@@ -1,13 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { catchError, Subscription, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    RouterModule
+],
   template: `<div 
     class="min-h-screen relative flex items-center justify-center bg-cover bg-center" 
     style="background-image: url('assets/images/Food House.jpg');"
@@ -30,6 +37,7 @@ import { AuthService } from '../../services/auth.service';
           Create Account
         </h2>
 
+        <form [formGroup]="registerForm">
         <!-- Name Input -->
         <div class="mb-6">
           <label for="name" class="block text-green-900 font-semibold mb-2"
@@ -38,6 +46,7 @@ import { AuthService } from '../../services/auth.service';
           <input 
             type="text" 
             id="name" 
+            formControlName="name"
             class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" 
             placeholder="Enter your full name"
           />
@@ -51,6 +60,7 @@ import { AuthService } from '../../services/auth.service';
           <input 
             type="email" 
             id="email" 
+            formControlName="email"
             class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" 
             placeholder="Enter your email"
           />
@@ -64,6 +74,7 @@ import { AuthService } from '../../services/auth.service';
           <input
             [type]="showPassword ? 'text' : 'password'"
             id="password"
+            formControlName="password"
             class="w-full p-4 pr-14 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
             placeholder="Create a password"
           />
@@ -112,6 +123,7 @@ import { AuthService } from '../../services/auth.service';
             <input
               [type]="showConfirmPassword ? 'text' : 'password'"
               id="confirm-password"
+              formControlName="confirmPassword"
               class="w-full p-4 pr-14 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
               placeholder="Confirm password"
             />
@@ -158,7 +170,8 @@ import { AuthService } from '../../services/auth.service';
             class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300">Register</button>
 
         <!-- Login Link -->
-        <p class="text-center text-green-900 mt-8">Already have an account? <a href="#" class="text-green-700 hover:text-green-500 font-bold">Log In</a></p>
+        <p class="text-center text-green-900 mt-8">Already have an account? <button [routerLink]="['/auth/login']" class="text-green-700 hover:text-green-500 font-bold">Log In</button></p>
+      </form>
     </div>
   </div>
   `,
@@ -166,14 +179,15 @@ import { AuthService } from '../../services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  username: string = '';
-  password: string = '';
-  loginError = '';
+  registerForm!: FormGroup;
+  registerError = '';
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   authService = inject(AuthService);
   router = inject(Router);
+  registerFormSubscription = new Subscription();
 
+  fb = inject(FormBuilder);
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
@@ -182,17 +196,37 @@ export class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  onRegister(): void {
-    const success = this.authService.login(this.username, this.password);
-    if (success) {
-      const role = this.authService.user()?.account_type;
-      if (role === 'admin') {
-        this.router.navigate(['/login']);
-      } else if (role === 'customer') {
-        this.router.navigate(['/login']);
-      }
-    } else {
-      this.loginError = 'Invalid username or password';
-    }
+  ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      name: [''],
+      email: [''],
+      password: [''],
+      confirmPassword: [''],
+    });
+  }
+
+  onRegister() {
+    this.registerFormSubscription.add(
+      this.authService
+        .register( this.registerForm.value.name, this.registerForm.value.email, this.registerForm.value.password, this.registerForm.value.confirmPassword )
+        .pipe(
+          catchError((error: HttpErrorResponse) => {
+            if (error.status === 401) {
+              alert('Invalid Credentials');
+            }
+            return throwError(error);
+          })
+        )
+        .subscribe((response) => {
+          if (response['status'] == 200) {
+            if (this.authService.user()?.account_type === 'admin') {
+              this.router.navigate(['admin/dashboard'])
+            } 
+            else {
+              this.router.navigate(['customer/home']);
+            }
+          }
+        })
+      )
   }
 }
