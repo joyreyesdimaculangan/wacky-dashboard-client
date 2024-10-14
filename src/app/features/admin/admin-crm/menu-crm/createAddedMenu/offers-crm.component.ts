@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Subscription } from 'rxjs';
 import { MenuService } from '../../../../../services/menu.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Menu } from '../../../../../models/menu';
 
 @Component({
   selector: 'app-offers-crm',
@@ -106,6 +107,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OffersCrmComponent { 
+  @Output() menuAdded = new EventEmitter<Menu>();
   private readonly menuService = inject(MenuService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -129,6 +131,8 @@ export class OffersCrmComponent {
     this.addMenuSubscription.add(
       this.menuService.createMenu(this.addContentForm.value).subscribe(() => {
         console.log('Menu created', this.addContentForm.value);
+        this.menuAdded.emit(this.addContentForm.value);
+        this.router.navigate(['/customer/home']);
       })
     )
     this.closeAddContent(); 

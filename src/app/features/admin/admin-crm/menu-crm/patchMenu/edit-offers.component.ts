@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -102,6 +102,7 @@ import { EditMenuValues, Menu } from '../../../../../models/menu';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditOffersComponent { 
+  @Output() menuEdited = new EventEmitter<Menu>();
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly menuService = inject(MenuService);
@@ -136,10 +137,12 @@ export class EditOffersComponent {
   }
 
   submitForm() {
-      const menuID = this.route.snapshot.params['menuID'];
+    const menuID = this.route.snapshot.params['menuID'];
       this.menuService.updateMenu(menuID, (this.editMenuForm.value as EditMenuValues)).subscribe(() => {
         console.log('Menu updated successfully');
+        this.menuEdited.emit(menuID);
         this.editMenuForm.reset();
+        this.router.navigate(['/customer/home']);
       });
     }
 }

@@ -6,72 +6,57 @@ img {
     border-radius: 0.5rem;
 }
 
-/* Description Container */
-.p-4 {
-    padding: 1rem;
-}
-
-.bg-white {
-    background-color: #fff;
-}
-
-.rounded-b-lg {
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-}
-
-/* Make each product container more distinctive */
-.grid .relative {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ensures full width of the grid cell */
-    max-width: 450px; /* Increased max width */
-}
-
-.grid .relative:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Make the image a perfect square */
-.square-container {
-    width: 100%; /* Full width for the grid cell */
-    aspect-ratio: 1; /* Maintain a perfect square aspect ratio */
-}
-
-.square-image {
-    height: 100%; /* Ensures the image fills the square container */
-    padding: 0; /* Remove padding from the image */
-}
-
-/* Responsive adjustments */
-@media (min-width: 768px) {
-    .square-container {
-        max-width: 550px; /* Larger max width for medium screens */
-    }
-}
-
-@media (min-width: 1024px) {
-    .square-container {
-        max-width: 650px; /* Larger max width for large screens */
-    }
-}
-
 /* Example of custom media queries for additional control */
 @media (max-width: 768px) {
     .card {
-      width: 100%;
-    }
-  }
-  
-@media (min-width: 768px) and (max-width: 1024px) {
-    .card {
-      width: 48%;
-    }
-  }
-  
-@media (min-width: 1024px) {
-    .card {
-      width: 23%;
+        width: 100%;
     }
 }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .card {
+        width: 48%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card {
+        width: 23%;
+    }
+}
+
+/* Ensure the card class is defined */
+.card {
+    position: relative;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Add this to your global styles or component-specific styles */
+.card.selected {
+    border: 3px solid #38a169; /* Tailwind's green-600 color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+    border-radius: 0.5rem; /* Ensure the border radius matches the card's */
+}
+
+.custom-snackbar-success {
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
   
+.custom-snackbar-error {
+    background-color: #f44336; /* Red */
+    color: white;
+}

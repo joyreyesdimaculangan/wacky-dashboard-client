@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { ChangeDetectionStrategy, Component, Inject, inject } from '@angular/core';
+import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -23,7 +23,7 @@ import { MatIcon } from '@angular/material/icon';
     </h2>
 
     <mat-dialog-content class="py-4 px-6 text-center text-gray-600">
-      Are you sure you want to delete this menu? This action is irreversible and cannot be undone.
+      {{ data.message }}
     </mat-dialog-content>
 
     <mat-dialog-actions class="flex justify-center space-x-4 px-6 py-3">
@@ -39,6 +39,11 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class DeleteOffersComponent { 
   public matdialogRef = inject(MatDialogRef<DeleteOffersComponent>);
+  
+  constructor(
+    public dialogRef: MatDialogRef<DeleteOffersComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { message: string }
+  ) {}
 
   onConfirmDelete() {
     this.matdialogRef.close(true);

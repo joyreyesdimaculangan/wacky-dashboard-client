@@ -10,22 +10,36 @@ import { Menu } from '../../../models/menu';
 import { EditOffersComponent } from '../../admin/admin-crm/menu-crm/patchMenu/edit-offers.component';
 import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/delete-offers/delete-offers.component';
 import { MatDialog } from '@angular/material/dialog';
+import { forkJoin } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [RouterModule, HeaderComponent, FooterComponent, CommonModule, FormsModule, ReactiveFormsModule, OffersCrmComponent, EditOffersComponent],
+  imports: [
+    RouterModule, 
+    HeaderComponent, 
+    FooterComponent, 
+    CommonModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    OffersCrmComponent, 
+    EditOffersComponent,
+    MatSnackBarModule
+  ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent implements OnInit{
   private readonly menuService = inject(MenuService);
   private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  public selectedItems: Set<string> = new Set<string>();
+
   ngOnInit(): void {
     this.getMenus();
   }
   
-  additionalContent!: { image_url: string; name: string; description: string; };
   public menu : Menu[] = [];
 
   getMenus() {
@@ -35,13 +49,108 @@ export class MenuComponent implements OnInit{
   }
 
   deleteDish(menuID: string) {
-    const matdialogRef = this.dialog.open(DeleteOffersComponent);
+    const matdialogRef = this.dialog.open(DeleteOffersComponent,{
+      data: { message: 'Are you sure you want to delete this menu? This action is irreversible and cannot be undone.' }
+    });
 
     matdialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.menuService.deleteMenu(menuID).subscribe(() => {
           console.log('Menu deleted successfully', menuID);
-          this.getMenus(); // Refresh the menu list
+          this.getMenus(); 
+          this.snackBar.open('Menu deleted successfully.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            panelClass: ['custom-snackbar-success']
+          });
+        });
+      } else (error: any) => {
+        console.error('Error deleting selected items:', error);
+        this.snackBar.open('Failed to delete selected items.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar-error']
+        });
+      }
+    });
+  }
+
+  toggleSelection(menuID: string) {
+    if (this.selectedItems.has(menuID)) {
+      this.selectedItems.delete(menuID);
+    } else {
+      this.selectedItems.add(menuID);
+    }
+  }
+
+  isSelected(menuID: string): boolean {
+    return this.selectedItems.has(menuID);
+  }
+
+  deleteSelectedItems() {
+    const dialogRef = this.dialog.open(DeleteOffersComponent, {
+      data: { message: 'Are you sure you want to delete the selected items? This action is irreversible and cannot be undone.' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const deleteObservables = Array.from(this.selectedItems).map(menuID =>
+          this.menuService.deleteMenu(menuID)
+        );
+
+        forkJoin(deleteObservables).subscribe(() => {
+          console.log('Selected items deleted successfully');
+          this.getMenus(); 
+          this.selectedItems.clear(); 
+          this.snackBar.open('Selected items deleted successfully.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['custom-snackbar-success']
+          });
+        });
+      } else (error: any) => {
+        console.error('Error deleting selected items:', error);
+        this.snackBar.open('Failed to delete selected items.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar-error']
+        });
+      }
+    });
+  }
+
+  deleteAllItems() {
+    const dialogRef = this.dialog.open(DeleteOffersComponent, {
+      data: { message: 'Are you sure you want to delete all items? This action is irreversible and cannot be undone.' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const deleteObservables = this.menu.map(dish =>
+          this.menuService.deleteMenu(dish.menuID.toString())
+        );
+
+        forkJoin(deleteObservables).subscribe(() => {
+          console.log('All items deleted successfully');
+          this.getMenus(); 
+          this.selectedItems.clear(); 
+          this.snackBar.open('All items deleted successfully.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['custom-snackbar-success']
+          });
+        });
+      } else (error: any) => {
+        console.error('Error deleting selected items:', error);
+        this.snackBar.open('Failed to delete selected items.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar-error']
         });
       }
     });
