@@ -49,7 +49,7 @@ export class ReservationService {
 
   // Update an existing reservation
   updateReservation(id: string, reservationData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, reservationData); // PATCH request to update a reservation
+    return this.http.patch<any>(`${this.apiUrl}/${id}`, reservationData); // PATCH request to update a reservation
   }
 
   // Delete a reservation

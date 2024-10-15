@@ -1,8 +1,13 @@
+
+
+import { PackageInclusions } from './packageInclusions';
+import { PackageAddOns } from './packageAddOns';
+
 export interface Packages { 
     packageID: string,
     name: string,
     description: string,
-    capacity: 0,
-    price: 0,
-    image_url: string
+    image_url: string,
+    additionalInclusions: PackageInclusions[];
+    addOns: PackageAddOns[];
 }

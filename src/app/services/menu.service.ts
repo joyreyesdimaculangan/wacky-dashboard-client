@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { EditMenuValues, Menu } from '../models/menu';
 import { environment } from '../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,23 +13,23 @@ export class MenuService {
  
   private apiUrl = environment.apiUrl + '/menu';
 
-  getMenu() {
+  getMenu(): Observable<any> {
     return this.http.get<any>(this.apiUrl); // GET request to the backend
   }
 
-  getMenuByMenuID(menuID: string) {
+  getMenuByMenuID(menuID: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${menuID}`); // GET request for a specific
   }
 
-  createMenu(menuData: Menu) {
+  createMenu(menuData: Menu): Observable<any> {
     return this.http.post<any>(this.apiUrl, menuData); // POST request to create a menu
   }
 
-  updateMenu(menuID: string, menuData: EditMenuValues) {
+  updateMenu(menuID: string, menuData: EditMenuValues): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${menuID}`, menuData); // PATCH request to update a menu
   }
 
-  deleteMenu(menuID: string) {
+  deleteMenu(menuID: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${menuID}`); // DELETE request to remove a menu
   }
 }

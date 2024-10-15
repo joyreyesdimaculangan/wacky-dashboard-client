@@ -24,7 +24,7 @@ export class PackagesService {
   }
 
   updatePackage(id: string, packageData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, packageData); // PATCH request to update a package
+    return this.http.patch<any>(`${this.apiUrl}/${id}`, packageData); // PATCH request to update a package
   }
 
   deletePackage(id: string): Observable<any> {

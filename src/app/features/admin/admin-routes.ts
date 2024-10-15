@@ -33,5 +33,9 @@ export const AdminRoutes: Routes = [
   {
     path: 'edit-menu/:menuID',
     loadComponent: () => import('./admin-crm/menu-crm/patchMenu/edit-offers.component').then((m) => m.EditOffersComponent),
-  }
+  },
+  {
+    path: 'add-packages',
+    loadComponent: () => import('./admin-crm/packages-crm/packages-crm.component').then((m) => m.PackagesCrmComponent),
+  },
 ];
