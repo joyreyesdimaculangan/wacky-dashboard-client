@@ -14,12 +14,18 @@
       <div class="mt-4">
         <h3 class="text-xl font-semibold text-green-700">Inclusions:</h3>
         <ul class="list-disc list-inside text-gray-700">
-          <li *ngFor="let inclusion of packageInclusions">{{ inclusion.name }}</li>
+          @for(item of packageData?.Inclusion; track $index) {
+            <li>{{ item?.name }}</li>
+          }
         </ul>
       </div>
 
-
-     
+      <div class="mt-4">
+        <h3 class="text-xl font-semibold text-green-700">Choose your Add-Ons:</h3>
+        <ul class="list-disc list-inside text-gray-700">
+          <li *ngFor="let addOn of packageData?.availableAddOns">{{ addOn?.name }}</li>
+        </ul>
+      </div>
 
       <div class="mt-4 flex justify-end space-x-4">
         <button class="bg-gray-300 text-gray-700 text-lg px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 transform hover:scale-105 transition duration-300 ease-in-out" (click)="closeModal()">
@@ -31,14 +37,4 @@
       </div>
     </div>  
   </div>
-
-   <!-- Reservation Form Modal 
-     <div *ngIf="isReservationOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-      <div class="relative bg-white w-full max-w-4xl mx-auto rounded-lg shadow-lg p-6 overflow-auto max-h-screen">
-        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-4xl" (click)="closeReservationForm()">&times;</button>
-
-      Reservation Form 
-        <app-reservation-form (reservationSubmitted)="onSubmit($event)"></app-reservation-form>
-      </div>
-    </div> -->
 </div>

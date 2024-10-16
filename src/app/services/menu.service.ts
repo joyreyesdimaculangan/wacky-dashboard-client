@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { EditMenuValues, Menu } from '../models/menu';
+import { CreateMenu, EditMenuValues, Menu } from '../models/menu';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class MenuService {
     return this.http.get<any>(`${this.apiUrl}/${menuID}`); // GET request for a specific
   }
 
-  createMenu(menuData: Menu): Observable<any> {
+  createMenu(menuData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, menuData); // POST request to create a menu
   }
 

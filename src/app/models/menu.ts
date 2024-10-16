@@ -11,11 +11,17 @@ export interface MenuValues {
   menuID: string,
   name: string,
   description: string,
-  image_url: string,
+  image: string,
 }
 
 export interface EditMenuValues {
   menuID: string,
+  name: string,
+  description: string,
+  image_url: string,
+}
+
+export interface CreateMenu { 
   name: string,
   description: string,
   image_url: string,

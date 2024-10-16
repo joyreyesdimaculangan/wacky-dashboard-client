@@ -126,7 +126,6 @@ export class EditOffersComponent {
     const menuID = this.route.snapshot.params['menuID'];
     console.log(this.route.snapshot);
     this.menuService.getMenuByMenuID(menuID).subscribe(menu => {
-      console.log(menu, 'menu');
      this.editMenuForm.patchValue(menu);
     });
   }
