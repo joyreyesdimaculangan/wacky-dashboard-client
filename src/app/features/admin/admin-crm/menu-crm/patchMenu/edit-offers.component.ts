@@ -210,6 +210,15 @@ export class EditOffersComponent {
   }
 
   submitForm() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('image', this.selectedFile, this.selectedFile.name);
+      formData.append('name', this.editMenuForm.controls['name'].value);
+      formData.append(
+        'description',
+        this.editMenuForm.controls['description'].value
+      );
+    
     const menuID = this.route.snapshot.params['menuID'];
     this.menuService
       .updateMenu(menuID, this.editMenuForm.value as EditMenuValues)
@@ -217,6 +226,7 @@ export class EditOffersComponent {
         console.log('Menu updated successfully');
         this.editMenuForm.reset();
         this.router.navigate(['/customer/home']);
-      });
+    });
+  }
   }
 }
