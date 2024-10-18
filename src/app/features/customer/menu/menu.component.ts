@@ -12,6 +12,7 @@ import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/delete-off
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-menu',
@@ -25,7 +26,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     ReactiveFormsModule, 
     OffersCrmComponent, 
     EditOffersComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',

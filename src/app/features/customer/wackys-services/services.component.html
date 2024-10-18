@@ -1,39 +1,137 @@
 <section class="text-center my-12 py-12 px-4 lg:px-8">
   <!-- Service Packages Section -->
   <section class="w-[70%] mx-auto p-6 mt-24 mb-12">
-    <h3 class="text-4xl font-bold font-serif text-center mb-6 text-green-700 relative elegant-underline">
+    <h3
+      class="text-4xl font-bold font-serif text-center mb-6 text-green-700 relative elegant-underline"
+    >
       Our Service Packages
     </h3>
-    <p class="text-center text-2xl text-gray-700 mb-6 font-poppins font-semibold">
+    <p
+      class="text-center text-2xl text-gray-700 mb-6 font-poppins font-semibold"
+    >
       Host your special moments with us!
-    </p>    
+    </p>
+    <div class="flex flex-col">
+      <!-- Bulk Delete Buttons -->
+      <div class="flex justify-end mb-4 space-x-4">
+        <!-- Delete Selected Dishes Button -->
+        <button
+          mat-flat-button
+          color="primary"
+          class="text-lg font-semibold text-gray-800 py-3 px-6 flex items-center rounded-lg bg-gray-100 hover:bg-gray-300 transition duration-150 ease-in-out"
+          (click)="deleteSelectedItems()"
+          [disabled]="selectedItems.size === 0"
+          [ngClass]="{
+            'text-gray-400 bg-gray-200 cursor-not-allowed':
+              selectedItems.size === 0
+          }"
+        >
+          <mat-icon class="mr-2">delete</mat-icon>
+          <span>Delete Selected</span>
+        </button>
+
+        <!-- Delete All Dishes Button -->
+        <button
+          mat-flat-button
+          color="warn"
+          class="text-lg font-semibold text-red-800 py-3 px-6 flex items-center rounded-lg bg-red-50 hover:bg-red-200 transition duration-150 ease-in-out"
+          (click)="deleteAllItems()"
+        >
+          <mat-icon class="mr-2">delete_forever</mat-icon>
+          <span>Delete All</span>
+        </button>
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Loop through packages -->
       @for (offer of packages; track $index) {
       <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-        <img [src]="offer.image_url" alt="Package {{ $index + 1 }}" class="w-full h-[32rem] object-cover">
-        <div class="p-6 flex-grow">
-          <h3 class="text-2xl font-serif font-bold text-green-700">{{ offer.name }}</h3>
-          <p class="mt-2 font-poppins text-green-900">{{ offer.description }}</p>
-        </div>
-        <button 
-          (click)="openPackageModal(offer)" 
-          class="mt-4 inline-block bg-green-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto mb-6"
+        <div
+          class="relative bg-white shadow-lg rounded-lg overflow-hidden flex flex-col justify-between p-4 h-full cursor-pointer"
+          [class.border-2]="isSelected(offer.packageID.toString())"
+          [class.border-red-500]="isSelected(offer.packageID.toString())"
+          (click)="toggleSelection(offer.packageID.toString())"
         >
-          Learn More
-        </button>
+          <img
+            [src]="offer.image_url"
+            alt="Package {{ $index + 1 }}"
+            class="w-full h-[32rem] object-cover"
+          />
+          <div class="p-6 flex-grow">
+            <h3 class="text-2xl font-serif font-bold text-green-700">
+              {{ offer.name }}
+            </h3>
+            <p class="mt-2 font-poppins text-green-900">
+              {{ offer.description }}
+            </p>
+          </div>
+          <button
+            (click)="openPackageModal(offer)"
+            class="mt-4 inline-block bg-green-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto mb-6"
+          >
+            Learn More
+          </button>
+
+          <!-- Edit and Delete Buttons -->
+          <div class="mt-4 flex justify-end space-x-2">
+            <button
+              class="flex items-center justify-center border border-green-500 text-green-500 font-medium py-1 px-4 rounded-lg hover:bg-green-50 hover:text-green-600 transition duration-200 ease-in-out"
+              [routerLink]="['/admin/edit-menu', offer.packageID]"
+              (click)="$event.stopPropagation()"
+            >
+              <span class="material-icons-outlined mr-1">edit</span>
+              Edit Info
+            </button>
+
+            <button
+              class="flex items-center justify-center border border-red-500 text-red-500 font-medium py-1 px-4 rounded-lg hover:bg-red-50 hover:text-red-600 transition duration-200 ease-in-out"
+              (click)="
+                deletePackage(offer.packageID.toString());
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
       </div>
-    }
+      }
       <!-- Add Package Card -->
-      <div [routerLink]="['/admin/add-packages']" class="bg-green-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2 flex flex-col items-center justify-center">
-        <div [routerLink]="['/admin/add-packages']" class="flex-grow flex flex-col justify-center items-center h-[32rem]">
-          <svg [routerLink]="['/admin/add-packages']" class="w-16 h-16 text-green-700 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a1 1 0 011 1v8h8a1 1 0 110 2h-8v8a1 1 0 11-2 0v-8H3a1 1 0 110-2h8V3a1 1 0 011-1z" /></svg>
-            <h4 [routerLink]="['/admin/add-packages']" class="text-2xl font-semibold font-serif text-green-700 text-center">Add New Package Deal</h4>
-            <button [routerLink]="['/admin/add-packages']" class="font-poppins text-gray-600 text-center mt-1">Click here to add a package offer.</button>
+      <div
+        [routerLink]="['/admin/add-packages']"
+        class="bg-green-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 square-container mx-2 flex flex-col items-center justify-center"
+      >
+        <div
+          [routerLink]="['/admin/add-packages']"
+          class="flex-grow flex flex-col justify-center items-center h-[32rem]"
+        >
+          <svg
+            [routerLink]="['/admin/add-packages']"
+            class="w-16 h-16 text-green-700 mb-2"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2a1 1 0 011 1v8h8a1 1 0 110 2h-8v8a1 1 0 11-2 0v-8H3a1 1 0 110-2h8V3a1 1 0 011-1z"
+            />
+          </svg>
+          <h4
+            [routerLink]="['/admin/add-packages']"
+            class="text-2xl font-semibold font-serif text-green-700 text-center"
+          >
+            Add New Package Deal
+          </h4>
+          <button
+            [routerLink]="['/admin/add-packages']"
+            class="font-poppins text-gray-600 text-center mt-1"
+          >
+            Click here to add a package offer.
+          </button>
         </div>
       </div>
     </div>
-    
+
     <!-- Modal Structure -->
     <app-package-details #packageModal></app-package-details>
   </section>

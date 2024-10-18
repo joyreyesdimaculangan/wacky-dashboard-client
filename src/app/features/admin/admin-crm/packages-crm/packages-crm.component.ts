@@ -25,6 +25,7 @@ import { PackageAddOnsService } from '../../../../services/packageAddOns.service
 import { Packages } from '../../../../models/packages';
 import { PackageInclusions } from '../../../../models/packageInclusions';
 import { PackageAddOns } from '../../../../models/packageAddOns';
+import { ViewPackages } from '../../../../models/packages';
 import { FileUploadService } from '../../../../services/file-upload.service';
 
 @Component({
@@ -47,10 +48,7 @@ import { FileUploadService } from '../../../../services/file-upload.service';
           &times;
         </button>
         <h2 class="text-2xl font-bold mb-6 text-green-700">Add Content</h2>
-        <form
-          [formGroup]="addPackagesForm"
-          class="p-4 md:p-5"
-        >
+        <form [formGroup]="addPackagesForm" class="p-4 md:p-5">
           <div class="grid gap-4 mb-4 grid-cols-2">
             <div class="col-span-2">
               <label
@@ -144,27 +142,22 @@ import { FileUploadService } from '../../../../services/file-upload.service';
           </div>
           <div formArrayName="additionalInclusions">
             <h3 class="text-xl font-bold mb-4">Additional Inclusions</h3>
-            <div
-              *ngFor="
-                let inclusion of additionalInclusions.controls;
-                let i = index
-              "
-            >
-              <div [formGroupName]="i" class="mb-4">
-                <input
-                  formControlName="name"
-                  placeholder="Inclusion Name"
-                  class="form-input"
-                />
-                <button
-                  type="button"
-                  (click)="removeInclusion(i)"
-                  class="text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
+            @for(inclusion of additionalInclusions.controls; track $index) {
+            <div [formGroupName]="$index" class="mb-4">
+              <input
+                formControlName="name"
+                placeholder="Inclusion Name"
+                class="form-input"
+              />
+              <button
+                type="button"
+                (click)="removeInclusion($index)"
+                class="text-red-500"
+              >
+                Remove
+              </button>
             </div>
+            }
             <button
               type="button"
               (click)="addInclusion()"
@@ -176,22 +169,22 @@ import { FileUploadService } from '../../../../services/file-upload.service';
 
           <div formArrayName="addOns">
             <h3 class="text-xl font-bold mb-4">Add-Ons</h3>
-            <div *ngFor="let addOn of addOns.controls; let i = index">
-              <div [formGroupName]="i" class="mb-4">
-                <input
-                  formControlName="name"
-                  placeholder="Add-On Name"
-                  class="form-input"
-                />
-                <button
-                  type="button"
-                  (click)="removeAddOn(i)"
-                  class="text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
+            @for(addOn of addOns.controls; track $index) {
+            <div [formGroupName]="$index" class="mb-4">
+              <input
+                formControlName="name"
+                placeholder="Add-On Name"
+                class="form-input"
+              />
+              <button
+                type="button"
+                (click)="removeAddOn($index)"
+                class="text-red-500"
+              >
+                Remove
+              </button>
             </div>
+            }
             <button type="button" (click)="addAddOn()" class="text-green-500">
               Add Add-On
             </button>
@@ -279,7 +272,7 @@ export class PackagesCrmComponent {
       // Preview the image
       const reader = new FileReader();
       reader.onload = () => {
-        this.previewUrl.set(reader.result as string) 
+        this.previewUrl.set(reader.result as string);
         console.log(this.previewUrl);
       };
       reader.readAsDataURL(this.selectedFile);
@@ -291,7 +284,10 @@ export class PackagesCrmComponent {
       const formData = new FormData();
       formData.append('image', this.selectedFile, this.selectedFile.name);
       formData.append('name', this.addPackagesForm.controls['name'].value);
-      formData.append('description', this.addPackagesForm.controls['description'].value);
+      formData.append(
+        'description',
+        this.addPackagesForm.controls['description'].value
+      );
   
       // Create the package first
       this.packageService.createPackage(formData).subscribe({
@@ -300,39 +296,42 @@ export class PackagesCrmComponent {
   
           // Create additional inclusions
           const additionalInclusions = this.addPackagesForm.controls['additionalInclusions'].value;
-          additionalInclusions.forEach((inclusion: any) => {
+          const inclusionRequests = additionalInclusions.map((inclusion: any) => {
+            const inclusionData = {
+              name: inclusion.name,
+              packageID: packageID // Associate with packageID
+            };
             const inclusionFormData = new FormData();
-            inclusionFormData.append('name', inclusion.name);
-            inclusionFormData.append('packageID', packageID); // Associate with packageID
-            this.additionalInclusionsService.createInclusion(inclusionFormData).subscribe({
-              next: () => {
-                console.log('Inclusion created successfully');
-              },
-              error: (err) => {
-                console.error('Error creating inclusion:', err);
-              }
-            });
+            inclusionFormData.append('name', inclusionData.name);
+            inclusionFormData.append('packageID', inclusionData.packageID);
+            return this.additionalInclusionsService.createInclusion(inclusionFormData);
           });
   
           // Create add-ons
           const addOns = this.addPackagesForm.controls['addOns'].value;
-          addOns.forEach((addOn: any) => {
+          const addOnRequests = addOns.map((addOn: any) => {
+            const addOnData = {
+              name: addOn.name,
+              packageID: packageID // Associate with packageID
+            };
             const addOnFormData = new FormData();
-            addOnFormData.append('name', addOn.name);
-            addOnFormData.append('packageID', packageID); // Associate with packageID
-            this.addOnService.createAddOn(addOnFormData).subscribe({
-              next: () => {
-                console.log('Add-on created successfully');
-              },
-              error: (err) => {
-                console.error('Error creating add-on:', err);
-              }
-            });
+            addOnFormData.append('name', addOnData.name);
+            addOnFormData.append('packageID', addOnData.packageID);
+            return this.addOnService.createAddOn(addOnFormData);
           });
   
-          // Reset the form and navigate
-          this.addPackagesForm.reset();
-          this.router.navigate(['/customer/home']);
+          // Use forkJoin to wait for all requests to complete
+          forkJoin([...inclusionRequests, ...addOnRequests]).subscribe({
+            next: () => {
+              console.log('All inclusions and add-ons created successfully');
+              // Reset the form and navigate
+              this.addPackagesForm.reset();
+              this.router.navigate(['/customer/home']);
+            },
+            error: (err) => {
+              console.error('Error creating inclusions or add-ons:', err);
+            }
+          });
         },
         error: (err) => {
           console.error('Error creating package:', err);
@@ -340,64 +339,4 @@ export class PackagesCrmComponent {
       });
     }
   }
-
-
-
-  //   const packageData: Packages = this.addPackagesForm.value;
-  //   this.addPackagesSubscription.add(
-  //     this.packageService.createPackage(packageData).subscribe({
-  //       next: (createdPackage: Packages) => {
-  //         const packageID = createdPackage.packageID;
-
-  //         const additionalInclusions$ = packageData.additionalInclusions.map(
-  //           (inclusion: PackageInclusions) =>
-  //             this.additionalInclusionsService
-  //               .createInclusion({ ...inclusion, packageID })
-  //               .pipe(
-  //                 catchError((error) => {
-  //                   console.error('Error creating inclusion:', error);
-  //                   return of(null);
-  //                 })
-  //               )
-  //         );
-
-  //         const addOns$ = packageData.addOns.map((addOn: PackageAddOns) =>
-  //           this.addOnService.createAddOn({ ...addOn, packageID }).pipe(
-  //             catchError((error) => {
-  //               console.error('Error creating add-on:', error);
-  //               return of(null);
-  //             })
-  //           )
-  //         );
-
-  //         // Use forkJoin to create additionalInclusions and addOns
-  //         forkJoin([...additionalInclusions$, ...addOns$]).subscribe({
-  //           next: (results) => {
-  //             // Filter out any null values from the results
-  //             const validInclusions = results
-  //               .slice(0, packageData.additionalInclusions.length)
-  //               .filter((result) => result !== null);
-  //             const validAddOns = results
-  //               .slice(packageData.additionalInclusions.length)
-  //               .filter((result) => result !== null);
-
-  //             console.log('Additional Inclusions created:', validInclusions);
-  //             console.log('Add-Ons created:', validAddOns);
-
-  //             // Reset the form and navigate
-  //             this.addPackagesForm.reset();
-  //             this.router.navigate(['/customer/home']);
-  //           },
-  //           error: (error) => {
-  //             console.error('Error in forkJoin:', error);
-  //           },
-  //         });
-  //       },
-  //       error: (error) => {
-  //         console.error('Error creating package:', error);
-  //       },
-  //     })
-  //   );
-  // }
-  }
-
+}

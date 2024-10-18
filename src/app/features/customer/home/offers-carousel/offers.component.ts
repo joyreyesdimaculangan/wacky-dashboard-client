@@ -47,17 +47,6 @@ export class OffersComponent implements OnInit, OnDestroy {
     this.isAddContentModalOpen = false;
   }
 
-  // saveContent() {
-  //  if (this.additionalContent.imageUrl && this.additionalContent.title && this.additionalContent.description) {
-  //    this.offers.push({
-  //      images: this.additionalContent.imageUrl,
-  //      title: this.additionalContent.title,
-  //      description: this.additionalContent.description,
-  //    });
-  //    this.closeAddContent();
-  // }
-  // }
-
   ngOnInit() {
     this.startAutoplay(); 
   }

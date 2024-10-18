@@ -1,5 +1,14 @@
-.custom-card {
-    max-width: 800px; /* Adjust to your preferred width */
-    width: 100%;
-}
+.transparent-input {
+    background-color: transparent; // Make the background transparent
+    border: 1px solid #d1d5db; // Maintain a light gray border
+    border-radius: 0.375rem; // Same border-radius as your other inputs
+  
+    &::placeholder {
+      color: #a1a1a1; // Change the color of the placeholder to a lighter shade
+    }
+  
+    &:focus {
+      background-color: white; // Set the background to white on focus
+    }
+  }
   

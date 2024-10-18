@@ -19,7 +19,7 @@ export class PackagesService {
     return this.http.get<any>(`${this.apiUrl}/${id}`); // GET request for a specific package
   }
 
-  createPackage(packageData: any): Observable<any> {
+  createPackage(packageData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, packageData); // POST request to create a package
   }
 

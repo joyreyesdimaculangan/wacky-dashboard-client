@@ -22,7 +22,8 @@ import { FileUploadService } from '../../../../../services/file-upload.service';
   selector: 'app-edit-offers',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: ` <div
+  template: ` 
+  <div
     class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
   >
     <div
@@ -58,66 +59,6 @@ import { FileUploadService } from '../../../../../services/file-upload.service';
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 placeholder="Type product name"
               />
-              @if (nameControl.hasError('required') && (nameControl.dirty ||
-              nameControl.touched)) {
-              <div class="text-red-500 text-sm mt-1">Name is required</div>
-              }
-            </div>
-            <div class="col-span-2">
-              <label
-                for="image_url"
-                class="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Image URL
-              </label>
-
-              <div class="flex items-center justify-center w-full">
-                <label
-                  for="dropzone-file"
-                  class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                >
-                  <div
-                    class="flex flex-col items-center justify-center pt-5 pb-6"
-                  >
-                    @if (selectedFile){
-                    <img
-                      [src]="previewUrl()"
-                      alt="Preview"
-                      class="w-full object-cover rounded-lg"
-                    />
-                    } @else {
-                    <svg
-                      class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span class="font-semibold">Click to upload</span> or drag
-                      and drop
-                    </p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
-                    </p>
-                    }
-                  </div>
-                  <input
-                    id="dropzone-file"
-                    type="file"
-                    class="hidden"
-                    (change)="onFileSelected($event)"
-                  />
-                </label>
-              </div>
             </div>
             <div class="col-span-2">
               <label
@@ -186,6 +127,7 @@ export class EditOffersComponent {
     console.log(this.route.snapshot);
     this.menuService.getMenuByMenuID(menuID).subscribe((menu) => {
       this.editMenuForm.patchValue(menu);
+      this.previewUrl.set(menu.image_url);
     });
   }
 
@@ -194,39 +136,19 @@ export class EditOffersComponent {
     this.router.navigate(['/customer/home']);
   }
 
-  onFileSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files[0]) {
-      this.selectedFile = fileInput.files[0];
-
-      // Preview the image
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl.set(reader.result as string) 
-        console.log(this.previewUrl);
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
-  }
-
   submitForm() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('image', this.selectedFile, this.selectedFile.name);
-      formData.append('name', this.editMenuForm.controls['name'].value);
-      formData.append(
-        'description',
-        this.editMenuForm.controls['description'].value
-      );
-    
     const menuID = this.route.snapshot.params['menuID'];
     this.menuService
       .updateMenu(menuID, this.editMenuForm.value as EditMenuValues)
-      .subscribe(() => {
-        console.log('Menu updated successfully');
-        this.editMenuForm.reset();
-        this.router.navigate(['/customer/home']);
-    });
-  }
+      .subscribe({
+        next: () => {
+          console.log('Menu updated successfully');
+          this.editMenuForm.reset();
+          this.router.navigate(['/customer/home']);
+        },
+        error: (err) => {
+          console.error('Error updating menu:', err);
+        },
+      });
   }
 }

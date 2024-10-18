@@ -1,26 +1,20 @@
 /* Style the swiper container */
 .swiper-container {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
-  
-/* Style for each slide */
+
 .swiper-slide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-  
-/* Style for navigation buttons */
+
 .swiper-button-next,
 .swiper-button-prev {
-    color: #000; /* Change to your desired color */
+  color: #38a169; /* Tailwind's green-700 color */
 }
-  
-/* Style for pagination */
-.swiper-pagination-bullet {
-    background: #000; /* Change to your desired color */
+
+.swiper-pagination-bullet-active {
+  background-color: #38a169; /* Tailwind's green-700 color */
 }
-  

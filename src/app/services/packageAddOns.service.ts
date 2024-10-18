@@ -19,7 +19,7 @@ export class PackageAddOnsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`); // GET request for a specific add-on
   }
 
-  createAddOn(addOnData: any): Observable<any> {
+  createAddOn(addOnData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, addOnData); // POST request to create an add-on
   }
 

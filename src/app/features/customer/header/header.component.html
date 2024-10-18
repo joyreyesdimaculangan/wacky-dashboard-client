@@ -1,4 +1,4 @@
-<nav class="bg-white border-b border-gray-200 py-6 shadow-sm">
+<nav class="bg-green-100 border-b border-green-200 py-6 shadow-lg">
     <div class="max-w-screen-xl mx-auto flex items-center justify-between">
         <!-- Logo stays on the left -->
         <div class="flex-none">
@@ -13,31 +13,31 @@
 
         <!-- Centered nav items -->
         <div class="flex-grow hidden md:flex justify-center">
-            <ul class="flex space-x-8 font-medium p-0 bg-white rounded-lg">
+            <ul class="flex space-x-8 font-medium p-0 bg-green-100 rounded-lg">
                 <li>
                     <button [routerLink]="['/customer/home']" fragment="home" 
-                            [ngClass]="{'bg-green-100': isActive('home')}" 
-                            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins">Home</button>
+                            [ngClass]="{'bg-white-100': isActive('home')}" 
+                            class="block py-3 px-5 text-lg text-green-600 hover:bg-white hover:text-green-700 rounded font-poppins">Home</button>
                 </li>
                 <li>
                     <button [routerLink]="['/customer/home']" fragment="menu" 
-                            [ngClass]="{'bg-green-100': isActive('menu')}" 
-                            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins">Menu</button>
+                            [ngClass]="{'bg-white-100': isActive('menu')}" 
+                            class="block py-3 px-5 text-lg text-green-600 hover:bg-white hover:text-green-700 rounded font-poppins">Menu</button>
                 </li>
                 <li>
                     <button [routerLink]="['/customer/home']" fragment="services" 
-                            [ngClass]="{'bg-green-100': isActive('services')}" 
-                            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins">Services</button>
+                            [ngClass]="{'bg-white-100': isActive('services')}" 
+                            class="block py-3 px-5 text-lg text-green-600 hover:bg-white hover:text-green-700 rounded font-poppins">Services</button>
                 </li>
                 <li>
                     <button [routerLink]="['/customer/home']" fragment="reviews" 
-                            [ngClass]="{'bg-green-100': isActive('reviews')}" 
-                            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins">Reviews</button>
+                            [ngClass]="{'bg-white-100': isActive('reviews')}" 
+                            class="block py-3 px-5 text-lg text-green-600 hover:bg-white hover:text-green-700 rounded font-poppins">Reviews</button>
                 </li>
                 <li>
                     <button [routerLink]="['/customer/home']" fragment="inquiry" 
-                            [ngClass]="{'bg-green-100': isActive('inquiry')}" 
-                            class="block py-3 px-5 text-lg text-green-600 hover:bg-green-100 rounded font-poppins">Contact Us</button>
+                            [ngClass]="{'bg-white-100': isActive('inquiry')}" 
+                            class="block py-3 px-5 text-lg text-green-600 hover:bg-white hover:text-green-700 rounded font-poppins">Contact Us</button>
                 </li>
             </ul>
         </div>

@@ -16,11 +16,11 @@ export interface ViewPackages {
   name: string;
   description: string;
   image_url: string;
-  availableAddOns: availableAddOns[];
+  availableAddOns: AvailableAddOns[];
   Inclusion: Inclusion[];
 }
 
-export interface availableAddOns {
+export interface AvailableAddOns {
   addOnID: string;
   name: string;
   packageID: string;

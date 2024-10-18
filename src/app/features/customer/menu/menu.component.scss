@@ -1,9 +1,36 @@
 /* Image */
 img {
     width: 100%;
-    height: auto;
+    height: 300px; /* Set a fixed height for consistency */
     object-fit: cover;
     border-radius: 0.5rem;
+}
+
+/* Ensure the card class is defined */
+.card {
+    position: relative;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    height: 100%; /* Ensure cards take full height */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Add this to your global styles or component-specific styles */
+.card.selected {
+    border: 3px solid #38a169; /* Tailwind's green-600 color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+    border-radius: 0.5rem; /* Ensure the border radius matches the card's */
 }
 
 /* Example of custom media queries for additional control */
@@ -25,37 +52,11 @@ img {
     }
 }
 
-/* Ensure the card class is defined */
-.card {
-    position: relative;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1rem;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: scale(1.05);
-}
-
-/* Add this to your global styles or component-specific styles */
-.card.selected {
-    border: 3px solid #38a169; /* Tailwind's green-600 color */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
-    border-radius: 0.5rem; /* Ensure the border radius matches the card's */
-}
-
 .custom-snackbar-success {
     background-color: #4caf50; /* Green */
     color: white;
-  }
-  
+}
+
 .custom-snackbar-error {
     background-color: #f44336; /* Red */
     color: white;

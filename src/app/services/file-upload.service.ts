@@ -9,6 +9,7 @@ export class FileUploadService {
 
   private url = environment.apiUrl
   private http = inject(HttpClient);
+
   uploadImage(data: FormData) {
     return this.http.post(`${this.url}/images/upload`, data);
   }

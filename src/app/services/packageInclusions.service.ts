@@ -19,7 +19,7 @@ export class PackageInclusionsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`); // GET request for a specific inclusion
   }
 
-  createInclusion(inclusionData: any): Observable<any> {
+  createInclusion(inclusionData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, inclusionData); // POST request to create an inclusion
   }
 
