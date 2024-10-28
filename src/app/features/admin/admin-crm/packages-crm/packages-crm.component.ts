@@ -142,16 +142,17 @@ import { FileUploadService } from '../../../../services/file-upload.service';
           </div>
           <div formArrayName="additionalInclusions">
             <h3 class="text-xl font-bold mb-4">Additional Inclusions</h3>
-            @for(inclusion of additionalInclusions.controls; track $index) {
-            <div [formGroupName]="$index" class="mb-4">
+            @for(inclusion of additionalInclusions.controls; track inclusion;
+            let i = $index) {
+            <div class="mb-4">
               <input
-                formControlName="name"
+                [formControlName]="i"
                 placeholder="Inclusion Name"
                 class="form-input"
               />
               <button
                 type="button"
-                (click)="removeInclusion($index)"
+                (click)="removeInclusion(i)"
                 class="text-red-500"
               >
                 Remove
@@ -169,16 +170,16 @@ import { FileUploadService } from '../../../../services/file-upload.service';
 
           <div formArrayName="addOns">
             <h3 class="text-xl font-bold mb-4">Add-Ons</h3>
-            @for(addOn of addOns.controls; track $index) {
-            <div [formGroupName]="$index" class="mb-4">
+            @for(addOn of addOns.controls; track addOn; let i = $index) {
+            <div class="mb-4">
               <input
-                formControlName="name"
+                [formControlName]="i"
                 placeholder="Add-On Name"
                 class="form-input"
               />
               <button
                 type="button"
-                (click)="removeAddOn($index)"
+                (click)="removeAddOn(i)"
                 class="text-red-500"
               >
                 Remove
@@ -236,11 +237,7 @@ export class PackagesCrmComponent {
   }
 
   addInclusion() {
-    this.additionalInclusions.push(
-      this.fb.group({
-        name: ['', Validators.required],
-      })
-    );
+    this.additionalInclusions.push(this.fb.control(''));
   }
 
   removeInclusion(index: number) {
@@ -248,11 +245,7 @@ export class PackagesCrmComponent {
   }
 
   addAddOn() {
-    this.addOns.push(
-      this.fb.group({
-        name: ['', Validators.required],
-      })
-    );
+    this.addOns.push(this.fb.control(''));
   }
 
   removeAddOn(index: number) {
@@ -282,60 +275,23 @@ export class PackagesCrmComponent {
   submitForm() {
     if (this.selectedFile) {
       const formData = new FormData();
+      const addOns: string[] = this.addPackagesForm.controls['addOns'].value;
+      const additionalInclusions: string[] =
+        this.addPackagesForm.controls['additionalInclusions'].value;
       formData.append('image', this.selectedFile, this.selectedFile.name);
       formData.append('name', this.addPackagesForm.controls['name'].value);
       formData.append(
         'description',
         this.addPackagesForm.controls['description'].value
       );
-  
+      formData.append('addOns', JSON.stringify(addOns));
+      formData.append('inclusions', JSON.stringify(additionalInclusions));
+
       // Create the package first
       this.packageService.createPackage(formData).subscribe({
-        next: (createdPackage) => {
-          const packageID = createdPackage.packageID;
-  
-          // Create additional inclusions
-          const additionalInclusions = this.addPackagesForm.controls['additionalInclusions'].value;
-          const inclusionRequests = additionalInclusions.map((inclusion: any) => {
-            const inclusionData = {
-              name: inclusion.name,
-              packageID: packageID // Associate with packageID
-            };
-            const inclusionFormData = new FormData();
-            inclusionFormData.append('name', inclusionData.name);
-            inclusionFormData.append('packageID', inclusionData.packageID);
-            return this.additionalInclusionsService.createInclusion(inclusionFormData);
-          });
-  
-          // Create add-ons
-          const addOns = this.addPackagesForm.controls['addOns'].value;
-          const addOnRequests = addOns.map((addOn: any) => {
-            const addOnData = {
-              name: addOn.name,
-              packageID: packageID // Associate with packageID
-            };
-            const addOnFormData = new FormData();
-            addOnFormData.append('name', addOnData.name);
-            addOnFormData.append('packageID', addOnData.packageID);
-            return this.addOnService.createAddOn(addOnFormData);
-          });
-  
-          // Use forkJoin to wait for all requests to complete
-          forkJoin([...inclusionRequests, ...addOnRequests]).subscribe({
-            next: () => {
-              console.log('All inclusions and add-ons created successfully');
-              // Reset the form and navigate
-              this.addPackagesForm.reset();
-              this.router.navigate(['/customer/home']);
-            },
-            error: (err) => {
-              console.error('Error creating inclusions or add-ons:', err);
-            }
-          });
+        next: (response) => {
+          console.log(response);
         },
-        error: (err) => {
-          console.error('Error creating package:', err);
-        }
       });
     }
   }
