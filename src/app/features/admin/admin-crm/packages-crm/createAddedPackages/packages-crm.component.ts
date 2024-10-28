@@ -18,20 +18,25 @@ import {
   Validators,
 } from '@angular/forms';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
-import { PackagesService } from '../../../../services/packages.service';
+import { PackagesService } from '../../../../../services/packages.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PackageInclusionsService } from '../../../../services/packageInclusions.service';
-import { PackageAddOnsService } from '../../../../services/packageAddOns.service';
-import { Packages } from '../../../../models/packages';
-import { PackageInclusions } from '../../../../models/packageInclusions';
-import { PackageAddOns } from '../../../../models/packageAddOns';
-import { ViewPackages } from '../../../../models/packages';
-import { FileUploadService } from '../../../../services/file-upload.service';
+import { PackageInclusionsService } from '../../../../../services/packageInclusions.service';
+import { PackageAddOnsService } from '../../../../../services/packageAddOns.service';
+import { Packages } from '../../../../../models/packages';
+import { PackageInclusions } from '../../../../../models/packageInclusions';
+import { PackageAddOns } from '../../../../../models/packageAddOns';
+import { ViewPackages } from '../../../../../models/packages';
+import { FileUploadService } from '../../../../../services/file-upload.service';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-packages-crm',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    MatIconModule],
   template: ` <div
     class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
   >
@@ -67,62 +72,67 @@ import { FileUploadService } from '../../../../services/file-upload.service';
                 required=""
               />
             </div>
+            <!-- Image upload dropzone -->
             <div class="col-span-2">
-              <label
-                for="image_url"
-                class="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Image URL
-              </label>
-
-              <div class="flex items-center justify-center w-full">
                 <label
-                  for="dropzone-file"
-                  class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                  for="image_url"
+                  class="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  <div
-                    class="flex flex-col items-center justify-center pt-5 pb-6"
+                  Image URL
+                </label>
+
+                <div class="flex items-center justify-center w-full">
+                  <label
+                    for="dropzone-file"
+                    class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    [ngClass]="selectedFile ? 'h-auto' : 'h-64'"
                   >
-                    @if (selectedFile){
+                    <div
+                      class="flex flex-col items-center justify-center pt-5 pb-6"
+                      *ngIf="!selectedFile"
+                    >
+                      <svg
+                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Click to upload</span> or
+                        drag and drop
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      </p>
+                    </div>
+
+                    <!-- Image preview -->
                     <img
+                      *ngIf="selectedFile"
                       [src]="previewUrl()"
                       alt="Preview"
                       class="w-full object-cover rounded-lg"
+                      style="max-height: 300px; max-width: 100%;"
                     />
-                    } @else {
-                    <svg
-                      class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span class="font-semibold">Click to upload</span> or drag
-                      and drop
-                    </p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
-                    </p>
-                    }
-                  </div>
-                  <input
-                    id="dropzone-file"
-                    type="file"
-                    class="hidden"
-                    (change)="onFileSelected($event)"
-                  />
-                </label>
+
+                    <input
+                      id="dropzone-file"
+                      type="file"
+                      class="hidden"
+                      (change)="onFileSelected($event)"
+                    />
+                  </label>
+                </div>
               </div>
-            </div>
             <div class="col-span-2">
               <label
                 for="description"
@@ -142,23 +152,27 @@ import { FileUploadService } from '../../../../services/file-upload.service';
           </div>
           <div formArrayName="additionalInclusions">
             <h3 class="text-xl font-bold mb-4">Additional Inclusions</h3>
-            @for(inclusion of additionalInclusions.controls; track inclusion;
-            let i = $index) {
-            <div class="mb-4">
+            <div
+              *ngFor="
+                let inclusion of additionalInclusions.controls;
+                let i = index
+              "
+              class="flex items-center gap-2 mb-4"
+            >
               <input
                 [formControlName]="i"
                 placeholder="Inclusion Name"
-                class="form-input"
+                class="form-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5"
               />
               <button
                 type="button"
                 (click)="removeInclusion(i)"
-                class="text-red-500"
+                class="text-red-500 hover:text-red-700"
+                aria-label="Delete inclusion"
               >
-                Remove
+                <mat-icon>delete</mat-icon>
               </button>
             </div>
-            }
             <button
               type="button"
               (click)="addInclusion()"
@@ -168,28 +182,31 @@ import { FileUploadService } from '../../../../services/file-upload.service';
             </button>
           </div>
 
-          <div formArrayName="addOns">
+          <div formArrayName="addOns" class="mt-4">
             <h3 class="text-xl font-bold mb-4">Add-Ons</h3>
-            @for(addOn of addOns.controls; track addOn; let i = $index) {
-            <div class="mb-4">
+            <div
+              *ngFor="let addOn of addOns.controls; let i = index"
+              class="flex items-center gap-2 mb-4"
+            >
               <input
                 [formControlName]="i"
                 placeholder="Add-On Name"
-                class="form-input"
+                class="form-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5"
               />
               <button
                 type="button"
                 (click)="removeAddOn(i)"
-                class="text-red-500"
+                class="text-red-500 hover:text-red-700"
+                aria-label="Delete add-on"
               >
-                Remove
+                <mat-icon>delete</mat-icon>
               </button>
             </div>
-            }
             <button type="button" (click)="addAddOn()" class="text-green-500">
               Add Add-On
             </button>
           </div>
+
           <div class="flex justify-end mt-4">
             <button
               type="button"
@@ -203,7 +220,6 @@ import { FileUploadService } from '../../../../services/file-upload.service';
       </div>
     </div>
   </div>`,
-  styleUrls: ['./packages-crm.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesCrmComponent {

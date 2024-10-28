@@ -39,7 +39,6 @@ export class PackageDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.getPackageInclusions();
     this.getPackageAddOns();
-    // this.getPackageData(); // Fetch package data on initialization
   }
 
   getPackageInclusions() {

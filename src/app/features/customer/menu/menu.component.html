@@ -57,7 +57,7 @@
         <img
           [src]="dishes.image_url"
           class="w-full h-48 object-cover rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-105"
-          alt="Product Image"
+          alt="Product Image {{ $index + 1 }}"
         />
         <!-- Set fixed height for consistency -->
 
@@ -99,7 +99,7 @@
       <!-- Add New Dish Card -->
       <div
         [routerLink]="['/admin/add-menu']"
-        class="bg-green-200 shadow-lg rounded-lg overflow-hidden flex flex-col justify-center items-center p-4 h-full"
+        class="bg-green-200 shadow-lg rounded-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 flex flex-col items-center justify-center p-4 h-full"
       >
         <svg
           [routerLink]="['/admin/add-menu']"

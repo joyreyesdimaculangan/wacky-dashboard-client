@@ -36,6 +36,6 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'add-packages',
-    loadComponent: () => import('./admin-crm/packages-crm/packages-crm.component').then((m) => m.PackagesCrmComponent),
+    loadComponent: () => import('./admin-crm/packages-crm/createAddedPackages/packages-crm.component').then((m) => m.PackagesCrmComponent),
   },
 ];

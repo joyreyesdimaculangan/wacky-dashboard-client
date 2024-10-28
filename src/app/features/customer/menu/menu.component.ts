@@ -8,7 +8,7 @@ import { OffersCrmComponent } from '../../admin/admin-crm/menu-crm/createAddedMe
 import { MenuService } from '../../../services/menu.service';
 import { Menu } from '../../../models/menu';
 import { EditOffersComponent } from '../../admin/admin-crm/menu-crm/patchMenu/edit-offers.component';
-import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/delete-offers/delete-offers.component';
+import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/deleteMenu/delete-offers.component';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -37,12 +37,11 @@ export class MenuComponent implements OnInit{
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   public selectedItems: Set<string> = new Set<string>();
+  public menu : Menu[] = [];
 
   ngOnInit(): void {
     this.getMenus();
   }
-  
-  public menu : Menu[] = [];
 
   getMenus() {
     this.menuService.getMenu().subscribe((data: any) => {
