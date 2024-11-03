@@ -7,7 +7,6 @@ export interface ReservationForm {
     eventTime: string,
     eventTheme: string,
     cakeTheme: string,
-    cakeMessage: string,
     otherRequest: string,
     packageID: string,
     accountProfileId: string,

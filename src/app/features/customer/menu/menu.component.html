@@ -45,9 +45,10 @@
     </div>
 
     <!-- Products Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 m-2">
+    <div cdkDropList (cdkDropListDropped)="drop($event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 m-2">
       @for (dishes of menu; track $index) {
       <div
+        cdkDrag
         class="relative bg-white shadow-lg rounded-lg overflow-hidden flex flex-col justify-between p-4 h-full cursor-pointer"
         [class.border-2]="isSelected(dishes.menuID.toString())"
         [class.border-red-500]="isSelected(dishes.menuID.toString())"

@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  inject,
   Input,
   OnInit,
   Output,
@@ -42,6 +43,9 @@ import { ReservationForm } from '../../../models/reservation-form';
   styleUrls: ['./reservation-form.component.scss'], // Corrected from styleUrl to styleUrls
 })
 export class ReservationFormComponent implements OnInit {
+  private readonly reservationService = inject(ReservationService);
+  private readonly router = inject(Router);
+  private fb = inject(FormBuilder);
 
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
@@ -60,11 +64,6 @@ export class ReservationFormComponent implements OnInit {
     { id: '4-00-pm', value: '4:00 PM', label: '4:00 PM' },
   ];
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private reservationService: ReservationService
-  ) {}
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
       name: ['', Validators.required],
@@ -165,13 +164,12 @@ export class ReservationFormComponent implements OnInit {
         contactNumber: this.step1.get("contactNumber")?.value,
         eventDate: this.step2.get("eventDate")?.value,
         eventTime: this.step2.get("eventTime")?.value,
-        eventTheme: this.reservationForm.value.eventTheme,
-        cakeTheme: this.step3.get("eventTheme")?.value,
-        cakeMessage: this.reservationForm.value.cakeMessage,
+        eventTheme: this.step3.get("eventTheme")?.value,
+        cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
         packageID: 'test',
         accountProfileId: "cff20a45-a425-47f5-9240-d9cab05e1af8",
-        status: "Pending" // Ensure status is either 'Pending' or the provided value
+        status: statusValue,
       };
 
       console.log('Reservation submitted:', reservationData);

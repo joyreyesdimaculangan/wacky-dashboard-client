@@ -56,4 +56,16 @@ export class ReservationService {
   deleteReservation(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`); // DELETE request to remove a reservation
   }
+
+  getPackageID(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  getAccountProfileById(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
+
+  getStatus(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
 }

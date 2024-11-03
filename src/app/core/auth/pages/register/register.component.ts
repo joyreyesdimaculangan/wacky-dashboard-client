@@ -52,6 +52,32 @@ import { HttpErrorResponse } from '@angular/common/http';
           />
         </div>
 
+        <div class="mb-6">
+          <label for="contactNo" class="block text-green-900 font-semibold mb-2"
+            >Contact No.</label
+          >
+          <input 
+            type="tel" 
+            id="contactNo" 
+            formControlName="contactNo"
+            class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" 
+            placeholder="Enter your Contact Number"
+          />
+        </div>
+
+        <div class="mb-6">
+          <label for="Address" class="block text-green-900 font-semibold mb-2"
+            >Address</label
+          >
+          <input 
+            type="text" 
+            id="address" 
+            formControlName="address"
+            class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" 
+            placeholder="Enter your Address"
+          />
+        </div>
+
         <!-- Email Input -->
         <div class="mb-6">
           <label for="email" class="block text-green-900 font-semibold mb-2"
@@ -199,6 +225,8 @@ export class RegisterComponent {
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       name: [''],
+      contactNo: [''],
+      address: [''],
       email: [''],
       password: [''],
       confirmPassword: [''],

@@ -318,8 +318,11 @@ export class PackagesCrmComponent {
       this.packageService.createPackage(formData).subscribe({
         next: (response) => {
           console.log(response);
+          this.addPackagesForm.reset();
+          this.router.navigate(['/customer/home']);
         },
       });
+
     }
   }
 }
