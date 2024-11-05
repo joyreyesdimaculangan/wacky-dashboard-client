@@ -29,8 +29,8 @@ export class MenuService {
     return this.http.patch<any>(`${this.apiUrl}/${menuID}`, menuData); // PATCH request to update a menu
   }
 
-  updateMenuOrder(menuData: Menu[]): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/order`, menuData); // PATCH request to update the order of the menu
+  updateMenuOrder(orderedMenu: { menuID: string; position: number }[]): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/order`, orderedMenu); // PATCH request to update the order of the menu
   }
 
   deleteMenu(menuID: string): Observable<any> {

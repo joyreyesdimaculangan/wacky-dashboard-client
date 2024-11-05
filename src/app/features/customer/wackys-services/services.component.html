@@ -74,7 +74,8 @@
         
             <!-- Learn More Button -->
             <button
-              (click)="openPackageModal(offer); $event.stopPropagation()"
+              (click)="openPackageModal(offer); $event.stopPropagation(); pushPackageDetails(offer.packageID)"
+              
               class="mt-4 inline-block bg-green-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto mb-6"
             >
               Learn More

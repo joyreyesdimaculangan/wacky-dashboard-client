@@ -11,5 +11,7 @@ export interface ReservationForm {
     packageID: string,
     accountProfileId: string,
     status: 'Pending' | 'Approved' | 'Cancelled' 
+    paymentStatus: 'PENDING' | 'PAID' | 'FAILED'
+    addOnIds: string[],
 }
   

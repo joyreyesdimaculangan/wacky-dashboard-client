@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -23,7 +24,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
+import { Location } from '@angular/common';
 import { ReservationForm } from '../../../models/reservation-form';
+import { PackageDetailsService } from './packageDetails.service';
+
 
 @Component({
   selector: 'app-reservation-form',
@@ -46,6 +50,8 @@ export class ReservationFormComponent implements OnInit {
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
   private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private packageDetailsService = inject(PackageDetailsService);
 
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
@@ -136,7 +142,7 @@ export class ReservationFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['customer/home']);
+    this.location.back();
   }
 
   get step1() {
@@ -170,6 +176,8 @@ export class ReservationFormComponent implements OnInit {
         packageID: 'test',
         accountProfileId: "cff20a45-a425-47f5-9240-d9cab05e1af8",
         status: statusValue,
+        paymentStatus: 'PENDING',
+        addOnIds: []
       };
 
       console.log('Reservation submitted:', reservationData);
@@ -178,7 +186,6 @@ export class ReservationFormComponent implements OnInit {
       this.reservationService.createReservation(reservationData).subscribe({
         next: (response) => {
           console.log('Reservation created successfully:', response);
-          // this.router.navigate(['/confirmation']);
           this.reservationSubmitted.emit(reservationData);
           this.close.emit();
         },

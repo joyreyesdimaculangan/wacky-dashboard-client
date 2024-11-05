@@ -6,7 +6,7 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OffersCrmComponent } from '../../admin/admin-crm/menu-crm/createAddedMenu/offers-crm.component';
 import { MenuService } from '../../../services/menu.service';
-import { Menu } from '../../../models/menu';
+import { Menu, MenuValues } from '../../../models/menu';
 import { EditOffersComponent } from '../../admin/admin-crm/menu-crm/patchMenu/edit-offers.component';
 import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/deleteMenu/delete-offers.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,6 +41,7 @@ export class MenuComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   public selectedItems: Set<string> = new Set<string>();
   public menu: Menu[] = [];
+  public menuValues: MenuValues[] = [];
   isDragging = false;
 
   ngOnInit(): void {
@@ -173,26 +174,35 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<Menu[]>) {
+  drop(event: CdkDragDrop<MenuValues[]>) {
     // Use moveItemInArray for simpler array manipulation
-    moveItemInArray(this.menu, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.menuValues, event.previousIndex, event.currentIndex);
 
     // Debugging log to confirm reordering
-    console.log('Menu items reordered:', this.menu);
+    console.log(
+      'Menu items reordered:',
+      this.menuValues.map((item) => item.menuID)
+    );
 
     // Call the service to update the menu order in the backend
     this.updateMenuOrder();
   }
 
   updateMenuOrder() {
-    this.menuService.updateMenuOrder(this.menu).subscribe(() => {
-      console.log('Menu order updated successfully');
-      this.snackBar.open('Menu order updated successfully.', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['custom-snackbar-success'],
-      });
-    });
+    // Prepare data with the new order
+    const orderedMenu = this.menuValues.map((item, index) => ({
+      menuID: item.menuID,
+      position: index, // Assign a new position based on array index
+    }));
+
+    // Send the updated order to the backend
+    this.menuService.updateMenuOrder(orderedMenu).subscribe(
+      (response) => {
+        console.log('Menu order updated successfully:', response);
+      },
+      (error) => {
+        console.error('Error updating menu order:', error);
+      }
+    );
   }
 }

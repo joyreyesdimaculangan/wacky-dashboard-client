@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/deleteMenu/delete-offers.component';
 import { forkJoin } from 'rxjs';
 import { DeletePackagesComponent } from '../../admin/admin-crm/packages-crm/deletePackages/delete-packages/delete-packages.component';
+import { PackageDetailsService } from '../reservation-form/packageDetails.service';
 declare const Flowbite: any;
 
 @Component({
@@ -31,6 +32,7 @@ declare const Flowbite: any;
 })
 export class ServicesComponent implements OnInit {
   private readonly packageService = inject(PackagesService);
+  private readonly packageDetails = inject(PackageDetailsService)
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   public selectedItems: Set<string> = new Set<string>();
@@ -41,6 +43,12 @@ export class ServicesComponent implements OnInit {
   ngOnInit(): void {
     this.getPackages();
   }
+
+  pushPackageDetails(packageInfo: string): void {
+    this.packageDetails.packageDetails().push(packageInfo);
+    console.log(this.packageDetails.packageDetails());
+  }
+
 
   getPackages() {
     this.packageService.getPackages().subscribe((data: Packages[]) => {

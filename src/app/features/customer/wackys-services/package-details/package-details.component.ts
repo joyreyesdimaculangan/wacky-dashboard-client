@@ -5,6 +5,9 @@ import {
   inject,
   OnInit,
   Input,
+  Output,
+  EventEmitter,
+  effect,
 } from '@angular/core';
 import { ReservationFormComponent } from '../../reservation-form/reservation-form.component';
 import { RouterModule } from '@angular/router';
@@ -14,6 +17,7 @@ import { PackageInclusions } from '../../../../models/packageInclusions';
 import { PackageInclusionsService } from '../../../../services/packageInclusions.service';
 import { PackageAddOnsService } from '../../../../services/packageAddOns.service';
 import { PackageAddOns } from '../../../../models/packageAddOns';
+import { PackageDetailsService } from '../../reservation-form/packageDetails.service';
 
 @Component({
   selector: 'app-package-details',
@@ -23,22 +27,50 @@ import { PackageAddOns } from '../../../../models/packageAddOns';
   styleUrls: ['./package-details.component.scss'],
 })
 export class PackageDetailsComponent implements OnInit {
+  @Input() package!: Packages;
+  @Output() addOnsSelected = new EventEmitter<string[]>();
+
+  selectedAddOns: string[] = [];
+
   public cdr = inject(ChangeDetectorRef);
   private readonly additionalInclusionsService = inject(
     PackageInclusionsService
   );
   private readonly packageAddOnsService = inject(PackageAddOnsService);
   private readonly packagesService = inject(PackagesService);
+  private readonly packageDetails = inject(PackageDetailsService);
 
   public packageInclusions: PackageInclusions[] = [];
   public packagesAddOns: PackageAddOns[] = [];
   packageData: ViewPackages | null = null; // Define a property to store the fetched package data
+  constructor() {
+    effect(() => {
+      console.log(this.packageDetails.packageDetails());
+    });
+  }
 
   isOpen: boolean = false;
 
   ngOnInit(): void {
     this.getPackageInclusions();
     this.getPackageAddOns();
+  }
+
+  pushAddOn(addOn: string): void {
+    this.packageDetails.packageDetails().push(addOn);
+    console.log(this.packageDetails.packageDetails());
+  }
+
+  onAddOnChange(addOn: string, isChecked: boolean): void {
+    if (isChecked) {
+      this.selectedAddOns.push(addOn);
+    } else {
+      const index = this.selectedAddOns.indexOf(addOn);
+      if (index > -1) {
+        this.selectedAddOns.splice(index, 1);
+      }
+    }
+    this.addOnsSelected.emit(this.selectedAddOns);
   }
 
   getPackageInclusions() {
