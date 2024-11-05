@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -204,7 +204,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   registerForm!: FormGroup;
   registerError = '';
   showPassword: boolean = false;
@@ -234,27 +234,41 @@ export class RegisterComponent {
   }
 
   onRegister() {
-    this.registerFormSubscription.add(
-      this.authService
-        .register( this.registerForm.value.name, this.registerForm.value.email, this.registerForm.value.password, this.registerForm.value.confirmPassword )
-        .pipe(
-          catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-              alert('Invalid Credentials');
+    if (this.registerForm.valid) {
+      this.registerFormSubscription.add(
+        this.authService
+          .register(
+            this.registerForm.value.name,
+            this.registerForm.value.email,
+            this.registerForm.value.password,
+            this.registerForm.value.confirmPassword
+          )
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              if (error.status === 401) {
+                alert('Invalid Credentials');
+              } else {
+                alert('An error occurred. Please try again.');
+              }
+              return throwError(error);
+            })
+          )
+          .subscribe((response) => {
+            console.log('Response:', response); // Log the response for debugging
+            if (response && response.status === 201 || response.status === 200) {
+              this.router.navigate(['auth/login']);
+              console.log('Registration successful');
+            } else {
+              alert('Registration failed. Please try again.');
             }
-            return throwError(error);
           })
-        )
-        .subscribe((response) => {
-          if (response['status'] == 200) {
-            if (this.authService.user()?.account_type === 'admin') {
-              this.router.navigate(['admin/dashboard'])
-            } 
-            else {
-              this.router.navigate(['customer/home']);
-            }
-          }
-        })
-      )
+      );
+    } else {
+      alert('Please fill in all required fields.');
+    }
+  }
+
+  ngOnDestroy() {
+    this.registerFormSubscription.unsubscribe();
   }
 }
