@@ -10,7 +10,7 @@ export class AccountProfileService {
 
   private apiUrl = environment.apiUrl + '/account'; // NestJS API endpoint
 
-  getAccountProfileById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getAccountProfile() {
+    return this.http.get<any>(this.apiUrl);
   }
 }

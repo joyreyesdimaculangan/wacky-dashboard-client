@@ -1,6 +1,11 @@
 import { PackageInclusions } from './packageInclusions';
 import { PackageAddOns } from './packageAddOns';
 
+export interface PackageName {
+  packageId: string;
+  packageName: string;
+}
+
 export interface Packages {
   packageID: string;
   name: string;

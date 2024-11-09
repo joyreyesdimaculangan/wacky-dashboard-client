@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -26,7 +27,11 @@ import { Router, RouterModule } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
 import { Location } from '@angular/common';
 import { ReservationForm } from '../../../models/reservation-form';
-import { PackageDetailsService } from './packageDetails.service';
+import { GetPackageAddOnsService } from './getPackageAddOns.service';
+import { GetPackageNameService } from './getPackageName.service';
+import { AccountProfileService } from '../../../services/account-profile.service';
+import { AuthService } from '../../../core/auth/services/auth.service';
+import { PackageName } from '../../../models/packages';
 
 
 @Component({
@@ -51,7 +56,23 @@ export class ReservationFormComponent implements OnInit {
   private readonly router = inject(Router);
   private fb = inject(FormBuilder);
   private location = inject(Location);
-  private packageDetailsService = inject(PackageDetailsService);
+  private authService = inject(AuthService);
+  private accountProfileService = inject(AccountProfileService);
+  private packageNameService = inject(GetPackageNameService);
+  private packageAddOnsService = inject(GetPackageAddOnsService);
+
+  packages: any[] = [];
+  addOns: any[] = [];
+  packageName: PackageName | null = null;
+  packageAddOns: string[] = [];
+  accountProfileId: string = '';
+
+  constructor() {
+    effect(() => {
+      console.log(this.packageNameService.packageName());
+      console.log(this.packageAddOnsService.packageDetails());
+    });
+  }
 
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
@@ -72,6 +93,9 @@ export class ReservationFormComponent implements OnInit {
 
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
+      // packageID: [null, Validators.required],
+      // addOnID: this.fb.array([]),
+      // accountProfileId: [null, Validators.required],
       name: ['', Validators.required],
       contactNumber: [
         '',
@@ -83,6 +107,8 @@ export class ReservationFormComponent implements OnInit {
       eventTheme: ['', Validators.required],
       cakeTheme: ['', Validators.required],
       otherRequest: [''],
+      paymentStatus: ['PENDING'],
+      status: ['Pending'],
     });
     this.reservationForm = new FormGroup({
       customerDetails: new FormGroup({
@@ -108,7 +134,35 @@ export class ReservationFormComponent implements OnInit {
         otherRequest: new FormControl(''),
       }),
     });
+
+    const packageName = this.packageNameService.getPackageName();
+    if (packageName) {
+      this.packageName = {
+        packageId: packageName.packageId,
+        packageName: packageName.packageName,
+      };
+    }
+
+    const packageDetails = this.packageAddOnsService.getPackageDetails();
+    if (packageDetails) {
+      this.packageAddOns = packageDetails;
+      const addOnsFormArray = this.reservationForm.get('addOns') as FormArray;
+      this.packageAddOns.forEach(addOn => addOnsFormArray.push(this.fb.control(addOn)));
+    }
+
+    this.accountProfileService.getAccountProfile().subscribe(
+      (profile) => {
+        this.accountProfileId = profile.id;
+      },
+      (error) => {
+        console.error('Error fetching account profile ID:', error);
+      },
+    );
+    console.log('Account Profile ID:', this.accountProfileId);
+    console.log('Package Name:', this.packageName);
+    console.log('Package Add-Ons:', this.packageAddOns);
   }
+  
   isFirstStepComplete = false;
   isSecondStepComplete = false;
   isReservationOpen = false;
@@ -133,7 +187,6 @@ export class ReservationFormComponent implements OnInit {
     } else if (this.stepper.selectedIndex === 2) {
       console.log(this.stepper.selectedIndex);
       this.stepper.selectedIndex = 3; // Move to Confirmation
-      
     }
   }
 
@@ -161,6 +214,7 @@ export class ReservationFormComponent implements OnInit {
     if (this.reservationForm.valid) {
       // Ensure the status is properly set, defaulting to 'Pending' if undefined
       const statusValue: 'Pending' = this.reservationForm.value.status || 'Pending'; 
+      const paymentStatusValue: 'PENDING' = this.reservationForm.value.paymentStatus || 'PENDING';
 
       // Map form values to the ReservationForm interface
       const reservationData: ReservationForm = {
@@ -173,52 +227,25 @@ export class ReservationFormComponent implements OnInit {
         eventTheme: this.step3.get("eventTheme")?.value,
         cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
-        packageID: 'test',
-        accountProfileId: "cff20a45-a425-47f5-9240-d9cab05e1af8",
+        packageID: this.reservationForm.get("packageID")?.value,
+        accountProfileId: '',
         status: statusValue,
-        paymentStatus: 'PENDING',
-        addOnIds: []
+        paymentStatus: paymentStatusValue,
+        addOnIds: this.reservationForm.get("addOnIds")?.value
       };
 
       console.log('Reservation submitted:', reservationData);
 
-      // Call the service to create a reservation
-      this.reservationService.createReservation(reservationData).subscribe({
-        next: (response) => {
-          console.log('Reservation created successfully:', response);
-          this.reservationSubmitted.emit(reservationData);
+      this.reservationService.createReservation(reservationData).subscribe(
+        (response) => {
+          console.log('Reservation created:', response);
+          this.reservationSubmitted.emit(response);
           this.close.emit();
         },
-        error: (error) => {
+        (error) => {
           console.error('Error creating reservation:', error);
-          // Handle error messages here
         },
-      });
-    } else {
-      console.log('Please complete all steps before submitting.');
-      this.displayErrorMessages();
-    }
-  }
-
-  displayErrorMessages() {
-    const errors = this.reservationForm.errors;
-    if (errors) {
-      // You can handle specific error messages based on the errors
-      if (this.step1.get('name')?.hasError('required')) {
-        console.log('Name is required.');
-      }
-      if (this.step1.get('contactNumber')?.hasError('required')) {
-        console.log('Contact number is required.');
-      }
-      if (this.step1.get('contactNumber')?.hasError('pattern')) {
-        console.log('Contact number must be numeric.');
-      }
-      if (this.step1.get('numberOfPax')?.hasError('required')) {
-        console.log('Number of pax is required.');
-      }
-      if (this.step1.get('numberOfPax')?.hasError('min')) {
-        console.log('Number of pax must be at least 1.');
-      }
+      );
     }
   }
 }

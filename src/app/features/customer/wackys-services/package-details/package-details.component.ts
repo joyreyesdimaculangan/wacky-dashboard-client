@@ -17,7 +17,7 @@ import { PackageInclusions } from '../../../../models/packageInclusions';
 import { PackageInclusionsService } from '../../../../services/packageInclusions.service';
 import { PackageAddOnsService } from '../../../../services/packageAddOns.service';
 import { PackageAddOns } from '../../../../models/packageAddOns';
-import { PackageDetailsService } from '../../reservation-form/packageDetails.service';
+import { GetPackageAddOnsService } from '../../reservation-form/getPackageAddOns.service';
 
 @Component({
   selector: 'app-package-details',
@@ -38,7 +38,7 @@ export class PackageDetailsComponent implements OnInit {
   );
   private readonly packageAddOnsService = inject(PackageAddOnsService);
   private readonly packagesService = inject(PackagesService);
-  private readonly packageDetails = inject(PackageDetailsService);
+  private readonly packageDetails = inject(GetPackageAddOnsService);
 
   public packageInclusions: PackageInclusions[] = [];
   public packagesAddOns: PackageAddOns[] = [];

@@ -12,7 +12,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/deleteMenu/delete-offers.component';
 import { forkJoin } from 'rxjs';
 import { DeletePackagesComponent } from '../../admin/admin-crm/packages-crm/deletePackages/delete-packages/delete-packages.component';
-import { PackageDetailsService } from '../reservation-form/packageDetails.service';
+import { GetPackageAddOnsService } from '../reservation-form/getPackageAddOns.service';
+import { GetPackageNameService } from '../reservation-form/getPackageName.service';
+import { effect as angularEffect } from '@angular/core';
 declare const Flowbite: any;
 
 @Component({
@@ -32,7 +34,7 @@ declare const Flowbite: any;
 })
 export class ServicesComponent implements OnInit {
   private readonly packageService = inject(PackagesService);
-  private readonly packageDetails = inject(PackageDetailsService)
+  private readonly packageDetails = inject(GetPackageNameService)
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   public selectedItems: Set<string> = new Set<string>();
@@ -44,9 +46,10 @@ export class ServicesComponent implements OnInit {
     this.getPackages();
   }
 
-  pushPackageDetails(packageInfo: string): void {
-    this.packageDetails.packageDetails().push(packageInfo);
-    console.log(this.packageDetails.packageDetails());
+  pushPackageName(packageId: string, packageName: string): void {
+    this.packageDetails.setPackageName(packageId, packageName);
+    this.packageDetails.getPackageName();
+    console.log(this.packageDetails.packageName());
   }
 
 
@@ -172,3 +175,7 @@ export class ServicesComponent implements OnInit {
     });
   }
 }
+function effect(arg0: () => void) {
+  throw new Error('Function not implemented.');
+}
+

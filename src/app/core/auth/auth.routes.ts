@@ -1,4 +1,6 @@
 import { Routes } from "@angular/router";
+import { hasTokenGuard } from "./guards/hasToken.guard";
+import { hasRoleGuard } from "./guards/hasRole.guard";
 
 export const AuthRoutes: Routes = [
   {
@@ -8,7 +10,8 @@ export const AuthRoutes: Routes = [
   },
   {
     path: 'login', 
-    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent)
+    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),
+    // canActivate: [hasRoleGuard]
   },
   {
     path: 'register', 

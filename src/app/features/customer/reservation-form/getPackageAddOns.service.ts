@@ -9,13 +9,16 @@ interface packageDetails {
   providedIn: 'root'
 })
 
-export class PackageDetailsService {
+export class GetPackageAddOnsService {
   packageDetails = signal<string[]>([]);
   
-
   setPackageDetails(packageDetail:string[]): void {
     this.packageDetails.update(values => {
       return [...values, ...packageDetail];
     });
+  }
+
+  getPackageDetails(): string[] {
+    return this.packageDetails();
   }
 }

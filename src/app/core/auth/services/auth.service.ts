@@ -23,8 +23,9 @@ export class AuthService {
   private readonly auth = inject(LoginService);
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
+
   // Mock login function; replace with actual backend integration
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<any> {
     return this.auth.login(email, password).pipe(
       tap((response: any) => {
         if (!response.access_token) {
@@ -33,13 +34,14 @@ export class AuthService {
         this._isLoggedIn$.next(true);
         localStorage.setItem(environment.TOKEN_NAME, response.access_token);
         this.userInfo = this.getUser(response.access_token);
-        this.user.set(this.getUser(response.access_token));
+        this.user.set(this.userInfo);
+        this.accountType.set(this.userInfo?.account_type);
       })
     );
   }
 
-  register(name: string, email: string, password: string, confirmPassword: string) {
-    return this.auth.register(name, email, password, confirmPassword).pipe(
+  register(name: string, contactNo: string, address: string, email: string, password: string, confirmPassword: string): Observable<any> {
+    return this.auth.register(name, contactNo, address, email, password, confirmPassword).pipe(
       tap((response: any) => {
         if (!response.access_token) {
           return;
@@ -47,7 +49,8 @@ export class AuthService {
         this._isLoggedIn$.next(true);
         localStorage.setItem(environment.TOKEN_NAME, response.access_token);
         this.userInfo = this.getUser(response.access_token);
-        this.user.set(this.getUser(response.access_token));
+        this.user.set(this.userInfo);
+        this.accountType.set(this.userInfo?.account_type);
       })
     );
   }
@@ -65,16 +68,17 @@ export class AuthService {
   }
 
   logout() {
-    this.isAuthenticated = false;
-    this.userRole = null;
     this._isLoggedIn$.next(false);
-        localStorage.removeItem(environment.TOKEN_NAME);
-        this.router.navigate([''])
+    localStorage.removeItem(environment.TOKEN_NAME);
+    this.userInfo = null;
+    this.user.set(null);
+    this.accountType.set(undefined);
+    this.router.navigate(['/login']);
   }
 
   public getUser(token: string): User | null {
     if (!token) {
-      this.router.navigate(['']);
+      this.router.navigate(['/login']);
       return null;
     }
     return JSON.parse(atob(token.split('.')[1])) as User;
