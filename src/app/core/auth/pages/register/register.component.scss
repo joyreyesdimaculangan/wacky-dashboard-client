@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 button {
   transition: background-color 0.3s ease;
 
@@ -8,5 +10,35 @@ button {
       background-color: darken(#1877f2, 10%); // Darken Facebook color on hover
     }
   }
+}
+
+mat-error {
+  font-family: 'Open Sans', sans-serif; // Use a minimalist font family
+  font-size: 0.875rem; // Adjust the font size
+  color: red; // Ensure the error message is red
+  font-weight: 400; // Use a normal font weight
+  margin-top: 0.25rem; // Add some spacing above the error message
+  font-style: italic;
+}
+
+input {
+  padding-right: 3rem; // Ensure enough space for the icon
+}
+
+.snackbar-success {
+  background-color: #4caf50 !important; // Green background for success messages
+  color: white !important; // White text color
+}
+
+.snackbar-error {
+  background-color: #f44336 !important; // Red background for error messages
+  color: white !important; // White text color
+}
+
+.snackbar-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
 }
 

@@ -4,17 +4,35 @@ import {
   Component,
   inject,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { catchError, Subscription, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule,
+    SnackbarComponent
+],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -81,7 +99,6 @@ import { HttpErrorResponse } from '@angular/common/http';
             </svg>
           </button>
         </div>
-
         <h2
           class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8"
         >
@@ -102,6 +119,14 @@ import { HttpErrorResponse } from '@angular/common/http';
                 class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 placeholder="Enter your full name"
               />
+              <mat-error
+                *ngIf="
+                  registerForm.get('name')?.hasError('required') &&
+                  registerForm.get('name')?.touched
+                "
+              >
+                Name is required
+              </mat-error>
             </div>
 
             <!-- Contact Number Input -->
@@ -118,6 +143,21 @@ import { HttpErrorResponse } from '@angular/common/http';
                 class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 placeholder="Enter your contact number"
               />
+              <mat-error
+                *ngIf="
+                  registerForm.get('contactNo')?.hasError('required') &&
+                  registerForm.get('contactNo')?.touched
+                "
+              >
+                Contact number is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  registerForm.get('contactNo')?.hasError('pattern') &&
+                  registerForm.get('contactNo')?.touched
+                "
+                >Invalid contact number</mat-error
+              >
             </div>
 
             <!-- Address Input -->
@@ -134,7 +174,22 @@ import { HttpErrorResponse } from '@angular/common/http';
                 class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 placeholder="Enter your address"
               />
+              <mat-error
+                *ngIf="
+                  registerForm.get('address')?.hasError('required') &&
+                  registerForm.get('address')?.touched
+                "
+                >Address is required</mat-error
+              >
             </div>
+
+            <button
+              (click)="nextSection()"
+              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
+            >
+              Next
+            </button>
+
             <!-- Divider with "or" Text -->
             <div class="flex items-center my-6">
               <div class="flex-grow border-t border-gray-300"></div>
@@ -186,6 +241,22 @@ import { HttpErrorResponse } from '@angular/common/http';
                 class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 placeholder="Enter your email"
               />
+              <mat-error
+                *ngIf="
+                  registerForm.get('email')?.hasError('required') &&
+                  registerForm.get('email')?.touched
+                "
+              >
+                Email is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  registerForm.get('email')?.hasError('email') &&
+                  registerForm.get('email')?.touched
+                "
+              >
+                Invalid email</mat-error
+              >
             </div>
 
             <!-- Password Input -->
@@ -195,101 +266,173 @@ import { HttpErrorResponse } from '@angular/common/http';
                 class="block text-green-900 font-semibold mb-2"
                 >Password</label
               >
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                formControlName="password"
-                class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                placeholder="Create a password"
-              />
-              <!-- Password Toggle Button -->
-              <button
-                type="button"
-                (click)="togglePasswordVisibility()"
-                class="absolute inset-y-0 right-0 flex items-center px-4 mx-2 mt-8 cursor-pointer text-gray-400 rounded-r-lg focus:outline-none"
-              >
-                @if (showPassword) {
-                <svg
-                  class="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              <div class="relative">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="password"
+                  formControlName="password"
+                  class="w-full p-4 pr-12 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  placeholder="Create a password"
+                />
+                <button
+                  type="button"
+                  (click)="togglePasswordVisibility()"
+                  class="absolute inset-y-0 right-0 flex items-center px-4 cursor-pointer text-gray-400 focus:outline-none"
+                  style="top: 50%; transform: translateY(-50%);"
                 >
-                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                } @else {<svg
-                  class="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  <ng-container *ngIf="showPassword; else hidePassword">
+                    <svg
+                      class="w-6 h-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </ng-container>
+                  <ng-template #hidePassword>
+                    <svg
+                      class="w-6 h-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                      <path
+                        d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                      ></path>
+                      <path
+                        d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                      ></path>
+                      <line x1="2" x2="22" y1="2" y2="22"></line>
+                    </svg>
+                  </ng-template>
+                </button>
+              </div>
+              <mat-error *ngIf="registerForm.get('password')?.touched">
+                <ng-container
+                  *ngIf="registerForm.get('password')?.hasError('required')"
                 >
-                  <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
-                  <path
-                    d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
-                  ></path>
-                  <path
-                    d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
-                  ></path>
-                  <line x1="2" x2="22" y1="2" y2="22"></line>
-                </svg>
-                }
-              </button>
+                  Password is required.
+                </ng-container>
+                <ng-container
+                  *ngIf="registerForm.get('password')?.hasError('minlength')"
+                >
+                  Password must be at least 8 characters.
+                </ng-container>
+                <ng-container
+                  *ngIf="registerForm.get('password')?.hasError('pattern')"
+                >
+                  Password must contain at least one number, one uppercase
+                  letter, and one lowercase letter.
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    registerForm.get('password')?.hasError('confirmPassword')
+                  "
+                >
+                  Passwords do not match.
+                </ng-container>
+              </mat-error>
             </div>
-
             <!-- Confirm Password Input -->
             <div class="relative mb-6">
               <label
                 for="confirmPassword"
-                class="block text-green-900 font-semibold mb-1"
+                class="block text-green-900 font-semibold mb-2"
                 >Confirm Password</label
               >
-              <input
-                [type]="showConfirmPassword ? 'text' : 'password'"
-                id="confirmPassword"
-                formControlName="confirmPassword"
-                class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                placeholder="Confirm your password"
-              />
-
-              <!-- Password Toggle Button -->
-              <button
-                type="button"
-                (click)="toggleConfirmPasswordVisibility()"
-                class="absolute inset-y-0 right-0 flex items-center px-4 mx-2 mt-8 cursor-pointer text-gray-400 rounded-r-lg focus:outline-none"
-              >
-                @if (showConfirmPassword) {
-                <svg
-                  class="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              <div class="relative">
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  class="w-full p-4 pr-14 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  placeholder="Confirm your password"
+                />
+                <!-- Password Toggle Button -->
+                <button
+                  type="button"
+                  (click)="toggleConfirmPasswordVisibility()"
+                  class="absolute inset-y-0 right-0 flex items-center px-4 cursor-pointer text-gray-400 focus:outline-none"
+                  style="top: 50%; transform: translateY(-50%);"
                 >
-                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                } @else {<svg
-                  class="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  @if (showConfirmPassword) {
+                  <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  } @else {<svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path
+                      d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                    ></path>
+                    <path
+                      d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                    ></path>
+                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                  </svg>
+                  }
+                </button>
+              </div>
+              <mat-error *ngIf="registerForm.get('confirmPassword')?.touched">
+                <ng-container
+                  *ngIf="
+                    registerForm.get('confirmPassword')?.hasError('required')
+                  "
                 >
-                  <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
-                  <path
-                    d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
-                  ></path>
-                  <path
-                    d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
-                  ></path>
-                  <line x1="2" x2="22" y1="2" y2="22"></line>
-                </svg>
-                }
-              </button>
+                  Confirm password is required.
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    registerForm.get('confirmPassword')?.hasError('minlength')
+                  "
+                >
+                  Password must be at least 8 characters.
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    registerForm.get('confirmPassword')?.hasError('pattern')
+                  "
+                >
+                  Password must contain at least one number, one uppercase
+                  letter, and one lowercase letter.
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    registerForm.get('confirmPassword')?.hasError('mustMatch')
+                  "
+                >
+                  Passwords do not match.
+                </ng-container>
+              </mat-error>
             </div>
+
+            <button
+              (click)="onRegister()"
+              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
+            >
+              Register
+            </button>
 
             <!-- Divider with "or" Text -->
             <div class="flex items-center my-6">
@@ -316,13 +459,6 @@ import { HttpErrorResponse } from '@angular/common/http';
               </button>
             </div>
 
-            <button
-              (click)="onRegister()"
-              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
-            >
-              Register
-            </button>
-
             <p class="text-center text-green-900 mt-4">
               Already have an account?
               <button
@@ -340,7 +476,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent implements OnDestroy {
+export class RegisterComponent implements OnInit,OnDestroy {
   currentSection = 1;
   registerForm!: FormGroup;
   registerError = '';
@@ -349,6 +485,7 @@ export class RegisterComponent implements OnDestroy {
   authService = inject(AuthService);
   router = inject(Router);
   registerFormSubscription = new Subscription();
+  snackBar = inject(MatSnackBar);
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -360,24 +497,71 @@ export class RegisterComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      name: [''],
-      contactNo: [''],
-      address: [''],
-      email: [''],
-      password: [''],
-      confirmPassword: [''],
-    });
+    this.registerForm = this.fb.group(
+      {
+        name: ['', Validators.required],
+        contactNo: [
+          '',
+          [Validators.required, Validators.pattern('^(09|\\+639)\\d{9}$')],
+        ],
+        address: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'
+            ),
+          ],
+        ],
+        confirmPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'
+            ),
+          ],
+        ],
+      },
+      {
+        validator: this.MustMatch('password', 'confirmPassword'),
+      }
+    );
+  }
+
+  MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+        return;
+      }
+
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ mustMatch: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 
   // Method to go to the next section
   nextSection() {
-    this.currentSection = 2;
+    if (this.currentSection < 3) {
+      this.currentSection++;
+    }
   }
 
   // Method to go back to the previous section
   prevSection() {
-    this.currentSection = 1;
+    if (this.currentSection > 1) {
+      this.currentSection--;
+    }
   }
 
   onRegister() {
@@ -396,30 +580,40 @@ export class RegisterComponent implements OnDestroy {
           .pipe(
             catchError((error: HttpErrorResponse) => {
               if (error.status === 401) {
-                alert('Invalid Credentials');
+                this.showSnackbar('Invalid Credentials', 'error');
+              } else if (error.status === 400) {
+                this.showSnackbar('Email is already registered. Use a different email.', 'error');
               } else {
-                alert('An error occurred. Please try again.');
+                this.showSnackbar('An error occurred. Please try again.', 'error');
               }
               return throwError(error);
             })
           )
           .subscribe((response) => {
-            console.log('Response:', response); // Log the response for debugging
-            if (
-              response &&
-              response.message ===
-                'Account created successfully. Please log in.'
-            ) {
+            if (response?.message === 'Account created successfully. Please log in.') {
+              this.showSnackbar('Registration successful. Please log in.', 'success');
               this.router.navigate(['auth/login']);
-              console.log('Registration successful');
             } else {
-              alert('An error occurred. Please try again.');
+              this.showSnackbar('An error occurred. Please try again.', 'error');
             }
           })
       );
     } else {
-      alert('Please fill in all required fields.');
+      this.showSnackbar('Please fill in all required fields.', 'error');
     }
+  }
+
+  showSnackbar(message: string, type: 'success' | 'error'): void {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        message,
+        icon: type === 'success' ? 'check_circle' : 'error'
+      },
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error'
+    });
   }
 
   ngOnDestroy() {

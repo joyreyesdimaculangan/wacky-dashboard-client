@@ -15,6 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AuthService } from '../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -39,13 +40,16 @@ export class MenuComponent implements OnInit {
   private readonly menuService = inject(MenuService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly authService = inject(AuthService);
   public selectedItems: Set<string> = new Set<string>();
   public menu: Menu[] = [];
   public menuValues: MenuValues[] = [];
+  userRole: string | null = null;
   isDragging = false;
 
   ngOnInit(): void {
     this.getMenus();
+    this.userRole = this.authService.getUserRole();
   }
 
   getMenus() {

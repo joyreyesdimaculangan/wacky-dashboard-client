@@ -15,6 +15,7 @@ import { DeletePackagesComponent } from '../../admin/admin-crm/packages-crm/dele
 import { GetPackageAddOnsService } from '../reservation-form/getPackageAddOns.service';
 import { GetPackageNameService } from '../reservation-form/getPackageName.service';
 import { effect as angularEffect } from '@angular/core';
+import { AuthService } from '../../../core/auth/services/auth.service';
 declare const Flowbite: any;
 
 @Component({
@@ -37,13 +38,16 @@ export class ServicesComponent implements OnInit {
   private readonly packageDetails = inject(GetPackageNameService)
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly authService = inject(AuthService);
   public selectedItems: Set<string> = new Set<string>();
   public packages: Packages[] = [];
+  userRole: string | null = null;
 
   @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
 
   ngOnInit(): void {
     this.getPackages();
+    this.userRole = this.authService.getUserRole();
   }
 
   pushPackageName(packageId: string, packageName: string): void {
@@ -104,7 +108,8 @@ export class ServicesComponent implements OnInit {
   }
 
   isSelected(packageID: string): boolean {
-    return this.selectedItems.has(packageID);
+    this.selectedItems.has(packageID);
+    return false;
   }
 
   deleteSelectedItems() {

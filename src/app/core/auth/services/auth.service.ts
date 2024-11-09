@@ -12,9 +12,9 @@ import { LoginService } from './login.service';
 })
 export class AuthService {
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
-
+  private userRoleSubject = new BehaviorSubject<string | null>(null);
+  userRole$ = this.userRoleSubject.asObservable();
   private isAuthenticated = false;
-  private userRole: string | null = null;
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<User | null>(null);
   userInfo: User | null = null;
@@ -23,6 +23,14 @@ export class AuthService {
   private readonly auth = inject(LoginService);
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
+
+  setUserRole(role: string): void {
+    this.userRoleSubject.next(role);
+  }
+
+  getUserRole(): string | null {
+    return this.userRoleSubject.value;
+  }
 
   // Mock login function; replace with actual backend integration
   login(email: string, password: string): Observable<any> {
@@ -61,10 +69,6 @@ export class AuthService {
 
   isLogin() {
     return this.isLoggedIn$;
-  }
-
-  getUserRole(): string | null {
-    return this.userRole;
   }
 
   logout() {
