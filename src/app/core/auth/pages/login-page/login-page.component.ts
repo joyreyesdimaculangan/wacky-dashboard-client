@@ -24,7 +24,7 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, SnackbarComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
