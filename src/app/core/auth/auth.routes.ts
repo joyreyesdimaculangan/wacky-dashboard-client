@@ -9,11 +9,6 @@ export const AuthRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'login', 
-    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),
-    // canActivate: [hasRoleGuard]
-  },
-  {
     path: 'register', 
     loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent)
   },
@@ -21,4 +16,12 @@ export const AuthRoutes: Routes = [
     path: 'password-recovery', 
     loadComponent: () => import('./pages/password-recovery/password-recovery.component').then(m => m.PasswordRecoveryComponent)
   }, 
+  {
+    path: 'edit-profile',
+    loadComponent: () => import('./pages/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
+  },
+  {
+    path: 'login', 
+    loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),
+  },
 ]

@@ -172,10 +172,9 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
               />
               <span class="ml-2">Remember Me</span>
             </label>
-            <a
-              href="#"
+            <button
               class="text-green-700 hover:text-green-500 font-semibold"
-              >Forgot Password?</a
+              >Forgot Password?</button
             >
           </div>
 

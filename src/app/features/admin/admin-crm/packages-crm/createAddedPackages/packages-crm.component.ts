@@ -217,7 +217,15 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
               </button>
             </div>
 
+            <!-- Buttons -->
             <div class="flex justify-end mt-4">
+              <button
+                type="button"
+                (click)="closeAddPackages()"
+                class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2"
+              >
+                Cancel
+              </button>
               <button
                 type="button"
                 (click)="submitForm()"
@@ -281,7 +289,7 @@ export class PackagesCrmComponent {
 
   closeAddPackages() {
     this.addPackagesForm.reset();
-    this.router.navigate(['/customer/home']);
+    this.router.navigate(['/admin/home']);
   }
 
   onFileSelected(event: Event): void {
@@ -319,7 +327,7 @@ export class PackagesCrmComponent {
         next: (response) => {
           console.log(response);
           this.addPackagesForm.reset();
-          this.router.navigate(['/customer/home']);
+          this.router.navigate(['/admin/home']);
         },
       });
 

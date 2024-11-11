@@ -24,21 +24,19 @@ declare const Flowbite: any;
   imports: [
     CommonModule,
     RouterModule,
-    InquiryFormComponent,
     PackageDetailsComponent,
-    PackagesCrmComponent,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './services.component.html',
   styleUrl: './services.component.scss',
 })
 export class ServicesComponent implements OnInit {
   private readonly packageService = inject(PackagesService);
-  private readonly packageDetails = inject(GetPackageNameService)
+  private readonly packageDetails = inject(GetPackageNameService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly authService = inject(AuthService);
+  public authService = inject(AuthService);
   public selectedItems: Set<string> = new Set<string>();
   public packages: Packages[] = [];
   userRole: string | null = null;
@@ -56,7 +54,6 @@ export class ServicesComponent implements OnInit {
     console.log(this.packageDetails.packageName());
   }
 
-
   getPackages() {
     this.packageService.getPackages().subscribe((data: Packages[]) => {
       this.packages = data;
@@ -72,31 +69,37 @@ export class ServicesComponent implements OnInit {
   }
 
   deletePackage(packageID: string) {
-    const matdialogRef = this.dialog.open(DeletePackagesComponent, {
-      data: { message: 'Are you sure you want to delete this package? This action is irreversible and cannot be undone.' }
-    });
+    if (this.authService.isAdmin()) {
+      const matdialogRef = this.dialog.open(DeletePackagesComponent, {
+        data: {
+          message:
+            'Are you sure you want to delete this package? This action is irreversible and cannot be undone.',
+        },
+      });
 
-    matdialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.packageService.deletePackage(packageID).subscribe(() => {
-          console.log('Packages deleted successfully', packageID);
-          this.getPackages(); 
-          this.snackBar.open('Package deleted successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            panelClass: ['custom-snackbar-success']
+      matdialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.packageService.deletePackage(packageID).subscribe(() => {
+            console.log('Packages deleted successfully', packageID);
+            this.getPackages();
+            this.snackBar.open('Package deleted successfully!', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              panelClass: ['custom-snackbar-success'],
+            });
           });
-        });
-      } else (error: any) => {
-        console.error('Error deleting selected items:', error);
-        this.snackBar.open('Failed to delete selected items.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['custom-snackbar-error']
-        });
-      }
-    });
+        } else
+          (error: any) => {
+            console.error('Error deleting selected items:', error);
+            this.snackBar.open('Failed to delete selected items.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['custom-snackbar-error'],
+            });
+          };
+      });
+    }
   }
 
   toggleSelection(packageID: string) {
@@ -113,74 +116,89 @@ export class ServicesComponent implements OnInit {
   }
 
   deleteSelectedItems() {
-    const dialogRef = this.dialog.open(DeleteOffersComponent, {
-      data: { message: 'Are you sure you want to delete the selected items? This action is irreversible and cannot be undone.' }
-    });
+    if (this.authService.isAdmin()) {
+      const dialogRef = this.dialog.open(DeleteOffersComponent, {
+        data: {
+          message:
+            'Are you sure you want to delete the selected items? This action is irreversible and cannot be undone.',
+        },
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const deleteObservables = Array.from(this.selectedItems).map(packageID =>
-          this.packageService.deletePackage(packageID)
-        );
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const deleteObservables = Array.from(this.selectedItems).map(
+            (packageID) => this.packageService.deletePackage(packageID)
+          );
 
-        forkJoin(deleteObservables).subscribe(() => {
-          console.log('Selected items deleted successfully');
-          this.getPackages(); 
-          this.selectedItems.clear(); 
-          this.snackBar.open('Selected items deleted successfully.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-            panelClass: ['custom-snackbar-success']
+          forkJoin(deleteObservables).subscribe(() => {
+            console.log('Selected items deleted successfully');
+            this.getPackages();
+            this.selectedItems.clear();
+            this.snackBar.open(
+              'Selected items deleted successfully.',
+              'Close',
+              {
+                duration: 3000,
+                horizontalPosition: 'right',
+                verticalPosition: 'top',
+                panelClass: ['custom-snackbar-success'],
+              }
+            );
           });
-        });
-      } else (error: any) => {
-        console.error('Error deleting selected items:', error);
-        this.snackBar.open('Failed to delete selected items.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['custom-snackbar-error']
-        });
-      }
-    });
+        } else
+          (error: any) => {
+            console.error('Error deleting selected items:', error);
+            this.snackBar.open('Failed to delete selected items.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['custom-snackbar-error'],
+            });
+          };
+      });
+    }
   }
 
   deleteAllItems() {
-    const dialogRef = this.dialog.open(DeletePackagesComponent, {
-      data: { message: 'Are you sure you want to delete all items? This action is irreversible and cannot be undone.' }
-    });
+    if (this.authService.isAdmin()) {
+      const dialogRef = this.dialog.open(DeletePackagesComponent, {
+        data: {
+          message:
+            'Are you sure you want to delete all items? This action is irreversible and cannot be undone.',
+        },
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const deleteObservables = this.packages.map(packages =>
-          this.packageService.deletePackage(packages.packageID.toString())
-        );
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const deleteObservables = this.packages.map((packages) =>
+            this.packageService.deletePackage(packages.packageID.toString())
+          );
 
-        forkJoin(deleteObservables).subscribe(() => {
-          console.log('All items deleted successfully');
-          this.getPackages(); 
-          this.selectedItems.clear(); 
-          this.snackBar.open('All items deleted successfully.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-            panelClass: ['custom-snackbar-success']
+          forkJoin(deleteObservables).subscribe(() => {
+            console.log('All items deleted successfully');
+            this.getPackages();
+            this.selectedItems.clear();
+            this.snackBar.open('All items deleted successfully.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['custom-snackbar-success'],
+            });
           });
-        });
-      } else (error: any) => {
-        console.error('Error deleting selected items:', error);
-        this.snackBar.open('Failed to delete selected items.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-          panelClass: ['custom-snackbar-error']
-        });
-      }
-    });
+        } else
+          (error: any) => {
+            console.error('Error deleting selected items:', error);
+            this.snackBar.open('Failed to delete selected items.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top',
+              panelClass: ['custom-snackbar-error'],
+            });
+          };
+      });
+    }
   }
 }
 function effect(arg0: () => void) {
   throw new Error('Function not implemented.');
 }
-

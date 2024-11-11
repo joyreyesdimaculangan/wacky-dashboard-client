@@ -1,10 +1,18 @@
 import { Routes } from '@angular/router';
+import { hasRoleGuard } from '../../core/auth/guards/hasRole.guard';
+import { hasTokenGuard } from '../../core/auth/guards/hasToken.guard';
 
 export const AdminRoutes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('../customer/home/home.component').then((m) => m.HomeComponent),
+    canActivate: [hasRoleGuard],
+    data: { roles: ['admin'] },
   },
   {
     path: 'dashboard',

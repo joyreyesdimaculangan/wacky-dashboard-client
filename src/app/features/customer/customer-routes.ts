@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { hasRoleGuard } from '../../core/auth/guards/hasRole.guard';
 
 export const CustomerRoutes: Routes = [
   {

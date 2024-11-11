@@ -22,6 +22,7 @@ import { MenuService } from '../../../../../services/menu.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateMenu, Menu } from '../../../../../models/menu';
 import { FileUploadService } from '../../../../../services/file-upload.service';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-offers-crm',
@@ -30,6 +31,7 @@ import { FileUploadService } from '../../../../../services/file-upload.service';
   template: `
     <div
       class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
+      *ngIf="authService.isAdmin()"
     >
       <div
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -176,9 +178,16 @@ export class OffersCrmComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly imageService = inject(FileUploadService);
+  public authService = inject(AuthService);
+  userRole: string | null = null;
   addContentForm: FormGroup;
   selectedFile: File | null = null;
   previewUrl = signal<string | ArrayBuffer | null>(null);
+
+  ngOnInit() {
+    this.userRole = this.authService.getUserRole();
+  }
+    
   constructor(private fb: FormBuilder) {
     this.addContentForm = this.fb.group({
       name: ['', Validators.required],
@@ -189,7 +198,7 @@ export class OffersCrmComponent {
 
   closeAddContent() {
     this.addContentForm.reset();
-    this.router.navigate(['/customer/home']);
+    this.router.navigate(['/admin/home']);
   }
 
   onFileSelected(event: Event): void {
@@ -208,19 +217,21 @@ export class OffersCrmComponent {
   }
 
   onSubmit() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('image', this.selectedFile, this.selectedFile.name);
-      formData.append('name', this.addContentForm.controls['name'].value);
-      formData.append(
-        'description',
-        this.addContentForm.controls['description'].value
-      );
+    if (this.authService.isAdmin()) {
+      if (this.selectedFile) {
+        const formData = new FormData();
+        formData.append('image', this.selectedFile, this.selectedFile.name);
+        formData.append('name', this.addContentForm.controls['name'].value);
+        formData.append(
+          'description',
+          this.addContentForm.controls['description'].value
+        );
 
-      this.menuService.createMenu(formData).subscribe(() => {
-        this.addContentForm.reset();
-        this.router.navigate(['/customer/home']);
-      });
+        this.menuService.createMenu(formData).subscribe(() => {
+          this.addContentForm.reset();
+          this.router.navigate(['/admin/home']);
+        });
+      }
     }
   }
 }

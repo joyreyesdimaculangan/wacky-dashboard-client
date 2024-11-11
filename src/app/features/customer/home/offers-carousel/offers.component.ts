@@ -5,7 +5,7 @@ import { OffersCrmComponent } from '../../../admin/admin-crm/menu-crm/createAdde
 @Component({
   selector: 'app-offers',
   standalone: true,
-  imports: [CommonModule, OffersCrmComponent],
+  imports: [CommonModule],
   templateUrl: './offers.component.html',
   styleUrl: './offers.component.scss',
 })

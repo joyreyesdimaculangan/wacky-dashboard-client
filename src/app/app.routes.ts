@@ -9,7 +9,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./core/auth/auth.routes').then((m) => m.AuthRoutes),
     title: 'Authentication',
-    
+  },
+  {
+    path: 'unauthorized',
+    loadChildren: () =>
+      import('./core/auth/pages/app-unauthorized/app-unauthorized.component').then((m) => m.AppUnauthorizedComponent),
+    title: 'Unauthorized',
   },
   {
     path: '',

@@ -133,7 +133,7 @@ export class EditOffersComponent {
 
   closeEditContent() {
     this.editMenuForm.reset();
-    this.router.navigate(['/customer/home']);
+    this.router.navigate(['/admin/home']);
   }
 
   submitForm() {
@@ -144,7 +144,7 @@ export class EditOffersComponent {
         next: () => {
           console.log('Menu updated successfully');
           this.editMenuForm.reset();
-          this.router.navigate(['/customer/home']);
+          this.router.navigate(['/admin/home']);
         },
         error: (err) => {
           console.error('Error updating menu:', err);

@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-password-recovery',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `<div 
     class="min-h-screen relative flex items-center justify-center bg-cover bg-center" 
     style="background-image: url('assets/images/Food House.jpg');"
@@ -44,7 +45,7 @@ import { CommonModule } from '@angular/common';
       <button class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300">Send Recovery Link</button>
 
       <!-- Login Link -->
-      <p class="text-center text-green-900 mt-8">Remember your password? <a href="#" class="text-green-700 hover:text-green-500 font-bold">Log In</a></p>
+      <p class="text-center text-green-900 mt-8">Remember your password? <a [routerLink]="['/auth/login']"] class="text-green-700 hover:text-green-500 font-bold">Log In</a></p>
   </div>
 </div>
 `,

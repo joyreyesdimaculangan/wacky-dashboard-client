@@ -77,12 +77,16 @@ export class AuthService {
     this.userInfo = null;
     this.user.set(null);
     this.accountType.set(undefined);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
+  }
+
+  public isAdmin(): boolean {
+    return this.userInfo?.account_type === 'admin';
   }
 
   public getUser(token: string): User | null {
     if (!token) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return null;
     }
     return JSON.parse(atob(token.split('.')[1])) as User;

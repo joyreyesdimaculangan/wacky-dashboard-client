@@ -31,7 +31,6 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
-    SnackbarComponent
 ],
   template: `
     <div

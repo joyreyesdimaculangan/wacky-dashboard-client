@@ -22,7 +22,7 @@ import { GetPackageAddOnsService } from '../../reservation-form/getPackageAddOns
 @Component({
   selector: 'app-package-details',
   standalone: true,
-  imports: [CommonModule, ReservationFormComponent, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './package-details.component.html',
   styleUrls: ['./package-details.component.scss'],
 })

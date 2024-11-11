@@ -14,6 +14,6 @@ export class DrawerComponent {
   auth = inject(AuthService);
 
   logout() {
-    throw new Error('Method not implemented.');
+    this.auth.logout();
   }
 }
