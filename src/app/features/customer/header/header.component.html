@@ -54,10 +54,10 @@
                     <span class="block text-sm text-gray-500 truncate">name.com</span>
                 </div>
                 <ul class="py-3" aria-labelledby="user-menu-button">
-                    <li><a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Reservations</a></li>
-                    <li><a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Notifications</a></li>
-                    <li><a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Settings</a></li>
-                    <li><a href="#" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Sign out</a></li>
+                    <li><button [routerLink]="['/']" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Reservations</button></li>
+                    <li><button [routerLink]="['/']" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Notifications</button></li>
+                    <li><button [routerLink]="['/customer/edit-profile']" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Settings</button></li>
+                    <li><button (click)="logout()" class="block px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins">Sign out</button></li>
                 </ul>
             </div>
         </div>

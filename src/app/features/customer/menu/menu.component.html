@@ -52,7 +52,7 @@
         class="relative bg-white shadow-lg rounded-lg overflow-hidden flex flex-col justify-between p-4 h-full cursor-pointer"
         [class.border-2]="isSelected(dishes.menuID.toString())"
         [class.border-red-500]="isSelected(dishes.menuID.toString())"
-        (click)="toggleSelection(dishes.menuID.toString())"
+        (click)="authService.isAdmin() ?toggleSelection(dishes.menuID.toString()) : null"
       >
         <!-- Image -->
         <img

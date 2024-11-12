@@ -11,15 +11,21 @@ export const routes: Routes = [
     title: 'Authentication',
   },
   {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full',
+  },
+  {
+    path: 'password-recovery',
+    loadChildren: () =>
+      import('./core/password-recovery/password-recovery.component').then((m) => m.PasswordRecoveryComponent),
+    title: 'Password Recovery',
+  },
+  {
     path: 'unauthorized',
     loadChildren: () =>
       import('./core/auth/pages/app-unauthorized/app-unauthorized.component').then((m) => m.AppUnauthorizedComponent),
     title: 'Unauthorized',
-  },
-  {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full',
   },
   {
     path: 'customer',

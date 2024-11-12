@@ -12,6 +12,10 @@ export const CustomerRoutes: Routes = [
     loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
   },
   {
+    path: 'edit-profile',
+    loadComponent: () => import('../../features/customer/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
+  },
+  {
     path: 'menu',
     loadComponent: () => import('./menu/menu.component').then((m) => m.MenuComponent),
   },

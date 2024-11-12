@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +11,11 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
+  auth = inject(AuthService);
+
 
   toggleDropdown() {
   this.isDropdownOpen = !this.isDropdownOpen;
@@ -28,9 +32,6 @@ export class HeaderComponent {
     }
   }
 
-
-  constructor(private route: ActivatedRoute) {}
-
   ngOnInit() {
     // Subscribe to fragment changes
     this.route.fragment.subscribe((fragment) => {
@@ -40,5 +41,9 @@ export class HeaderComponent {
 
   isActive(fragment: string): boolean {
     return this.currentFragment === fragment;
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }
