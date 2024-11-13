@@ -1,6 +1,5 @@
 export interface ReservationForm {
     numberOfPax: number,
-    packageType: string,
     name: string,
     contactNumber: string,
     eventDate: string,

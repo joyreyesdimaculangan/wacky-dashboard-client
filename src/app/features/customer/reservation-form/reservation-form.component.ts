@@ -93,9 +93,7 @@ export class ReservationFormComponent implements OnInit {
 
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
-      // packageID: [null, Validators.required],
-      // addOnID: this.fb.array([]),
-      // accountProfileId: [null, Validators.required],
+      packageID: [null, Validators.required],
       name: ['', Validators.required],
       contactNumber: [
         '',
@@ -110,6 +108,19 @@ export class ReservationFormComponent implements OnInit {
       paymentStatus: ['PENDING'],
       status: ['Pending'],
     });
+
+    const packageName = this.packageNameService.packageName();
+    if (packageName) {
+      this.packageName = {
+        packageId: packageName.packageId,
+        packageName: packageName.packageName,
+      };
+
+      this.confirmReservationForm.patchValue({
+        packageID: this.packageName.packageId,
+      });
+    }
+    
     this.reservationForm = new FormGroup({
       customerDetails: new FormGroup({
         name: new FormControl('', [Validators.required]),
@@ -135,32 +146,11 @@ export class ReservationFormComponent implements OnInit {
       }),
     });
 
-    const packageName = this.packageNameService.getPackageName();
-    if (packageName) {
-      this.packageName = {
-        packageId: packageName.packageId,
-        packageName: packageName.packageName,
-      };
-    }
-
-    const packageDetails = this.packageAddOnsService.getPackageDetails();
-    if (packageDetails) {
-      this.packageAddOns = packageDetails;
-      const addOnsFormArray = this.reservationForm.get('addOns') as FormArray;
-      this.packageAddOns.forEach(addOn => addOnsFormArray.push(this.fb.control(addOn)));
-    }
-
-    this.accountProfileService.getAccountProfile().subscribe(
-      (profile) => {
-        this.accountProfileId = profile.id;
-      },
-      (error) => {
-        console.error('Error fetching account profile ID:', error);
-      },
-    );
-    console.log('Account Profile ID:', this.accountProfileId);
-    console.log('Package Name:', this.packageName);
-    console.log('Package Add-Ons:', this.packageAddOns);
+    this.reservationForm.patchValue({
+      packageID: this.packageName?.packageId,
+      accountProfileID: this.accountProfileId,
+      addOnsID: this.addOns?.map((addOn) => addOn.addOnId),
+    })
   }
   
   isFirstStepComplete = false;
@@ -219,7 +209,6 @@ export class ReservationFormComponent implements OnInit {
       // Map form values to the ReservationForm interface
       const reservationData: ReservationForm = {
         numberOfPax: this.step1.get("numberOfPax")?.value,
-        packageType: "Standard Type",
         name: this.step1.get("name")?.value,
         contactNumber: this.step1.get("contactNumber")?.value,
         eventDate: this.step2.get("eventDate")?.value,
@@ -227,11 +216,11 @@ export class ReservationFormComponent implements OnInit {
         eventTheme: this.step3.get("eventTheme")?.value,
         cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
-        packageID: this.reservationForm.get("packageID")?.value,
-        accountProfileId: '',
+        packageID: 'ff3e1efc-480f-4cd5-9434-59b5dd2e92c3',
+        accountProfileId: '48eb20ae-5490-4036-b5d7-33e61b1d7478',
         status: statusValue,
         paymentStatus: paymentStatusValue,
-        addOnIds: this.reservationForm.get("addOnIds")?.value
+        addOnIds: ['5cab5866-4dfc-4193-8983-b2d7fa9f7047'],
       };
 
       console.log('Reservation submitted:', reservationData);
@@ -249,3 +238,5 @@ export class ReservationFormComponent implements OnInit {
     }
   }
 }
+
+
