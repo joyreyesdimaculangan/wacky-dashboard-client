@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { LoginCredentials } from '../models/login-credentials.';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { User } from '../models/user.model';
+import { AccountProfile, User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
@@ -19,6 +19,7 @@ export class AuthService {
   user = signal<User | null>(null);
   userInfo: User | null = null;
   accountType = signal<String | undefined>('');
+  userName: string | undefined;
 
   private readonly auth = inject(LoginService);
   private readonly router = inject(Router);
@@ -30,6 +31,10 @@ export class AuthService {
 
   getUserRole(): string | null {
     return this.userRoleSubject.value;
+  }
+
+  getUserInfo(): User | null {
+    return this.userInfo;
   }
 
   // Mock login function; replace with actual backend integration
@@ -44,6 +49,7 @@ export class AuthService {
         this.userInfo = this.getUser(response.access_token);
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
+        this.userName = this.userInfo?.accountProfile?.name;
       })
     );
   }

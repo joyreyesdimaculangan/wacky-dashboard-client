@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatIcon],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -14,6 +15,9 @@ export class HeaderComponent {
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
+
+  userName: string | null = null;
+  userEmail: string | null = null;
   auth = inject(AuthService);
 
 
@@ -33,7 +37,14 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    // Subscribe to fragment changes
+    const userInfo = this.auth.getUserInfo();
+    
+    if (userInfo) {
+      this.userName = userInfo.accountProfile?.name || userInfo.email;
+      this.userEmail = userInfo.email;
+    }
+    
+
     this.route.fragment.subscribe((fragment) => {
       this.currentFragment = fragment;
     });

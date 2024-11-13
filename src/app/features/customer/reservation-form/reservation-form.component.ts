@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
   effect,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -60,7 +61,8 @@ export class ReservationFormComponent implements OnInit {
   private accountProfileService = inject(AccountProfileService);
   private packageNameService = inject(GetPackageNameService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
-
+  
+  packageID = signal<string | null>(null);
   packages: any[] = [];
   addOns: any[] = [];
   packageName: PackageName | null = null;
@@ -115,6 +117,7 @@ export class ReservationFormComponent implements OnInit {
         packageId: packageName.packageId,
         packageName: packageName.packageName,
       };
+      this.packageID.set(this.packageName.packageId);
 
       this.confirmReservationForm.patchValue({
         packageID: this.packageName.packageId,

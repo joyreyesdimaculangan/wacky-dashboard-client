@@ -13,4 +13,8 @@ export class AccountProfileService {
   getAccountProfile() {
     return this.http.get<any>(this.apiUrl);
   }
+
+  createAccountProfile(accountProfile: any) {
+    return this.http.post<any>(this.apiUrl, accountProfile);
+  }
 }
