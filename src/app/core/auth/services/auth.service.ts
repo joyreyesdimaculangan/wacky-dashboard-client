@@ -51,7 +51,7 @@ export class AuthService {
         this.userInfo = this.getUser(response.access_token);
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
-        this.getAccountIdService.setAccountProfileId(response.accountProfileId);
+        this.getAccountIdService.setAccountProfileName(response.accountProfileId, response.accountProfileName);
       })
     );
   }
@@ -85,7 +85,6 @@ export class AuthService {
     this.userInfo = null;
     this.user.set(null);
     this.accountType.set(undefined);
-    this.getAccountIdService.setAccountProfileId('');
   }
 
   public isAdmin(): boolean {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
 import { ViewReservationModalComponent } from '../reservation-modal-forms/view-reservation-modal.component';
@@ -8,6 +8,7 @@ import { EditReservationModalComponent } from '../reservation-modal-forms/edit-r
 import { DeleteReservationModalComponent } from '../reservation-modal-forms/delete-reservation-modal.component';
 import { RouterModule } from '@angular/router';
 import { ReservationForm } from '../../../models/reservation-form';
+import { ReservationService } from '../../../services/reservation.service';
 
 @Component({
   selector: 'app-datatables',
@@ -20,12 +21,12 @@ import { ReservationForm } from '../../../models/reservation-form';
     AddReservationModalComponent,
     EditReservationModalComponent,
     DeleteReservationModalComponent,
-    RouterModule,
+    RouterModule
   ],
   templateUrl: './datatables.component.html',
   styleUrl: './datatables.component.scss',
 })
-export class DatatablesComponent {
+export class DatatablesComponent implements OnInit {
   searchText: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 5;
@@ -37,6 +38,7 @@ export class DatatablesComponent {
   selectedTab: string = 'all';
   router: any;
 
+  private readonly reservationService = inject(ReservationService);
   public reservationData: ReservationForm[] = [];
 
   @Output() viewItemEvent = new EventEmitter<any>();
@@ -49,7 +51,40 @@ export class DatatablesComponent {
   }
 
   getReservations() {
+    this.reservationService.getReservations().subscribe((data: any) => {
+      this.reservationData = data;
+    });
+  }
 
+  viewReservation(id: string) {
+    this.reservationService.getReservationById(id).subscribe((data: ReservationForm) => {
+      this.viewingItem = data;
+      this.viewItemEvent.emit(data);
+    });
+  }
+
+  addReservation(reservation: ReservationForm) {
+    this.reservationService.createReservation(reservation).subscribe((data: ReservationForm) => {
+      this.addingItem = data;
+      this.addItemEvent.emit(data);
+      this.getReservations(); // Refresh the list
+    });
+  }
+
+  editReservation(id: string, reservation: ReservationForm) {
+    this.reservationService.updateReservation(id, reservation).subscribe((data: ReservationForm) => {
+      this.editingItem = data;
+      this.editItemEvent.emit(data);
+      this.getReservations(); // Refresh the list
+    });
+  }
+
+  deleteReservation(id: string) {
+    this.reservationService.deleteReservation(id).subscribe(() => {
+      this.deletingItem = id;
+      this.deleteItemEvent.emit(id);
+      this.getReservations(); // Refresh the list
+    });
   }
 
   filteredData() {

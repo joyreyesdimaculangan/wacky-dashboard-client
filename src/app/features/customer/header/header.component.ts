@@ -3,6 +3,7 @@ import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { MatIcon } from '@angular/material/icon';
+import { GetAccountIdService } from '../reservation-form/getAccountId.service';
 
 @Component({
   selector: 'app-header',
@@ -12,10 +13,12 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  private readonly getAccountNameService = inject(GetAccountIdService);
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
 
+  accountProfileName: string | null = null;
   userName: string | null = null;
   userEmail: string | null = null;
   auth = inject(AuthService);
@@ -43,7 +46,8 @@ export class HeaderComponent {
     const userInfo = this.auth.getUserInfo();
     
     if (userInfo) {
-      this.userName = userInfo.accountProfile?.name || userInfo.email;
+      const accountProfileName = this.getAccountNameService.getAccountProfileName();
+      this.accountProfileName = accountProfileName?.accountProfileName ?? null;
       this.userEmail = userInfo.email;
     }
     

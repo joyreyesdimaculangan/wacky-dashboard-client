@@ -1,24 +1,21 @@
 import { Injectable, signal } from '@angular/core';
 
+interface AccountProfile {
+  accountProfileId: string;
+  accountProfileName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class GetAccountIdService {
-  accountProfileId = signal<string | null>(null);
+  accountProfileName = signal<AccountProfile | null>(null);
 
-  setAccountProfileId(accountProfileId: string): void {
-    this.accountProfileId.set(accountProfileId);
+  setAccountProfileName(accountProfileId:string, accountProfileName: string): void {
+    this.accountProfileName.set({accountProfileId, accountProfileName});
   }
 
-  setAccountProfileName(accountProfileName: string): void {
-    this.accountProfileId.set(accountProfileName);
-  }
-
-  getAccountProfileName(): string | null {
-    return this.accountProfileId();
-  }
-
-  getAccountProfileId(): string | null {
-    return this.accountProfileId();
+  getAccountProfileName(): AccountProfile | null {
+    return this.accountProfileName();
   }
 }

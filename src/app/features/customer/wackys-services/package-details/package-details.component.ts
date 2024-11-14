@@ -18,6 +18,7 @@ import { PackageInclusionsService } from '../../../../services/packageInclusions
 import { PackageAddOnsService } from '../../../../services/packageAddOns.service';
 import { PackageAddOns } from '../../../../models/packageAddOns';
 import { GetPackageAddOnsService } from '../../reservation-form/getPackageAddOns.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-package-details',
@@ -36,6 +37,7 @@ export class PackageDetailsComponent implements OnInit {
   private readonly additionalInclusionsService = inject(
     PackageInclusionsService
   );
+  private readonly authService = inject(AuthService);
   private readonly packageAddOnsService = inject(PackageAddOnsService);
   private readonly packagesService = inject(PackagesService);
   private readonly packageDetails = inject(GetPackageAddOnsService);
@@ -108,10 +110,12 @@ export class PackageDetailsComponent implements OnInit {
   }
 
   reservePackage() {
-    console.log(
-      'Reserve package:',
-      this.packageData?.packageID,
-    );
-    this.router.navigate(['/signInFirst']);
+    console.log('Reserve package:', this.packageData?.packageID);
+
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/customer/reservations']);
+    } else {
+      this.router.navigate(['/signInFirst']);
+    }
   }
 }

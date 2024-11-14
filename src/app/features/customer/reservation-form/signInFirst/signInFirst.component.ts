@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -237,7 +237,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './signInFirst.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignInFirstComponent {
+export class SignInFirstComponent implements OnInit {
   private readonly getAccountProfileId = inject(GetAccountIdService);
   loginForm!: FormGroup;
   loginError = '';

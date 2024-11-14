@@ -68,17 +68,20 @@ export class ReservationFormComponent implements OnInit {
   addOnsId: string[] = [];
 
   packages: any[] = [];
+  accountProfileName: any[] = [];
   packageName: PackageName | null = null;
 
   constructor() {
     effect(() => {
       const packages = this.packageNameService.packageName();
       console.log('Package Name:', packages);
-      this.accountProfileId = this.getAccountProfileIDService.getAccountProfileId();
-      console.log('Account Profile ID:', this.accountProfileId);
+      const accountProfileName = this.getAccountProfileIDService.accountProfileName();
+      console.log('Account Profile Name:', accountProfileName);
       this.packageID = packages?.packageId;
       console.log('Package ID:', this.packageID);
-      this.addOnsId = this.packageAddOnsService.packageDetails();
+      this.accountProfileId = accountProfileName?.accountProfileId;
+      console.log('Account Profile ID:', this.accountProfileId);
+      this.addOnsId = this.packageAddOnsService.getAddOnsId();
       console.log('Add-ons:', this.addOnsId);
     });
   }
@@ -190,7 +193,7 @@ export class ReservationFormComponent implements OnInit {
       // Map form values to the ReservationForm interface
       const reservationData: ReservationForm = {
         numberOfPax: this.step1.get("numberOfPax")?.value,
-        name: this.step1.get("name")?.value,
+        name: this.step1.get("name")?.value || this.accountProfileName,
         contactNumber: this.step1.get("contactNumber")?.value,
         eventDate: this.step2.get("eventDate")?.value,
         eventTime: this.step2.get("eventTime")?.value,

@@ -1,140 +1,187 @@
 <div class="flex h-screen bg-gray-100 overflow-hidden">
-    <app-drawer></app-drawer>
-    <div class="flex-1 p-6 overflow-y-auto">
-        <!-- Search and Items per Page Panel -->
-        <div class="mb-6 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a7 7 0 100 14 7 7 0 000-14zM21 21l-4.35-4.35"/>
-                    </svg>
-                    <input
-                        type="text"
-                        [(ngModel)]="searchText"
-                        placeholder="Search..."
-                        class="pl-12 py-3 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 w-96 shadow-sm transition duration-200"
-                    />
-                </div>
-                <button
-                    (click)="resetSearch()"
-                    class="py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
-                    Reset
-                </button>
-            </div>
-            <div>
-                <select
-                    [(ngModel)]="itemsPerPage"
-                    (change)="changeItemsPerPage()"
-                    class="py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm transition duration-200">
-                    <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }} per page</option>
-                </select>
-            </div>
+  <app-drawer></app-drawer>
+  <div class="flex-1 p-6 overflow-y-auto">
+    <!-- Search and Items per Page Panel -->
+    <div class="mb-6 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <svg
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 4a7 7 0 100 14 7 7 0 000-14zM21 21l-4.35-4.35"
+            />
+          </svg>
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Search..."
+            class="pl-12 py-3 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 w-96 shadow-sm transition duration-200"
+          />
         </div>
-
-        <!-- Reservation Data Table -->
-        <div class="overflow-x-auto mb-6">
-            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-left">
-                <thead class="bg-green-500 text-white">
-                    <tr>
-                        <th class="p-4 text-sm font-medium">Package Type</th>
-                        <th class="p-4 text-sm font-medium">Customer Name</th>
-                        <th class="p-4 text-sm font-medium">Contact No.</th>
-                        <th class="p-4 text-sm font-medium">Number of Pax</th>
-                        <th class="p-4 text-sm font-medium">Date</th>
-                        <th class="p-4 text-sm font-medium">Time</th>
-                        <th class="p-4 text-sm font-medium">Status</th>
-                        <th class="p-4 text-sm font-medium">Payment Status</th>
-                        <th class="p-4 text-sm font-medium">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 divide-y divide-gray-200">
-                    <tr *ngFor="let item of pagedData()" class="hover:bg-gray-50 transition duration-200">
-                        <td class="p-4">{{ item }}</td>
-                        <td class="p-4">{{ item.name }}</td>
-                        <td class="p-4">{{ item.contactNumber }}</td>
-                        <td class="p-4">{{ item.numberOfPax }}</td>
-                        <td class="p-4">{{ item.eventDate }}</td>
-                        <td class="p-4">{{ item.eventTime }}</td>
-                        <td class="p-4">
-                            <span [ngClass]="{
-                                'bg-yellow-100 text-yellow-600': item.status === 'Pending',
-                                'bg-green-100 text-green-600': item.status === 'Approved',
-                                'bg-red-100 text-red-600': item.status === 'Cancelled'
-                            }" class="px-3 py-1 text-xs font-medium rounded-lg">
-                                {{ item.status }}
-                            </span>
-                        </td>
-                        <td class="p-4">
-                            <span [ngClass]="{
-                                'bg-yellow-100 text-yellow-600': item.paymentStatus === 'PENDING',
-                                'bg-green-100 text-green-600': item.paymentStatus === 'PAID',
-                            }" class="px-3 py-1 text-xs font-medium rounded-lg">
-                                {{ item.paymentStatus }}
-                            </span>
-                        </td>
-                        <td class="p-4 space-x-1">
-                            <button
-                                (click)="openView(item)"
-                                class="py-1 px-2 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 focus:outline-none transition duration-200">
-                                <i class="material-icons text-xs">visibility</i>
-                            </button>
-                            <button
-                                (click)="openEdit(item)"
-                                class="py-1 px-2 bg-yellow-500 text-white rounded-lg text-xs hover:bg-yellow-600 focus:outline-none transition duration-200">
-                                <i class="material-icons text-xs">edit</i>
-                            </button>
-                            <button
-                                (click)="openDelete(item)"
-                                class="py-1 px-2 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600 focus:outline-none transition duration-200">
-                                <i class="material-icons text-xs">delete</i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Modals for Viewing, Editing, and Deleting -->
-        <div class="modal-container overflow-auto max-h-screen z-50">
-            <app-view-reservation-modal *ngIf="viewingItem" [item]="viewingItem" (close)="closeView()"></app-view-reservation-modal>
-            <app-edit-reservation-modal *ngIf="editingItem" [item]="editingItem" (cancel)="closeEdit()"></app-edit-reservation-modal>
-            <app-delete-reservation-modal *ngIf="deletingItem" [item]="deletingItem" (cancelDelete)="closeDelete()"></app-delete-reservation-modal>
-        </div>
-
-        <!-- Pagination Controls -->
-        <div class="flex justify-end mt-4">
-            <div class="flex items-center space-x-2">
-                <button
-                    (click)="prevPage()"
-                    [disabled]="currentPage === 1"
-                    class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
-                    Previous
-                </button>
-                <span class="text-sm">Page {{ currentPage }} of {{ totalPages() }}</span>
-                <button
-                    (click)="nextPage()"
-                    [disabled]="currentPage === totalPages()"
-                    class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
-                    Next
-                </button>
-            </div>
-        </div>
-
-        <div class="relative group">
-            <!-- Button with Enhanced Floating Effect and Shadow -->
-            <button 
-                (click)="openAdd(addItemEvent)"
-                class="fixed bottom-6 right-6 bg-green-500 text-white p-6 rounded-lg shadow-2xl hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-3xl">
-                <i class="material-icons text-4xl">add</i>
-            </button>
-        </div>
-
-        <div class="modal-container overflow-auto max-h-screen z-50">
-            <app-add-reservation-modal
-                *ngIf="addingItem"
-                (close)="closeAdd()"
-                (add)="handleAdd($event)">
-            </app-add-reservation-modal>
-        </div>
+        <button
+          (click)="resetSearch()"
+          class="py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+        >
+          Reset
+        </button>
+      </div>
+      <div>
+        <select
+          [(ngModel)]="itemsPerPage"
+          (change)="changeItemsPerPage()"
+          class="py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm transition duration-200"
+        >
+          <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+            {{ option }} per page
+          </option>
+        </select>
+      </div>
     </div>
+
+    <!-- Reservation Data Table -->
+    <div class="overflow-x-auto mb-6">
+      <table
+        class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-left"
+      >
+        <thead class="bg-green-500 text-white">
+          <tr>
+            <th class="p-4 text-sm font-medium">Package Type</th>
+            <th class="p-4 text-sm font-medium">Customer Name</th>
+            <th class="p-4 text-sm font-medium">Contact No.</th>
+            <th class="p-4 text-sm font-medium">Number of Pax</th>
+            <th class="p-4 text-sm font-medium">Date</th>
+            <th class="p-4 text-sm font-medium">Time</th>
+            <th class="p-4 text-sm font-medium">Status</th>
+            <th class="p-4 text-sm font-medium">Payment Status</th>
+            <th class="p-4 text-sm font-medium">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700 divide-y divide-gray-200">
+          <tr
+          *ngFor="let reservation of reservationData"
+            class="hover:bg-gray-50 transition duration-200"
+          >
+            <td class="p-4">{{ reservation.packageID }}</td>
+            <td class="p-4">{{ reservation.accountProfileId }}</td>
+            <td class="p-4">{{ reservation.contactNumber }}</td>
+            <td class="p-4">{{ reservation.numberOfPax }}</td>
+            <td class="p-4">{{ reservation.eventDate }}</td>
+            <td class="p-4">{{ reservation.eventTime }}</td>
+            <td class="p-4">
+              <span
+                [ngClass]="{
+                  'bg-yellow-100 text-yellow-600': reservation.status === 'Pending',
+                  'bg-green-100 text-green-600': reservation.status === 'Approved',
+                  'bg-red-100 text-red-600': reservation.status === 'Cancelled'
+                }"
+                class="px-3 py-1 text-xs font-medium rounded-lg"
+              >
+                {{ reservation.status }}
+              </span>
+            </td>
+            <td class="p-4">
+              <span
+                [ngClass]="{
+                                'bg-yellow-100 text-yellow-600': reservation.paymentStatus === 'PENDING',
+                                'bg-green-100 text-green-600': reservation.paymentStatus === 'PAID',
+                            }"
+                class="px-3 py-1 text-xs font-medium rounded-lg"
+              >
+                {{ reservation.paymentStatus }}
+              </span>
+            </td>
+            <td class="p-4 space-x-1">
+              <button
+                
+                class="py-1 px-2 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 focus:outline-none transition duration-200"
+              >
+                <i class="material-icons text-xs">visibility</i>
+              </button>
+              <button
+                
+                class="py-1 px-2 bg-yellow-500 text-white rounded-lg text-xs hover:bg-yellow-600 focus:outline-none transition duration-200"
+              >
+                <i class="material-icons text-xs">edit</i>
+              </button>
+              <button
+                
+                class="py-1 px-2 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600 focus:outline-none transition duration-200"
+              >
+                <i class="material-icons text-xs">delete</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modals for Viewing, Editing, and Deleting -->
+    <div class="modal-container overflow-auto max-h-screen z-50">
+      <app-view-reservation-modal
+        *ngIf="viewingItem"
+        [item]="viewingItem"
+        (close)="closeView()"
+      ></app-view-reservation-modal>
+      <app-edit-reservation-modal
+        *ngIf="editingItem"
+        [item]="editingItem"
+        (cancel)="closeEdit()"
+      ></app-edit-reservation-modal>
+      <app-delete-reservation-modal
+        *ngIf="deletingItem"
+        [item]="deletingItem"
+        (cancelDelete)="closeDelete()"
+      ></app-delete-reservation-modal>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-end mt-4">
+      <div class="flex items-center space-x-2">
+        <button
+          (click)="prevPage()"
+          [disabled]="currentPage === 1"
+          class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+        >
+          Previous
+        </button>
+        <span class="text-sm"
+          >Page {{ currentPage }} of {{ totalPages() }}</span
+        >
+        <button
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages()"
+          class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
+    <div class="relative group">
+      <!-- Button with Enhanced Floating Effect and Shadow -->
+      <button
+        (click)="openAdd(addItemEvent)"
+        class="fixed bottom-6 right-6 bg-green-500 text-white p-6 rounded-lg shadow-2xl hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-3xl"
+      >
+        <i class="material-icons text-4xl">add</i>
+      </button>
+    </div>
+
+    <div class="modal-container overflow-auto max-h-screen z-50">
+      <app-add-reservation-modal
+        *ngIf="addingItem"
+        (close)="closeAdd()"
+        (add)="handleAdd($event)"
+      >
+      </app-add-reservation-modal>
+    </div>
+  </div>
 </div>
