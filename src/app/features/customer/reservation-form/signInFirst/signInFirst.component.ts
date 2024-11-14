@@ -295,6 +295,7 @@ export class SignInFirstComponent implements OnInit {
         )
         .subscribe((response: any) => {
           if (response['status'] == 200) {
+            console.log('Account Profile Name:', this.authService.accountProfileName);
             if (this.authService.user()?.account_type === 'admin') {
               this.router.navigate(['admin/dashboard']);
             } else {

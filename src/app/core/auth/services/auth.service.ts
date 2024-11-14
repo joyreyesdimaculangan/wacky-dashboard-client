@@ -21,6 +21,7 @@ export class AuthService {
   userInfo: User | null = null;
   accountType = signal<String | undefined>('');
   userName: string | undefined;
+  accountProfileName: string | undefined;
 
   private readonly auth = inject(LoginService);
   private readonly router = inject(Router);
@@ -61,6 +62,7 @@ export class AuthService {
         this.userInfo = this.getUser(response.access_token);
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
+        this.accountProfileName = response.accountProfileName;
         this.getAccountIdService.setAccountProfileName(response.accountProfileId, response.accountProfileName);
       })
     );

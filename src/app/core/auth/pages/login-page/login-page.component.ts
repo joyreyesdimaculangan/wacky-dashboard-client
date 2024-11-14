@@ -197,6 +197,7 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
             <!-- Social Sign-in Options -->
             <div class="flex justify-center gap-4 mb-6">
               <button
+                (click)="loginWithGoogle()"
                 class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
                 style="background-color: #4285F4;"
               >
@@ -261,6 +262,10 @@ export class LoginPageComponent {
     });
   }
 
+  loginWithGoogle() {
+    console.log('Login with Google');
+  }
+
   login() {
     this.loginSubscription.add(
       this.authService
@@ -281,6 +286,7 @@ export class LoginPageComponent {
         )
         .subscribe((response: any) => {
           if (response['status'] == 200) {
+            console.log('Account Profile Name:', this.authService.accountProfileName);
             if (this.authService.user()?.account_type === 'admin') {
               this.router.navigate(['admin/dashboard']);
             } else {

@@ -330,7 +330,6 @@ export class PackagesCrmComponent {
           this.router.navigate(['/admin/home']);
         },
       });
-
     }
   }
 }
