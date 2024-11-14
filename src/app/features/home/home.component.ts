@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { OffersComponent } from './offers-carousel/offers.component';
-import { MenuComponent } from '../menu/menu.component';
-import { ServicesComponent } from '../wackys-services/services.component';
-import { ReviewSectionComponent } from './review-section/review-section.component';
-import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
+import { OffersComponent } from '../customer/home/offers-carousel/offers.component';
+import { MenuComponent } from '../customer/menu/menu.component';
+import { ServicesComponent } from '../customer/wackys-services/services.component';
+import { ReviewSectionComponent } from '../customer/home/review-section/review-section.component';
+import { InquiryFormComponent } from '../customer/inquiry-form/inquiry-form.component';
+import { HeaderComponent } from '../customer/header/header.component';
+import { FooterComponent } from '../customer/footer/footer.component';
 
 import { ActivatedRoute } from '@angular/router';
 

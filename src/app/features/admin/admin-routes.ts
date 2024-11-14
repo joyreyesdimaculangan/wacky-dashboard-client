@@ -10,9 +10,7 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('../customer/home/home.component').then((m) => m.HomeComponent),
-    canActivate: [hasRoleGuard],
-    data: { roles: ['admin'] },
+    loadComponent: () => import('../home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'dashboard',

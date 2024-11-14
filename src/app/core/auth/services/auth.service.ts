@@ -6,6 +6,7 @@ import { AccountProfile, User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
+import { GetAccountIdService } from '../../../features/customer/reservation-form/getAccountId.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class AuthService {
   private readonly auth = inject(LoginService);
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
+  private readonly getAccountIdService = inject(GetAccountIdService);
 
   setUserRole(role: string): void {
     this.userRoleSubject.next(role);
@@ -49,7 +51,7 @@ export class AuthService {
         this.userInfo = this.getUser(response.access_token);
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
-        this.userName = this.userInfo?.accountProfile?.name;
+        this.getAccountIdService.setAccountProfileId(response.accountProfileId);
       })
     );
   }
@@ -83,16 +85,19 @@ export class AuthService {
     this.userInfo = null;
     this.user.set(null);
     this.accountType.set(undefined);
-    this.router.navigate(['/auth/login']);
   }
 
   public isAdmin(): boolean {
     return this.userInfo?.account_type === 'admin';
   }
 
+  public isCustomer(): boolean {
+    return this.userInfo?.account_type === 'customer';
+  }
+
   public getUser(token: string): User | null {
     if (!token) {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/home']);
       return null;
     }
     return JSON.parse(atob(token.split('.')[1])) as User;

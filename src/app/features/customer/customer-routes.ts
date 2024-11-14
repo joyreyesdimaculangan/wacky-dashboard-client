@@ -4,12 +4,8 @@ import { hasRoleGuard } from '../../core/auth/guards/hasRole.guard';
 export const CustomerRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'reservations',
     pathMatch: 'full',
-  },
-  {
-    path: 'home',
-    loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'edit-profile',
@@ -26,5 +22,7 @@ export const CustomerRoutes: Routes = [
   {
     path: 'reservations',
     loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
+    canActivate: [hasRoleGuard],
+    data: { roles: ['customer'] }
   },
 ];

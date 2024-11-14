@@ -10,7 +10,7 @@ import {
   effect,
 } from '@angular/core';
 import { ReservationFormComponent } from '../../reservation-form/reservation-form.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PackagesService } from '../../../../services/packages.service';
 import { Packages, ViewPackages } from '../../../../models/packages';
 import { PackageInclusions } from '../../../../models/packageInclusions';
@@ -39,6 +39,7 @@ export class PackageDetailsComponent implements OnInit {
   private readonly packageAddOnsService = inject(PackageAddOnsService);
   private readonly packagesService = inject(PackagesService);
   private readonly packageDetails = inject(GetPackageAddOnsService);
+  router = inject(Router);
 
   public packageInclusions: PackageInclusions[] = [];
   public packagesAddOns: PackageAddOns[] = [];
@@ -104,5 +105,10 @@ export class PackageDetailsComponent implements OnInit {
 
   closeModal() {
     this.isOpen = false;
+  }
+
+  reservePackage() {
+    console.log('Reserve package:',);
+    this.router.navigate(['/customer/reservations']);
   }
 }

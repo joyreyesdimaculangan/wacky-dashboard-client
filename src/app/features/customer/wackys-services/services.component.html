@@ -84,14 +84,6 @@
             <!-- Action Buttons Section with Extra Margin and Padding -->
             <div class="mt-6 flex justify-end space-x-4 mb-6 pr-4" *ngIf="authService.isAdmin()">
               <button
-                class="flex items-center justify-center border border-green-500 text-green-500 font-medium py-2 px-6 rounded-lg hover:bg-green-50 hover:text-green-600 transition duration-200 ease-in-out"
-                [routerLink]="['/admin/edit-menu', offer.packageID]"
-                (click)="$event.stopPropagation()"
-              >
-                <span class="material-icons-outlined mr-2">edit</span>
-                Edit Info
-              </button>
-              <button
                 class="flex items-center justify-center border border-red-500 text-red-500 font-medium py-2 px-6 rounded-lg hover:bg-red-50 hover:text-red-600 transition duration-200 ease-in-out"
                 (click)="deletePackage(offer.packageID.toString()); $event.stopPropagation()"
               >

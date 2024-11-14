@@ -5,15 +5,21 @@ import { hasRoleGuard } from './core/auth/guards/hasRole.guard';
 
 export const routes: Routes = [
   {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/home.component').then((m) => m.HomeComponent),
+    title: 'Home Page',
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
     path: 'auth',
     loadChildren: () =>
       import('./core/auth/auth.routes').then((m) => m.AuthRoutes),
     title: 'Authentication',
-  },
-  {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full',
   },
   {
     path: 'password-recovery',
@@ -31,9 +37,7 @@ export const routes: Routes = [
     path: 'customer',
     loadChildren: () => 
       import('./features/customer/customer-routes').then(m => m.CustomerRoutes),
-    title: 'Home Page',
-    canActivate: [hasRoleGuard],
-    data: { roles: ['customer'] }
+    title: 'Wacky Customer Page',
   },
   {
     path: 'admin',

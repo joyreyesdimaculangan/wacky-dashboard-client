@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
+import { GetAccountIdService } from '../../../../features/customer/reservation-form/getAccountId.service';
 
 @Component({
   selector: 'app-login-page',
@@ -229,10 +230,11 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent {
+  private readonly getAccountProfileId = inject(GetAccountIdService);
   loginForm!: FormGroup;
   loginError = '';
   showPassword: boolean = false;
-  public isLoadingButton = signal(false);
+  
   authService = inject(AuthService);
   router = inject(Router);
   loginSubscription = new Subscription();
@@ -259,14 +261,12 @@ export class LoginPageComponent {
     });
   }
 
-   login() {
-    this.isLoadingButton.set(true);
+  login() {
     this.loginSubscription.add(
       this.authService
         .login(this.loginForm.value.email, this.loginForm.value.password)
         .pipe(
           catchError((error: HttpErrorResponse) => {
-            this.isLoadingButton.set(false);
             if (error.status === 401) {
               if (error.error.message === 'Incorrect password') {
                 this.showSnackbar('Incorrect password. Please try again.', 'error');
@@ -281,11 +281,10 @@ export class LoginPageComponent {
         )
         .subscribe((response: any) => {
           if (response['status'] == 200) {
-            this.isLoadingButton.set(false);
             if (this.authService.user()?.account_type === 'admin') {
               this.router.navigate(['admin/dashboard']);
             } else {
-              this.router.navigate(['customer/home']);
+              this.router.navigate(['customer/reservations']);
             }
           } else if (response['status'] == 401 && response['message'] === 'Incorrect password') {
             this.showSnackbar('Incorrect password. Please try again.', 'error');

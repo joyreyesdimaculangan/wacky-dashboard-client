@@ -49,7 +49,7 @@
                 </thead>
                 <tbody class="text-gray-700 divide-y divide-gray-200">
                     <tr *ngFor="let item of pagedData()" class="hover:bg-gray-50 transition duration-200">
-                        <td class="p-4">{{ item.packageType }}</td>
+                        <td class="p-4">{{ item }}</td>
                         <td class="p-4">{{ item.name }}</td>
                         <td class="p-4">{{ item.contactNumber }}</td>
                         <td class="p-4">{{ item.numberOfPax }}</td>
@@ -66,8 +66,8 @@
                         </td>
                         <td class="p-4">
                             <span [ngClass]="{
-                                'bg-yellow-100 text-yellow-600': item.paymentStatus === '50% Downpayment',
-                                'bg-green-100 text-green-600': item.paymentStatus === 'Fully Paid',
+                                'bg-yellow-100 text-yellow-600': item.paymentStatus === 'PENDING',
+                                'bg-green-100 text-green-600': item.paymentStatus === 'PAID',
                             }" class="px-3 py-1 text-xs font-medium rounded-lg">
                                 {{ item.paymentStatus }}
                             </span>
@@ -97,8 +97,8 @@
         <!-- Modals for Viewing, Editing, and Deleting -->
         <div class="modal-container overflow-auto max-h-screen z-50">
             <app-view-reservation-modal *ngIf="viewingItem" [item]="viewingItem" (close)="closeView()"></app-view-reservation-modal>
-            <app-edit-reservation-modal *ngIf="editingItem" [item]="editingItem" (save)="saveEdit($event)" (cancel)="closeEdit()"></app-edit-reservation-modal>
-            <app-delete-reservation-modal *ngIf="deletingItem" [item]="deletingItem" (confirmDelete)="confirmDelete($event)" (cancelDelete)="closeDelete()"></app-delete-reservation-modal>
+            <app-edit-reservation-modal *ngIf="editingItem" [item]="editingItem" (cancel)="closeEdit()"></app-edit-reservation-modal>
+            <app-delete-reservation-modal *ngIf="deletingItem" [item]="deletingItem" (cancelDelete)="closeDelete()"></app-delete-reservation-modal>
         </div>
 
         <!-- Pagination Controls -->

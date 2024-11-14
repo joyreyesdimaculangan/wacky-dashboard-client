@@ -3,7 +3,7 @@
     <!-- Logo stays on the left -->
     <div class="flex-none">
       <a
-        [routerLink]="['/customer/home']"
+        [routerLink]="['/home']"
         fragment="home"
         class="flex items-center space-x-4"
       >
@@ -24,7 +24,7 @@
       <ul class="flex space-x-8 font-medium p-0 bg-green-600 rounded-lg">
         <li>
           <button
-            [routerLink]="['/customer/home']"
+            [routerLink]="['/home']"
             fragment="home"
             [ngClass]="{ 'bg-white-100': isActive('home') }"
             class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
@@ -34,7 +34,7 @@
         </li>
         <li>
           <button
-            [routerLink]="['/customer/home']"
+            [routerLink]="['/home']"
             fragment="menu"
             [ngClass]="{ 'bg-white-100': isActive('menu') }"
             class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
@@ -44,7 +44,7 @@
         </li>
         <li>
           <button
-            [routerLink]="['/customer/home']"
+            [routerLink]="['/home']"
             fragment="services"
             [ngClass]="{ 'bg-white-100': isActive('services') }"
             class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
@@ -54,7 +54,7 @@
         </li>
         <li>
           <button
-            [routerLink]="['/customer/home']"
+            [routerLink]="['/home']"
             fragment="reviews"
             [ngClass]="{ 'bg-white-100': isActive('reviews') }"
             class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
@@ -64,7 +64,7 @@
         </li>
         <li>
           <button
-            [routerLink]="['/customer/home']"
+            [routerLink]="['/home']"
             fragment="inquiry"
             [ngClass]="{ 'bg-white-100': isActive('inquiry') }"
             class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
@@ -76,21 +76,22 @@
     </div>
 
     <!-- Profile icon stays on the far right -->
-    <div class="flex-none relative flex items-center">
+    <div class="flex-none relative flex items-center" 
+    *ngIf="auth.isCustomer() || auth.isAdmin()">
       <button
         type="button"
-        class="flex items-center text-sm bg-white text-green-600 border border-green-600 rounded-full focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition duration-200"
+        class="flex items-center justify-center bg-white text-green-600 border border-green-600 rounded-full focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition duration-200"
         id="user-menu-button"
         aria-expanded="false"
         (click)="toggleDropdown()"
+        style="height: 48px; width: 48px; padding: 0"
       >
         <span class="sr-only">Open user menu</span>
-        <img
-          class="w-12 h-12 rounded-full"
-          src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU"
-          alt="user photo"
-        />
+        <mat-icon class="text-green-600" style="font-size: 24px"
+          >account_circle</mat-icon
+        >
       </button>
+
       <div
         *ngIf="isDropdownOpen"
         class="absolute top-14 right-0 z-50 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-60 transition duration-200 ease-in-out transform origin-top-right scale-95"

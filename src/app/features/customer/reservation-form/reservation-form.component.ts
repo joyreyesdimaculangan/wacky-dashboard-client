@@ -33,6 +33,7 @@ import { GetPackageNameService } from './getPackageName.service';
 import { AccountProfileService } from '../../../services/account-profile.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { PackageName } from '../../../models/packages';
+import { GetAccountIdService } from './getAccountId.service';
 
 
 @Component({
@@ -58,21 +59,24 @@ export class ReservationFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private location = inject(Location);
   private authService = inject(AuthService);
-  private accountProfileService = inject(AccountProfileService);
+  private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
   
-  packageID = signal<string | null>(null);
+  packageID!: null | string | undefined;
+  accountProfileId!: null | string | undefined;
+  addOnsId: string[] = [];
+
   packages: any[] = [];
   addOns: any[] = [];
   packageName: PackageName | null = null;
-  packageAddOns: string[] = [];
-  accountProfileId: string = '';
 
   constructor() {
     effect(() => {
-      console.log(this.packageNameService.packageName());
-      console.log(this.packageAddOnsService.packageDetails());
+      const packages = this.packageNameService.packageName();
+      this.accountProfileId = this.getAccountProfileIDService.getAccountProfileId();
+      this.packageID = packages?.packageId;
+      this.addOnsId = this.packageAddOnsService.packageDetails();
     });
   }
 
@@ -84,18 +88,8 @@ export class ReservationFormComponent implements OnInit {
   @Output() reservationSubmitted = new EventEmitter<any>();
   @Output() close = new EventEmitter<void>();
 
-  availableTimes = [
-    { id: '10-am', value: '10:00 AM', label: '10:00 AM' },
-    { id: '10-30am', value: '10:30 AM', label: '10:30 AM' },
-    { id: '11-am', value: '11:00 AM', label: '11:00 AM' },
-    { id: '3-00-pm', value: '3:00 PM', label: '3:00 PM' },
-    { id: '3-30-pm', value: '3:30 PM', label: '3:30 PM' },
-    { id: '4-00-pm', value: '4:00 PM', label: '4:00 PM' },
-  ];
-
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
-      packageID: [null, Validators.required],
       name: ['', Validators.required],
       contactNumber: [
         '',
@@ -110,20 +104,7 @@ export class ReservationFormComponent implements OnInit {
       paymentStatus: ['PENDING'],
       status: ['Pending'],
     });
-
-    const packageName = this.packageNameService.packageName();
-    if (packageName) {
-      this.packageName = {
-        packageId: packageName.packageId,
-        packageName: packageName.packageName,
-      };
-      this.packageID.set(this.packageName.packageId);
-
-      this.confirmReservationForm.patchValue({
-        packageID: this.packageName.packageId,
-      });
-    }
-    
+  
     this.reservationForm = new FormGroup({
       customerDetails: new FormGroup({
         name: new FormControl('', [Validators.required]),
@@ -148,12 +129,6 @@ export class ReservationFormComponent implements OnInit {
         otherRequest: new FormControl(''),
       }),
     });
-
-    this.reservationForm.patchValue({
-      packageID: this.packageName?.packageId,
-      accountProfileID: this.accountProfileId,
-      addOnsID: this.addOns?.map((addOn) => addOn.addOnId),
-    })
   }
   
   isFirstStepComplete = false;
@@ -188,7 +163,8 @@ export class ReservationFormComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    // this.authService.logout();
+    this.router.navigate(['/home']);
   }
 
   get step1() {
@@ -219,11 +195,11 @@ export class ReservationFormComponent implements OnInit {
         eventTheme: this.step3.get("eventTheme")?.value,
         cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
-        packageID: 'ff3e1efc-480f-4cd5-9434-59b5dd2e92c3',
-        accountProfileId: '48eb20ae-5490-4036-b5d7-33e61b1d7478',
+        packageID: this.packageID,
+        accountProfileId: this.accountProfileId,
         status: statusValue,
         paymentStatus: paymentStatusValue,
-        addOnIds: ['5cab5866-4dfc-4193-8983-b2d7fa9f7047'],
+        addOnIds: this.addOnsId,
       };
 
       console.log('Reservation submitted:', reservationData);
@@ -239,6 +215,7 @@ export class ReservationFormComponent implements OnInit {
         },
       );
     }
+    this.closeReservationForm();
   }
 }
 

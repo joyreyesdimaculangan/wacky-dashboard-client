@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject, OnInit } from '@angular/core';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { MatIcon } from '@angular/material/icon';
 
@@ -19,7 +19,9 @@ export class HeaderComponent {
   userName: string | null = null;
   userEmail: string | null = null;
   auth = inject(AuthService);
+  router = inject(Router);
 
+  userRole: string | null = null;
 
   toggleDropdown() {
   this.isDropdownOpen = !this.isDropdownOpen;
@@ -37,6 +39,7 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
+    this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
     
     if (userInfo) {
@@ -44,7 +47,6 @@ export class HeaderComponent {
       this.userEmail = userInfo.email;
     }
     
-
     this.route.fragment.subscribe((fragment) => {
       this.currentFragment = fragment;
     });
@@ -53,6 +55,10 @@ export class HeaderComponent {
   isActive(fragment: string): boolean {
     return this.currentFragment === fragment;
   }
+
+  signIn() {
+    this.router.navigate(['/login']);
+  } 
 
   logout() {
     this.auth.logout();

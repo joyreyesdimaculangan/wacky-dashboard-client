@@ -7,8 +7,8 @@ export interface ReservationForm {
     eventTheme: string,
     cakeTheme: string,
     otherRequest: string,
-    packageID: string,
-    accountProfileId: string,
+    packageID: string | null | undefined,
+    accountProfileId: string | null | undefined,
     status: 'Pending' | 'Approved' | 'Cancelled' 
     paymentStatus: 'PENDING' | 'PAID' | 'FAILED'
     addOnIds: string[],
