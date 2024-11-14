@@ -204,7 +204,7 @@ export class ReservationFormComponent implements OnInit {
         accountProfileId: this.accountProfileId,
         status: statusValue,
         paymentStatus: paymentStatusValue,
-        addOnIds: this.addOnsId,
+        addOnIds: this.packageAddOnsService.packageDetails();,
       };
 
       console.log('Reservation submitted:', reservationData);
