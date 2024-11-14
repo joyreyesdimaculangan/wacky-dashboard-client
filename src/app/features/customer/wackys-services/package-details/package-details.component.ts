@@ -61,6 +61,7 @@ export class PackageDetailsComponent implements OnInit {
 
   pushAddOn(addOn: string): void {
     this.packageDetails.addOnsId().push(addOn);
+    console.log('Add-ons:', this.packageDetails.addOnsId());
   }
 
   onAddOnChange(addOn: string, isChecked: boolean): void {

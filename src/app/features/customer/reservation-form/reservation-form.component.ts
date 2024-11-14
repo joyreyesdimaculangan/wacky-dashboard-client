@@ -75,8 +75,12 @@ export class ReservationFormComponent implements OnInit {
     effect(() => {
       const packages = this.packageNameService.packageName();
       this.packageID = packages?.packageId;
+      console.log('Package ID:', this.packageID);
+      const accountProfileName = this.getAccountProfileIDService.getAccountProfileName();
+      this.accountProfileId = accountProfileName?.accountProfileId;
+      console.log('Account Profile ID:', this.accountProfileId);
       this.addOnsId = this.packageAddOnsService.addOnsId();
-      console.log('Package ID:', this.addOnsId);
+      console.log('Add-ons:', this.addOnsId);
     });
   }
 
@@ -209,12 +213,18 @@ export class ReservationFormComponent implements OnInit {
           console.log('Reservation created:', response);
           this.reservationSubmitted.emit(response);
           this.close.emit();
+          this.resetAddOns();
         },
         (error) => {
           console.error('Error creating reservation:', error);
         },
       );
     }
+  }
+
+  resetAddOns() {
+    this.addOnsId = [];
+    this.packageAddOnsService.setAddOnsId([]);
   }
 }
 
