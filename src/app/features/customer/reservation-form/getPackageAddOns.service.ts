@@ -10,24 +10,20 @@ interface packageDetails {
 })
 
 export class GetPackageAddOnsService {
-  packageDetails = signal<packageDetails[]>([]);
-  addOnsId = signal<packageDetails[]>([]);
+  packageDetails = signal<string[]>([]);
+  addOnsId = signal<string[]>([]);
 
-  setAddOnsId(addOnsId: packageDetails[]): void {
+  setAddOnsId(addOnsId: string[]): void {
     this.addOnsId.set(addOnsId);
   }
 
-  setPackageDetails(packageDetail: packageDetails[]): void {
+  setPackageDetails(packageDetail:string[]): void {
     this.packageDetails.update(values => {
       return [...values, ...packageDetail];
     });
   }
 
-  getPackageDetails(): packageDetails[] {
+  getPackageDetails(): string[] {
     return this.packageDetails();
-  }
-
-  getAddOnsId(): packageDetails[] {
-    return this.addOnsId();
   }
 }

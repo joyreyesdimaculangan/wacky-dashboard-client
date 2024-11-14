@@ -81,7 +81,7 @@ export class ReservationFormComponent implements OnInit {
       console.log('Package ID:', this.packageID);
       this.accountProfileId = accountProfileName?.accountProfileId;
       console.log('Account Profile ID:', this.accountProfileId);
-      this.addOnsId = this.packageAddOnsService.getAddOnsId();
+      this.addOnsId = this.packageAddOnsService.packageDetails();
       console.log('Add-ons:', this.addOnsId);
     });
   }
@@ -204,7 +204,7 @@ export class ReservationFormComponent implements OnInit {
         accountProfileId: this.accountProfileId,
         status: statusValue,
         paymentStatus: paymentStatusValue,
-        addOnIds: this.packageAddOnsService.packageDetails();,
+        addOnIds: this.packageAddOnsService.packageDetails(),
       };
 
       console.log('Reservation submitted:', reservationData);
