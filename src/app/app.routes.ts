@@ -24,7 +24,7 @@ export const routes: Routes = [
   {
     path: 'password-recovery',
     loadChildren: () =>
-      import('./core/password-recovery/password-recovery.component').then((m) => m.PasswordRecoveryComponent),
+      import('./core/auth/pages/password-recovery/password-recovery.component').then((m) => m.PasswordRecoveryComponent),
     title: 'Password Recovery',
   },
   {

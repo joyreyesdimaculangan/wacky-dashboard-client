@@ -54,7 +54,7 @@ import { MatInputModule } from '@angular/material/input';
           Ready to make your reservations?
         </h2>
         <h4
-          class="text-2xl font-bold text-green-700 text-center mt-14 mb-6"
+          class="text-2xl font-bold text-black-100 text-center"
         >
           Sign In First
         </h4>

@@ -1,0 +1,14 @@
+:host {
+  .email-icon {
+    color: #4caf50;
+    background-color: #e8f5e9;
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+  .verify-button {
+    background-color: #4caf50;
+    &:hover {
+      background-color: #388e3c;
+    }
+  }
+}

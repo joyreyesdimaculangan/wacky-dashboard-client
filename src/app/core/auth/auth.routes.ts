@@ -9,8 +9,12 @@ export const AuthRoutes: Routes = [
   },
   {
     path: 'password-recovery', 
-    loadComponent: () => import('../password-recovery/password-recovery.component').then(m => m.PasswordRecoveryComponent)
+    loadComponent: () => import('./pages/password-recovery/password-recovery.component').then(m => m.PasswordRecoveryComponent)
   }, 
+  {
+    path: 'email-verification',
+    loadComponent: () => import('./pages/email-verification/email-verification.component').then(m => m.EmailVerificationComponent),
+  },
   {
     path: 'login', 
     loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),

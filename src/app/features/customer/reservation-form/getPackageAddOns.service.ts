@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-interface packageDetails {
+interface PackageDetails {
   packageId: string;
   addOns: string[];
 }
