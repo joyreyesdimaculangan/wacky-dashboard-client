@@ -72,7 +72,7 @@ export class AuthService {
   }
   
   isLoggedIn(): boolean {
-    return this.isAuthenticated;
+    return this._isLoggedIn$.value;
   }
 
   isLogin() {
@@ -85,6 +85,7 @@ export class AuthService {
     this.userInfo = null;
     this.user.set(null);
     this.accountType.set(undefined);
+    this.getAccountIdService.setAccountProfileId('');
   }
 
   public isAdmin(): boolean {

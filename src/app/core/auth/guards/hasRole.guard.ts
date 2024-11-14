@@ -9,7 +9,7 @@ export const hasRoleGuard: CanActivateFn = (route, state) => {
   console.log('Account Type:', accountType);
   const isAuthorized = route.data['roles'].includes(accountType);
   if (!isAuthorized) {
-    _router.navigate(['/auth/login']);
+    _router.navigate(['/home']);
   }
 
   return isAuthorized || false;

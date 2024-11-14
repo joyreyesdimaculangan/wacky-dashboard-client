@@ -60,6 +60,10 @@ export class HeaderComponent {
     this.router.navigate(['/login']);
   } 
 
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
   logout() {
     this.auth.logout();
   }

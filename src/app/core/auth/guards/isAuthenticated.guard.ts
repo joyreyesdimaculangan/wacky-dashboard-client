@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (token && !jwtHelper.isTokenExpired(token)) {
     return true;
   } else {
-    router.navigate(['/auth/login']);
+    router.navigate(['/home']);
     return false;
   }
 };

@@ -40,6 +40,12 @@ export const routes: Routes = [
     title: 'Wacky Customer Page',
   },
   {
+    path: 'signInFirst',
+    loadComponent: () =>
+      import('./features/customer/reservation-form/signInFirst/signInFirst.component').then((m) => m.SignInFirstComponent),
+    title: 'Sign In First',
+  },
+  {
     path: 'admin',
     loadChildren: () =>
       import('./features/admin/admin-routes').then(m => m.AdminRoutes),

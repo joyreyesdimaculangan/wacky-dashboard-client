@@ -1,31 +1,34 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { catchError, Subscription, throwError } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { Router, RouterModule } from '@angular/router';
+import { catchError, Subscription, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
+import { GetAccountIdService } from '../getAccountId.service';
+import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
-import { GetAccountIdService } from '../../../../features/customer/reservation-form/getAccountId.service';
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-sign-in-first',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -48,8 +51,13 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
         <h2
           class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8"
         >
-          Welcome Back
+          Ready to make your reservations?
         </h2>
+        <h4
+          class="text-2xl font-bold text-green-700 text-center mt-14 mb-6"
+        >
+          Sign In First
+        </h4>
 
         <form [formGroup]="loginForm">
           <!-- Email Input -->
@@ -226,15 +234,15 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
       </div>
     </div>
   `,
-  styleUrl: './login-page.component.scss',
+  styleUrl: './signInFirst.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginPageComponent {
+export class SignInFirstComponent {
   private readonly getAccountProfileId = inject(GetAccountIdService);
   loginForm!: FormGroup;
   loginError = '';
   showPassword: boolean = false;
-  
+
   authService = inject(AuthService);
   router = inject(Router);
   loginSubscription = new Subscription();
@@ -269,12 +277,18 @@ export class LoginPageComponent {
           catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
               if (error.error.message === 'Incorrect password') {
-                this.showSnackbar('Incorrect password. Please try again.', 'error');
+                this.showSnackbar(
+                  'Incorrect password. Please try again.',
+                  'error'
+                );
               } else {
                 this.showSnackbar('Invalid Credentials', 'error');
               }
             } else {
-              this.showSnackbar('An error occurred. Please try again later.', 'error');
+              this.showSnackbar(
+                'An error occurred. Please try again later.',
+                'error'
+              );
             }
             return throwError(error);
           })
@@ -284,9 +298,12 @@ export class LoginPageComponent {
             if (this.authService.user()?.account_type === 'admin') {
               this.router.navigate(['admin/dashboard']);
             } else {
-              this.router.navigate(['customer/home']);
+              this.router.navigate(['customer/reservations']);
             }
-          } else if (response['status'] == 401 && response['message'] === 'Incorrect password') {
+          } else if (
+            response['status'] == 401 &&
+            response['message'] === 'Incorrect password'
+          ) {
             this.showSnackbar('Incorrect password. Please try again.', 'error');
           }
         })
@@ -297,12 +314,12 @@ export class LoginPageComponent {
     this.snackBar.openFromComponent(SnackbarComponent, {
       data: {
         message,
-        icon: type === 'success' ? 'check_circle' : 'error'
+        icon: type === 'success' ? 'check_circle' : 'error',
       },
       duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
-      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error'
+      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error',
     });
   }
 }

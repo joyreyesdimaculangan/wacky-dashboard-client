@@ -58,8 +58,8 @@ export class PackageDetailsComponent implements OnInit {
   }
 
   pushAddOn(addOn: string): void {
-    this.packageDetails.packageDetails().push(addOn);
-    console.log(this.packageDetails.packageDetails());
+    this.selectedAddOns.push(addOn);
+    console.log(this.selectedAddOns);
   }
 
   onAddOnChange(addOn: string, isChecked: boolean): void {
@@ -108,7 +108,10 @@ export class PackageDetailsComponent implements OnInit {
   }
 
   reservePackage() {
-    console.log('Reserve package:',);
-    this.router.navigate(['/customer/reservations']);
+    console.log(
+      'Reserve package:',
+      this.packageData?.packageID,
+    );
+    this.router.navigate(['/signInFirst']);
   }
 }

@@ -7,6 +7,12 @@ export const CustomerRoutes: Routes = [
     redirectTo: 'reservations',
     pathMatch: 'full',
   },
+  { 
+    path: 'home',
+    loadComponent: () => import('./../home/home.component').then((m) => m.HomeComponent),
+    canActivate: [hasRoleGuard],
+    data: { roles: ['customer'] }
+  },
   {
     path: 'edit-profile',
     loadComponent: () => import('../../features/customer/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
