@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development'; 
+import { environment } from '../../environments/environment.development';
+import { ReservationForm } from '../models/reservation-form';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,7 @@ export class ReservationService {
   }
 
   // Create a new reservation
-  createReservation(reservationData: any): Observable<any> {
+  createReservation(reservationData: ReservationForm): Observable<any> {
     return this.http.post<any>(this.apiUrl, reservationData); // POST request to create a reservation
   }
 

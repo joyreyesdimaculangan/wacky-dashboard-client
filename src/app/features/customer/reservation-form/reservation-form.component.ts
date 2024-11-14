@@ -62,7 +62,7 @@ export class ReservationFormComponent implements OnInit {
   private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
-  
+
   packageID!: null | string | undefined;
   accountProfileId!: null | string | undefined;
   addOnsId: string[] = [];
@@ -74,15 +74,9 @@ export class ReservationFormComponent implements OnInit {
   constructor() {
     effect(() => {
       const packages = this.packageNameService.packageName();
-      console.log('Package Name:', packages);
-      const accountProfileName = this.getAccountProfileIDService.accountProfileName();
-      console.log('Account Profile Name:', accountProfileName);
       this.packageID = packages?.packageId;
-      console.log('Package ID:', this.packageID);
-      this.accountProfileId = accountProfileName?.accountProfileId;
-      console.log('Account Profile ID:', this.accountProfileId);
-      this.addOnsId = this.packageAddOnsService.packageDetails();
-      console.log('Add-ons:', this.addOnsId);
+      this.addOnsId = this.packageAddOnsService.addOnsId();
+      console.log('Package ID:', this.addOnsId);
     });
   }
 
@@ -110,7 +104,7 @@ export class ReservationFormComponent implements OnInit {
       paymentStatus: ['PENDING'],
       status: ['Pending'],
     });
-  
+
     this.reservationForm = new FormGroup({
       customerDetails: new FormGroup({
         name: new FormControl('', [Validators.required]),
@@ -136,7 +130,7 @@ export class ReservationFormComponent implements OnInit {
       }),
     });
   }
-  
+
   isFirstStepComplete = false;
   isSecondStepComplete = false;
   isReservationOpen = false;
@@ -186,8 +180,9 @@ export class ReservationFormComponent implements OnInit {
 
   onSubmit() {
     if (this.reservationForm.valid) {
+      const accountProfileId = this.authService.user()?.accountProfileId;
       // Ensure the status is properly set, defaulting to 'Pending' if undefined
-      const statusValue: 'Pending' = this.reservationForm.value.status || 'Pending'; 
+      const statusValue: 'Pending' = this.reservationForm.value.status || 'Pending';
       const paymentStatusValue: 'PENDING' = this.reservationForm.value.paymentStatus || 'PENDING';
 
       // Map form values to the ReservationForm interface
@@ -201,10 +196,10 @@ export class ReservationFormComponent implements OnInit {
         cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
         packageID: this.packageID,
-        accountProfileId: this.accountProfileId,
+        accountProfileId: accountProfileId,
         status: statusValue,
         paymentStatus: paymentStatusValue,
-        addOnIds: this.packageAddOnsService.packageDetails(),
+        addOnIds: this.addOnsId,
       };
 
       console.log('Reservation submitted:', reservationData);

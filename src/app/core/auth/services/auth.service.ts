@@ -38,6 +38,16 @@ export class AuthService {
   getUserInfo(): User | null {
     return this.userInfo;
   }
+  constructor() {
+    const token = localStorage.getItem(environment.TOKEN_NAME);
+    if (token) {
+      this.userInfo = this.getUser(token);
+      this.user.set(this.userInfo);
+      this.accountType.set(this.userInfo?.account_type);
+      console.log('User Info:', this.userInfo);
+      this._isLoggedIn$.next(true)
+    }
+  }
 
   // Mock login function; replace with actual backend integration
   login(email: string, password: string): Observable<any> {
@@ -70,7 +80,7 @@ export class AuthService {
       })
     );
   }
-  
+
   isLoggedIn(): boolean {
     return this._isLoggedIn$.value;
   }

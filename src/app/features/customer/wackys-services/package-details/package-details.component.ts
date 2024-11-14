@@ -60,8 +60,7 @@ export class PackageDetailsComponent implements OnInit {
   }
 
   pushAddOn(addOn: string): void {
-    this.selectedAddOns.push(addOn);
-    console.log(this.selectedAddOns);
+    this.packageDetails.addOnsId().push(addOn);
   }
 
   onAddOnChange(addOn: string, isChecked: boolean): void {
@@ -111,7 +110,7 @@ export class PackageDetailsComponent implements OnInit {
 
   reservePackage() {
     console.log('Reserve package:', this.packageData?.packageID);
-
+    console.log(this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/customer/reservations']);
     } else {
