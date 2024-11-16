@@ -1,20 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OffersCrmComponent } from '../../admin/admin-crm/menu-crm/createAddedMenu/offers-crm.component';
 import { MenuService } from '../../../services/menu.service';
 import { Menu, MenuValues } from '../../../models/menu';
-import { EditOffersComponent } from '../../admin/admin-crm/menu-crm/patchMenu/edit-offers.component';
 import { DeleteOffersComponent } from '../../admin/admin-crm/menu-crm/deleteMenu/delete-offers.component';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AuthService } from '../../../core/auth/services/auth.service';
 
 @Component({

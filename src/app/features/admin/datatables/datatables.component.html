@@ -66,14 +66,14 @@
         </thead>
         <tbody class="text-gray-700 divide-y divide-gray-200">
           <tr
-          *ngFor="let reservation of reservationData"
+            *ngFor="let reservation of pagedData()"
             class="hover:bg-gray-50 transition duration-200"
           >
             <td class="p-4">{{ reservation.packageID }}</td>
-            <td class="p-4">{{ reservation.accountProfileId }}</td>
+            <td class="p-4">{{ reservation.name }}</td>
             <td class="p-4">{{ reservation.contactNumber }}</td>
             <td class="p-4">{{ reservation.numberOfPax }}</td>
-            <td class="p-4">{{ reservation.eventDate }}</td>
+            <td class="p-4">{{ reservation.eventDate | date }}</td>
             <td class="p-4">{{ reservation.eventTime }}</td>
             <td class="p-4">
               <span
@@ -90,9 +90,9 @@
             <td class="p-4">
               <span
                 [ngClass]="{
-                                'bg-yellow-100 text-yellow-600': reservation.paymentStatus === 'PENDING',
-                                'bg-green-100 text-green-600': reservation.paymentStatus === 'PAID',
-                            }"
+                  'bg-yellow-100 text-yellow-600': reservation.paymentStatus === 'PENDING',
+                  'bg-green-100 text-green-600': reservation.paymentStatus === 'PAID',
+                }"
                 class="px-3 py-1 text-xs font-medium rounded-lg"
               >
                 {{ reservation.paymentStatus }}
@@ -100,19 +100,19 @@
             </td>
             <td class="p-4 space-x-1">
               <button
-                
+                (click)="openView(reservation); $event.stopPropagation()"
                 class="py-1 px-2 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">visibility</i>
               </button>
               <button
-                
+                (click)="openEdit(reservation); $event.stopPropagation()"
                 class="py-1 px-2 bg-yellow-500 text-white rounded-lg text-xs hover:bg-yellow-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">edit</i>
               </button>
               <button
-                
+                (click)="openDelete(reservation); $event.stopPropagation()"
                 class="py-1 px-2 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">delete</i>
@@ -152,9 +152,7 @@
         >
           Previous
         </button>
-        <span class="text-sm"
-          >Page {{ currentPage }} of {{ totalPages() }}</span
-        >
+        <span class="text-sm">Page {{ currentPage }} of {{ totalPages() }}</span>
         <button
           (click)="nextPage()"
           [disabled]="currentPage === totalPages()"
@@ -168,7 +166,7 @@
     <div class="relative group">
       <!-- Button with Enhanced Floating Effect and Shadow -->
       <button
-        (click)="openAdd(addItemEvent)"
+        (click)="openAdd()"
         class="fixed bottom-6 right-6 bg-green-500 text-white p-6 rounded-lg shadow-2xl hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-3xl"
       >
         <i class="material-icons text-4xl">add</i>

@@ -10,12 +10,11 @@ import {
   MatDialogModule,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-delete-packages',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatIcon],
+  imports: [CommonModule, MatDialogModule],
   template: ` <div class="flex justify-center items-center my-4">
       <div class="bg-red-100 rounded-full p-4 shadow-lg">
         <span class="material-icons-outlined text-red-600 text-6xl"

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -17,6 +17,8 @@ import { PackagesService } from '../../../services/packages.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { MatIcon } from '@angular/material/icon';
 import { PackageAddOnsService } from '../../../services/packageAddOns.service';
+import { AvailableAddOns, Packages } from '../../../models/packages';
+import { PackageAddOns } from '../../../models/packageAddOns';
 
 @Component({
   selector: 'app-add-reservation-modal',
@@ -29,7 +31,6 @@ import { PackageAddOnsService } from '../../../services/packageAddOns.service';
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIcon,
   ],
   template: `
     <div
@@ -257,16 +258,14 @@ import { PackageAddOnsService } from '../../../services/packageAddOns.service';
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
               >
                 <option
-                  *ngFor="let package of packages"
-                  [value]="package.availableAddOns.addOnID"
+                  *ngFor="let availableAddOns of packages" 
+                  [value]="availableAddOns.addOns"
                 >
-                  {{ package.availableAddOns.name }}
+                  {{ availableAddOns.addOns }} 
                 </option>
               </select>
             </div>
-
           </div>
-  
 
           <!-- Modal Footer -->
           <div class="mt-8 flex justify-end gap-3">
@@ -291,17 +290,19 @@ import { PackageAddOnsService } from '../../../services/packageAddOns.service';
   `,
   styleUrls: ['./add-reservation-modal.component.scss'],
 })
-export class AddReservationModalComponent {
+export class AddReservationModalComponent implements OnInit{
   private readonly packageService = inject(PackagesService);
   private readonly reservationService = inject(ReservationService);
   private readonly getPackageAddOnsService = inject(PackageAddOnsService);
   private readonly authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  
   adminReservationForm!: FormGroup;
-  packages: any[] = [];
-  addOns: string[] = [];
+  availableAddOns: PackageAddOns[] = [];
+  packages: Packages[] = [];
+  addOns: PackageAddOns[] = [];
 
-  ngOnInit() {
+  constructor() {
     this.adminReservationForm = this.fb.group({
       packageType: ['', Validators.required],
       name: ['', Validators.required],
@@ -311,11 +312,14 @@ export class AddReservationModalComponent {
       eventTime: ['', Validators.required],
       eventTheme: ['', Validators.required],
       cakeTheme: ['', Validators.required],
-      addOns: this.fb.array([]),
+      addOns: [[], Validators.required],
       otherRequest: [''],
     });
+  }
 
+  ngOnInit() {
     this.fetchPackages();
+    this.fetchAddOnsId(this.adminReservationForm.value.packageType);
   }
 
   fetchPackages() {
@@ -324,6 +328,11 @@ export class AddReservationModalComponent {
     });
   }
 
+  fetchAddOnsId(packageId: string) {
+    this.getPackageAddOnsService.getAddOnById(packageId).subscribe((data: AvailableAddOns[]) => {
+      this.availableAddOns = data;
+    });
+  }
 
   @Output() closeModal = new EventEmitter<void>();
   showModal = true; // Initial value to show the modal
@@ -337,7 +346,7 @@ export class AddReservationModalComponent {
     eventTheme: '',
     cakeTheme: '',
     otherRequest: '',
-    addOns: [],
+    addOns: '',
   };
 
   closeAddReservation() {
@@ -351,7 +360,7 @@ export class AddReservationModalComponent {
       ...this.adminReservationForm.value,
       accountProfileId,
     };
-
+    console.log('Reservation Data:', reservationData);
     this.reservationService.createReservation(reservationData).subscribe(
       (response) => {
         console.log('Reservation created:', response);

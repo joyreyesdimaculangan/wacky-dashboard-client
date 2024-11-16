@@ -9,6 +9,7 @@ import { DeleteReservationModalComponent } from '../reservation-modal-forms/dele
 import { RouterModule } from '@angular/router';
 import { ReservationForm } from '../../../models/reservation-form';
 import { ReservationService } from '../../../services/reservation.service';
+import { GetPackageNameService } from '../../customer/reservation-form/getPackageName.service';
 
 @Component({
   selector: 'app-datatables',
@@ -21,10 +22,10 @@ import { ReservationService } from '../../../services/reservation.service';
     AddReservationModalComponent,
     EditReservationModalComponent,
     DeleteReservationModalComponent,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './datatables.component.html',
-  styleUrl: './datatables.component.scss',
+  styleUrls: ['./datatables.component.scss'],
 })
 export class DatatablesComponent implements OnInit {
   searchText: string = '';
@@ -39,7 +40,9 @@ export class DatatablesComponent implements OnInit {
   router: any;
 
   private readonly reservationService = inject(ReservationService);
+  private readonly packageNameService = inject(GetPackageNameService);
   public reservationData: ReservationForm[] = [];
+  public packageMap: { [key: string]: string } = {};
 
   @Output() viewItemEvent = new EventEmitter<any>();
   @Output() addItemEvent = new EventEmitter<any>();
@@ -57,26 +60,32 @@ export class DatatablesComponent implements OnInit {
   }
 
   viewReservation(id: string) {
-    this.reservationService.getReservationById(id).subscribe((data: ReservationForm) => {
-      this.viewingItem = data;
-      this.viewItemEvent.emit(data);
-    });
+    this.reservationService
+      .getReservationById(id)
+      .subscribe((data: ReservationForm) => {
+        this.viewingItem = data;
+        this.viewItemEvent.emit(data);
+      });
   }
 
   addReservation(reservation: ReservationForm) {
-    this.reservationService.createReservation(reservation).subscribe((data: ReservationForm) => {
-      this.addingItem = data;
-      this.addItemEvent.emit(data);
-      this.getReservations(); // Refresh the list
-    });
+    this.reservationService
+      .createReservation(reservation)
+      .subscribe((data: ReservationForm) => {
+        this.addingItem = data;
+        this.addItemEvent.emit(data);
+        this.getReservations(); // Refresh the list
+      });
   }
 
   editReservation(id: string, reservation: ReservationForm) {
-    this.reservationService.updateReservation(id, reservation).subscribe((data: ReservationForm) => {
-      this.editingItem = data;
-      this.editItemEvent.emit(data);
-      this.getReservations(); // Refresh the list
-    });
+    this.reservationService
+      .updateReservation(id, reservation)
+      .subscribe((data: ReservationForm) => {
+        this.editingItem = data;
+        this.editItemEvent.emit(data);
+        this.getReservations(); // Refresh the list
+      });
   }
 
   deleteReservation(id: string) {
@@ -90,7 +99,6 @@ export class DatatablesComponent implements OnInit {
   filteredData() {
     return this.reservationData.filter(
       (item) =>
-        // item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.contactNumber.toString().includes(this.searchText) ||
         item.numberOfPax.toString().includes(this.searchText) ||
         item.eventDate.toString().includes(this.searchText) ||
@@ -132,9 +140,8 @@ export class DatatablesComponent implements OnInit {
     this.searchText = '';
   }
 
-  openAdd(item: any) {
-    console.log('Opening view for:', item); // Debugging
-    this.addingItem = item;
+  openAdd() {
+    this.addingItem = {};
   }
 
   handleAdd(newItem: any) {
@@ -147,7 +154,6 @@ export class DatatablesComponent implements OnInit {
   }
 
   openView(item: any) {
-    console.log('Opening view for:', item); // Debugging
     this.viewingItem = item;
   }
 
@@ -156,7 +162,6 @@ export class DatatablesComponent implements OnInit {
   }
 
   openEdit(item: any) {
-    console.log('Opening edit for:', item); // Debugging
     this.editingItem = item;
   }
 
@@ -164,19 +169,7 @@ export class DatatablesComponent implements OnInit {
     this.editingItem = null;
   }
 
-  // saveEdit(editedItem: any) {
-  //   // Update the item in the data array
-  //   const index = this.reservationData.findIndex(
-  //     (i) => i.reservationID === editedItem.reservationID
-  //   );
-  //   if (index !== -1) {
-  //     this.reservationData[index] = editedItem;
-  //   }
-  //   this.closeEdit();
-  // }
-
   openDelete(item: any) {
-    console.log('Opening delete for:', item); // Debugging
     this.deletingItem = item;
   }
 
@@ -184,19 +177,11 @@ export class DatatablesComponent implements OnInit {
     this.deletingItem = null;
   }
 
-  // confirmDelete(item: any) {
-  //   // Remove the item from the data array
-  //   this.reservationData = this.reservationData.filter((i) => i.reservationID !== item.reservationID);
-  //   this.closeDelete();
-  // }
-
-  // Method to change the selected tab
   selectTab(tab: string) {
     this.selectedTab = tab;
     this.currentPage = 1; // Reset to first page on tab change
   }
 
-  // Method to get filtered data based on selected tab
   getTabData() {
     if (this.selectedTab === 'all') {
       return this.filteredData();

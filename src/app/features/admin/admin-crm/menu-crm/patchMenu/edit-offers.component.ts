@@ -41,7 +41,6 @@ import { FileUploadService } from '../../../../../services/file-upload.service';
         <h2 class="text-2xl font-bold mb-6 text-green-700">Edit Content</h2>
         <form
           [formGroup]="editMenuForm"
-          (ngSubmit)="submitForm()"
           class="p-4 md:p-5"
         >
           <div class="grid gap-4 mb-4 grid-cols-2">
