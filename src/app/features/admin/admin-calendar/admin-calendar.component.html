@@ -13,12 +13,5 @@
     <div id="calendar" class="w-full h-full rounded-lg shadow-md border border-gray-300 bg-green-50 p-4 m-2">
       <!-- Optional Calendar Initialization Here -->
     </div>
-
-    <app-view-reservation-modal 
-      *ngIf="showModal"
-      [item]="calendar"  
-      (close)="closeModal()">
-    </app-view-reservation-modal>
-
   </div>
 </div>

@@ -53,14 +53,150 @@
       >
         <thead class="bg-green-500 text-white">
           <tr>
-            <th class="p-4 text-sm font-medium">Package Type</th>
-            <th class="p-4 text-sm font-medium">Customer Name</th>
-            <th class="p-4 text-sm font-medium">Contact No.</th>
-            <th class="p-4 text-sm font-medium">Number of Pax</th>
-            <th class="p-4 text-sm font-medium">Date</th>
-            <th class="p-4 text-sm font-medium">Time</th>
-            <th class="p-4 text-sm font-medium">Status</th>
-            <th class="p-4 text-sm font-medium">Payment Status</th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Package Type</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('packageType')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.packageType"
+                type="text"
+                [(ngModel)]="filters.packageType"
+                placeholder="Filter by Package Type"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Customer Name</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('name')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.name"
+                type="text"
+                [(ngModel)]="filters.name"
+                placeholder="Filter by Name"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Contact No.</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('contactNumber')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.contactNumber"
+                type="text"
+                [(ngModel)]="filters.contactNumber"
+                placeholder="Filter by Contact No."
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Number of Pax</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('numberOfPax')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.numberOfPax"
+                type="text"
+                [(ngModel)]="filters.numberOfPax"
+                placeholder="Filter by Number of Pax"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Date</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('eventDate')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.eventDate"
+                type="text"
+                [(ngModel)]="filters.eventDate"
+                placeholder="Filter by Date"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Time</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('eventTime')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.eventTime"
+                type="text"
+                [(ngModel)]="filters.eventTime"
+                placeholder="Filter by Time"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Status</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('status')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.status"
+                type="text"
+                [(ngModel)]="filters.status"
+                placeholder="Filter by Status"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
+            <th class="p-4 text-sm font-medium relative">
+              <div class="flex items-center justify-between">
+                <span>Payment Status</span>
+                <button
+                  class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
+                  (click)="toggleFilter('paymentStatus')"
+                >
+                  <i class="material-icons text-sm">filter_list</i>
+                </button>
+              </div>
+              <input
+                *ngIf="showFilters.paymentStatus"
+                type="text"
+                [(ngModel)]="filters.paymentStatus"
+                placeholder="Filter by Payment Status"
+                class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
+              />
+            </th>
             <th class="p-4 text-sm font-medium">Actions</th>
           </tr>
         </thead>
@@ -78,8 +214,10 @@
             <td class="p-4">
               <span
                 [ngClass]="{
-                  'bg-yellow-100 text-yellow-600': reservation.status === 'Pending',
-                  'bg-green-100 text-green-600': reservation.status === 'Approved',
+                  'bg-yellow-100 text-yellow-600':
+                    reservation.status === 'Pending',
+                  'bg-green-100 text-green-600':
+                    reservation.status === 'Approved',
                   'bg-red-100 text-red-600': reservation.status === 'Cancelled'
                 }"
                 class="px-3 py-1 text-xs font-medium rounded-lg"
@@ -90,9 +228,9 @@
             <td class="p-4">
               <span
                 [ngClass]="{
-                  'bg-yellow-100 text-yellow-600': reservation.paymentStatus === 'PENDING',
-                  'bg-green-100 text-green-600': reservation.paymentStatus === 'PAID',
-                }"
+                      'bg-yellow-100 text-yellow-600': reservation.paymentStatus === 'PENDING',
+                      'bg-green-100 text-green-600': reservation.paymentStatus === 'PAID',
+                    }"
                 class="px-3 py-1 text-xs font-medium rounded-lg"
               >
                 {{ reservation.paymentStatus }}
@@ -100,41 +238,46 @@
             </td>
             <td class="p-4 space-x-1">
               <button
-                (click)="openView(reservation); $event.stopPropagation()"
+                [routerLink]="[
+                  '/admin/view-reservations',
+                  reservation.reservationID
+                ]"
                 class="py-1 px-2 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">visibility</i>
               </button>
               <button
-                (click)="openEdit(reservation); $event.stopPropagation()"
+                [routerLink]="[
+                  '/admin/edit-reservations',
+                  reservation.reservationID
+                ]"
+                (click)="$event.stopPropagation()"
                 class="py-1 px-2 bg-yellow-500 text-white rounded-lg text-xs hover:bg-yellow-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">edit</i>
               </button>
               <button
-                (click)="openDelete(reservation); $event.stopPropagation()"
+                (click)="
+                  openDelete(reservation.reservationID);
+                  $event.stopPropagation()
+                "
                 class="py-1 px-2 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600 focus:outline-none transition duration-200"
               >
                 <i class="material-icons text-xs">delete</i>
               </button>
             </td>
           </tr>
+          <tr *ngIf="pagedData().length === 0">
+            <td colspan="9" class="text-center py-4 text-red-500">
+              No results found.
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modals for Viewing, Editing, and Deleting -->
+    <!-- Modals for Deleting -->
     <div class="modal-container overflow-auto max-h-screen z-50">
-      <app-view-reservation-modal
-        *ngIf="viewingItem"
-        [item]="viewingItem"
-        (close)="closeView()"
-      ></app-view-reservation-modal>
-      <app-edit-reservation-modal
-        *ngIf="editingItem"
-        [item]="editingItem"
-        (cancel)="closeEdit()"
-      ></app-edit-reservation-modal>
       <app-delete-reservation-modal
         *ngIf="deletingItem"
         [item]="deletingItem"
@@ -152,7 +295,9 @@
         >
           Previous
         </button>
-        <span class="text-sm">Page {{ currentPage }} of {{ totalPages() }}</span>
+        <span class="text-sm"
+          >Page {{ currentPage }} of {{ totalPages() }}</span
+        >
         <button
           (click)="nextPage()"
           [disabled]="currentPage === totalPages()"

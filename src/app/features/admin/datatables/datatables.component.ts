@@ -6,10 +6,16 @@ import { ViewReservationModalComponent } from '../reservation-modal-forms/view-r
 import { AddReservationModalComponent } from '../reservation-modal-forms/add-reservation-modal.component';
 import { EditReservationModalComponent } from '../reservation-modal-forms/edit-reservation-modal.component';
 import { DeleteReservationModalComponent } from '../reservation-modal-forms/delete-reservation-modal.component';
-import { RouterModule } from '@angular/router';
-import { ReservationForm } from '../../../models/reservation-form';
+import { Router, RouterModule } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import {
+  EditedReservationForm,
+  ReservationForm,
+} from '../../../models/reservation-form';
 import { ReservationService } from '../../../services/reservation.service';
 import { GetPackageNameService } from '../../customer/reservation-form/getPackageName.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-datatables',
@@ -18,12 +24,11 @@ import { GetPackageNameService } from '../../customer/reservation-form/getPackag
     DrawerComponent,
     CommonModule,
     FormsModule,
-    ViewReservationModalComponent,
     AddReservationModalComponent,
-    EditReservationModalComponent,
     DeleteReservationModalComponent,
     RouterModule,
   ],
+  providers: [DatePipe],
   templateUrl: './datatables.component.html',
   styleUrls: ['./datatables.component.scss'],
 })
@@ -37,12 +42,36 @@ export class DatatablesComponent implements OnInit {
   editingItem: any = null;
   deletingItem: any = null;
   selectedTab: string = 'all';
-  router: any;
 
   private readonly reservationService = inject(ReservationService);
-  private readonly packageNameService = inject(GetPackageNameService);
-  public reservationData: ReservationForm[] = [];
+  private readonly router = inject(Router);
+  private readonly datePipe = inject(DatePipe);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  public reservationData: EditedReservationForm[] = [];
   public packageMap: { [key: string]: string } = {};
+
+  filters = {
+    packageType: '',
+    name: '',
+    contactNumber: '',
+    numberOfPax: '',
+    eventDate: '',
+    eventTime: '',
+    status: '',
+    paymentStatus: ''
+  };
+
+  showFilters = {
+    packageType: false,
+    name: false,
+    contactNumber: false,
+    numberOfPax: false,
+    eventDate: false,
+    eventTime: false,
+    status: false,
+    paymentStatus: false
+  };
 
   @Output() viewItemEvent = new EventEmitter<any>();
   @Output() addItemEvent = new EventEmitter<any>();
@@ -59,13 +88,48 @@ export class DatatablesComponent implements OnInit {
     });
   }
 
-  viewReservation(id: string) {
-    this.reservationService
-      .getReservationById(id)
-      .subscribe((data: ReservationForm) => {
-        this.viewingItem = data;
-        this.viewItemEvent.emit(data);
-      });
+  viewReservation(reservationID: string) {
+    this.router.navigate(['/admin/view-reservations', reservationID]);
+  }
+
+  openEdit(reservationID: string) {
+    this.router.navigate(['/admin/edit-reservations', reservationID]);
+  }
+
+  openDelete(id: string) {
+    const matdialogRef = this.dialog.open(DeleteReservationModalComponent, {
+      data: {
+        message:
+          'Are you sure you want to delete this reservation? This action is irreversible and cannot be undone.',
+      },
+    });
+
+    matdialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reservationService
+          .deleteReservation(id)
+          .subscribe(() => {
+            this.deletingItem = id;
+            this.deleteItemEvent.emit(id);
+            console.log('Reservation deleted successfully', id);
+            this.getReservations(); // Refresh the list
+            this.snackBar.open('Reservation deleted successfully.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              panelClass: ['custom-snackbar-success'],
+            });
+          });
+      } else
+        (error: any) => {
+          console.error('Error deleting selected items:', error);
+          this.snackBar.open('Failed to delete selected items.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: ['custom-snackbar-error'],
+          });
+        };
+    });
   }
 
   addReservation(reservation: ReservationForm) {
@@ -78,9 +142,9 @@ export class DatatablesComponent implements OnInit {
       });
   }
 
-  editReservation(id: string, reservation: ReservationForm) {
+  editReservation(reservationID: string, reservation: ReservationForm) {
     this.reservationService
-      .updateReservation(id, reservation)
+      .updateReservation(reservationID, reservation)
       .subscribe((data: ReservationForm) => {
         this.editingItem = data;
         this.editItemEvent.emit(data);
@@ -88,26 +152,44 @@ export class DatatablesComponent implements OnInit {
       });
   }
 
-  deleteReservation(id: string) {
-    this.reservationService.deleteReservation(id).subscribe(() => {
-      this.deletingItem = id;
-      this.deleteItemEvent.emit(id);
+  deleteReservation(reservationID: string) {
+    this.reservationService.deleteReservation(reservationID).subscribe(() => {
+      this.deletingItem = reservationID;
+      this.deleteItemEvent.emit(reservationID);
       this.getReservations(); // Refresh the list
     });
   }
 
   filteredData() {
-    return this.reservationData.filter(
-      (item) =>
-        item.contactNumber.toString().includes(this.searchText) ||
-        item.numberOfPax.toString().includes(this.searchText) ||
-        item.eventDate.toString().includes(this.searchText) ||
-        item.eventTime.toString().includes(this.searchText) ||
-        item.eventTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        item.cakeTheme.toString().includes(this.searchText) ||
-        item.otherRequest.toString().includes(this.searchText) ||
-        item.status.toString().includes(this.searchText)
-    );
+    return this.reservationData.filter((item) => {
+      const formattedEventDate = this.datePipe.transform(item.eventDate, 'MM/dd/yyyy');
+      return (
+        (this.filters.packageType ? (item.packageID && this.packageMap[item.packageID]?.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
+        (this.filters.name ? item.name.toLowerCase().includes(this.filters.name.toLowerCase()) : true) &&
+        (this.filters.contactNumber ? item.contactNumber.toString().includes(this.filters.contactNumber) : true) &&
+        (this.filters.numberOfPax ? item.numberOfPax.toString().includes(this.filters.numberOfPax) : true) &&
+        (this.filters.eventDate ? (formattedEventDate && formattedEventDate.includes(this.filters.eventDate)) : true) &&
+        (this.filters.eventTime ? item.eventTime.toString().includes(this.filters.eventTime) : true) &&
+        (this.filters.status ? item.status.toLowerCase().includes(this.filters.status.toLowerCase()) : true) &&
+        (this.filters.paymentStatus ? item.paymentStatus.toLowerCase().includes(this.filters.paymentStatus.toLowerCase()) : true) &&
+        (this.searchText ? (
+          item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          item.contactNumber.toString().includes(this.searchText) ||
+          item.numberOfPax.toString().includes(this.searchText) ||
+          (formattedEventDate && formattedEventDate.includes(this.searchText)) ||
+          item.eventTime.toString().includes(this.searchText) ||
+          item.eventTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          item.cakeTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          item.otherRequest.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          item.status.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          item.paymentStatus.toLowerCase().includes(this.searchText.toLowerCase())
+        ) : true)
+      );
+    });
+  }
+
+  toggleFilter(column: keyof typeof this.showFilters) {
+    this.showFilters[column] = !this.showFilters[column];
   }
 
   pagedData() {
@@ -138,6 +220,16 @@ export class DatatablesComponent implements OnInit {
 
   resetSearch() {
     this.searchText = '';
+    this.filters = {
+      packageType: '',
+      name: '',
+      contactNumber: '',
+      numberOfPax: '',
+      eventDate: '',
+      eventTime: '',
+      status: '',
+      paymentStatus: ''
+    };
   }
 
   openAdd() {
@@ -153,24 +245,12 @@ export class DatatablesComponent implements OnInit {
     this.addingItem = null;
   }
 
-  openView(item: any) {
-    this.viewingItem = item;
-  }
-
   closeView() {
     this.viewingItem = null;
   }
 
-  openEdit(item: any) {
-    this.editingItem = item;
-  }
-
   closeEdit() {
     this.editingItem = null;
-  }
-
-  openDelete(item: any) {
-    this.deletingItem = item;
   }
 
   closeDelete() {

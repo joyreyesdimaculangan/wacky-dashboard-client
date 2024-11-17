@@ -18,17 +18,15 @@ export const CustomerRoutes: Routes = [
     loadComponent: () => import('../../features/customer/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
   },
   {
-    path: 'menu',
-    loadComponent: () => import('./menu/menu.component').then((m) => m.MenuComponent),
-  },
-  {
-    path: 'services',
-    loadComponent: () => import('./wackys-services/services.component').then((m) => m.ServicesComponent),
-  },
-  {
     path: 'reservations',
     loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
     canActivate: [hasRoleGuard],
     data: { roles: ['customer'] }
   },
+  {
+    path: 'reviews',
+    loadComponent: () => import('./home/review-section/add-reviews/add-reviews.component').then((m) => m.AddReviewsComponent),
+    canActivate: [hasRoleGuard],
+    data: { roles: ['customer'] }
+  }
 ];

@@ -27,7 +27,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
 import { Location } from '@angular/common';
-import { ReservationForm } from '../../../models/reservation-form';
+import { EditedReservationForm, ReservationForm } from '../../../models/reservation-form';
 import { GetPackageAddOnsService } from './getPackageAddOns.service';
 import { GetPackageNameService } from './getPackageName.service';
 import { AccountProfileService } from '../../../services/account-profile.service';
@@ -70,6 +70,11 @@ export class ReservationFormComponent implements OnInit {
   packages: any[] = [];
   accountProfileName: any[] = [];
   packageName: PackageName | null = null;
+  fullyBookedDates: Date[] = [];
+
+  isFirstStepComplete = false;
+  isSecondStepComplete = false;
+  isReservationOpen = false;
 
   constructor() {
     effect(() => {
@@ -135,9 +140,47 @@ export class ReservationFormComponent implements OnInit {
     });
   }
 
-  isFirstStepComplete = false;
-  isSecondStepComplete = false;
-  isReservationOpen = false;
+  fetchReservations() {
+    this.reservationService.getReservations().subscribe({
+      next: (data: EditedReservationForm[]) => {
+        console.log('Fetched reservations:', data); // Debugging
+        this.fullyBookedDates = this.getFullyBookedDates(data);
+        console.log('Fully booked dates:', this.fullyBookedDates);
+      },
+      error: (error) => {
+        console.error('Error fetching reservations:', error); // Error handling
+      }
+    });
+  }
+
+  getFullyBookedDates(reservations: EditedReservationForm[]): Date[] {
+    // Logic to determine fully booked dates
+    // For simplicity, assuming a date is fully booked if there are more than 5 reservations on that date
+    const dateCounts: { [key: string]: number } = {};
+    reservations.forEach(reservation => {
+      const date = new Date(reservation.eventDate).toDateString();
+      dateCounts[date] = (dateCounts[date] || 0) + 1;
+    });
+
+    return Object.keys(dateCounts)
+      .filter(date => dateCounts[date] > 5)
+      .map(date => new Date(date));
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of the day
+    const isPastDate = date < today;
+    const isFullyBooked = this.fullyBookedDates.some(
+      bookedDate => bookedDate.toDateString() === date.toDateString()
+    );
+    const isAvailable = !isPastDate && !isFullyBooked;
+    console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
+    return isAvailable;
+  };
 
   openReservationForm() {
     this.isReservationOpen = true;
