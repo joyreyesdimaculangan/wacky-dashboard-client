@@ -1,16 +1,117 @@
-/* styles.scss or your component-specific SCSS file */
+/* Custom styles for the calendar */
 #calendar {
-  border: 2px solid #38a169; /* Tailwind green-500 for a stronger green border */
-  border-radius: 0.5rem; /* Rounded corners */
-  /* Optional: you can also add shadow effects if desired */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
-}
+  .fc-toolbar {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 10px;
+  }
 
-/* Custom styles for calendar events or specific elements */
-.calendar-event {
-  background-color: #38a169; /* Tailwind green-500 */
-  color: white;
-  border-radius: 0.25rem; /* Slight rounding */
-  padding: 0.5rem; /* Padding for event elements */
-}
+  .fc-button {
+    background-color: #378006;
+    border: none;
+    color: #ffffff;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
 
+  .fc-button:hover {
+    background-color: #2e6b05;
+  }
+
+  .fc-button:focus {
+    box-shadow: none;
+  }
+
+  .fc-button-group {
+    margin: 0 5px;
+  }
+
+  .fc-event {
+    border: 1px solid #ffffff;
+    background-color: #378006;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  .fc-event:hover {
+    background-color: #2e6b05;
+  }
+
+  .fc-daygrid-day {
+    border: 1px solid #dee2e6;
+  }
+
+  .fc-daygrid-day-number {
+    color: #495057;
+  }
+
+  .fc-daygrid-day-top {
+    padding: 5px;
+  }
+
+  .fc-daygrid-day-frame {
+    padding: 5px;
+  }
+
+  .fc-daygrid-day-events {
+    margin-top: 5px;
+  }
+
+  .fc-daygrid-event-dot {
+    border: 1px solid #ffffff;
+    background-color: #378006;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-dot {
+    background-color: #2e6b05;
+  }
+
+  .fc-daygrid-event-title {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-title {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event-time {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-time {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event:hover {
+    background-color: #2e6b05;
+  }
+
+  .fc-daygrid-event-dot {
+    border: 1px solid #ffffff;
+    background-color: #378006;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-dot {
+    background-color: #2e6b05;
+  }
+
+  .fc-daygrid-event-title {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-title {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event-time {
+    color: #ffffff;
+  }
+
+  .fc-daygrid-event:hover .fc-daygrid-event-time {
+    color: #ffffff;
+  }
+}

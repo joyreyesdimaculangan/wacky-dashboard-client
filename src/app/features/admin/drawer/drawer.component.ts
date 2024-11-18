@@ -11,6 +11,11 @@ import { AuthService } from '../../../core/auth/services/auth.service';
   styleUrl: './drawer.component.scss'
 })
 export class DrawerComponent {
+  isOpen = false;
+
+  toggleDrawer() {
+    this.isOpen = !this.isOpen;
+  }
   auth = inject(AuthService);
 
   logout() {

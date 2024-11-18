@@ -6,3 +6,16 @@ button {
     font-family: 'Poppins', sans-serif;
 }
   
+/* Add any custom styles for the drawer component here */
+@media (max-width: 768px) {
+  aside {
+    position: absolute;
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  aside.open {
+    transform: translateX(0);
+  }
+}

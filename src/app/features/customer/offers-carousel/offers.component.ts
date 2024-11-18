@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { OffersCrmComponent } from '../../../admin/admin-crm/menu-crm/createAddedMenu/offers-crm.component';
 
 @Component({
   selector: 'app-offers',

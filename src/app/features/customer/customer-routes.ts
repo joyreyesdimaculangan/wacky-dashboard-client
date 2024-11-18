@@ -25,7 +25,7 @@ export const CustomerRoutes: Routes = [
   },
   {
     path: 'reviews',
-    loadComponent: () => import('./home/review-section/add-reviews/add-reviews.component').then((m) => m.AddReviewsComponent),
+    loadComponent: () => import('./review-section/add-reviews/add-reviews.component').then((m) => m.AddReviewsComponent),
     canActivate: [hasRoleGuard],
     data: { roles: ['customer'] }
   }

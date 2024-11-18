@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { OffersComponent } from '../customer/home/offers-carousel/offers.component';
+import { OffersComponent } from '../customer/offers-carousel/offers.component';
 import { MenuComponent } from '../customer/menu/menu.component';
 import { ServicesComponent } from '../customer/wackys-services/services.component';
-import { ReviewSectionComponent } from '../customer/home/review-section/review-section.component';
+import { ReviewSectionComponent } from '../customer/review-section/review-section.component';
 import { InquiryFormComponent } from '../customer/inquiry-form/inquiry-form.component';
 import { HeaderComponent } from '../customer/header/header.component';
 import { FooterComponent } from '../customer/footer/footer.component';
