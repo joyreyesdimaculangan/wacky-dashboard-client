@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -19,6 +26,7 @@ import { MatIcon } from '@angular/material/icon';
 import { PackageAddOnsService } from '../../../services/packageAddOns.service';
 import { AvailableAddOns, Packages } from '../../../models/packages';
 import { PackageAddOns } from '../../../models/packageAddOns';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-add-reservation-modal',
@@ -85,9 +93,7 @@ import { PackageAddOns } from '../../../models/packageAddOns';
 
             <!-- Customer Name -->
             <div class="relative">
-              <label
-                for="name"
-                class="block text-sm font-medium text-gray-700"
+              <label for="name" class="block text-sm font-medium text-gray-700"
                 >Customer Name</label
               >
               <input
@@ -258,10 +264,10 @@ import { PackageAddOns } from '../../../models/packageAddOns';
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
               >
                 <option
-                  *ngFor="let availableAddOns of packages.addOns" 
-                  [value]="availableAddOns.addOns"
+                  *ngFor="let availableAddOns of addonsPackageSelected()"
+                  [value]="availableAddOns.addOnID"
                 >
-                  {{ availableAddOns.addOns.name }} 
+                  {{ availableAddOns.name }}
                 </option>
               </select>
             </div>
@@ -290,17 +296,18 @@ import { PackageAddOns } from '../../../models/packageAddOns';
   `,
   styleUrls: ['./add-reservation-modal.component.scss'],
 })
-export class AddReservationModalComponent implements OnInit{
+export class AddReservationModalComponent implements OnInit {
   private readonly packageService = inject(PackagesService);
   private readonly reservationService = inject(ReservationService);
   private readonly getPackageAddOnsService = inject(PackageAddOnsService);
   private readonly authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  
+
   adminReservationForm!: FormGroup;
   availableAddOns: PackageAddOns[] = [];
   packages: Packages[] = [];
   addOns: PackageAddOns[] = [];
+  packageSelected!: Packages | undefined;
 
   constructor() {
     this.adminReservationForm = this.fb.group({
@@ -317,9 +324,25 @@ export class AddReservationModalComponent implements OnInit{
     });
   }
 
+  addonsPackageSelected = signal<PackageAddOns[]>([]);
   ngOnInit() {
     this.fetchPackages();
     this.fetchAddOnsId(this.adminReservationForm.value.packageType);
+
+    // Assign Selected Package on packageSelected
+    this.adminReservationForm
+      .get('packageID')
+      ?.valueChanges.subscribe((packageId) => {
+        const selectedPackage = this.packages.find(
+          (pkg: Packages) => pkg.packageID === packageId
+        );
+        console.log('Selected Package:', selectedPackage?.availableAddOns);
+        if (selectedPackage?.availableAddOns) {
+          this.addonsPackageSelected.set(selectedPackage.availableAddOns);
+        }
+        console.log('Selected Package:', this.addonsPackageSelected());
+        this.packageSelected = selectedPackage;
+      });
   }
 
   fetchPackages() {
@@ -329,9 +352,11 @@ export class AddReservationModalComponent implements OnInit{
   }
 
   fetchAddOnsId(packageId: string) {
-    this.getPackageAddOnsService.getAddOnById(packageId).subscribe((data: AvailableAddOns[]) => {
-      this.availableAddOns = data;
-    });
+    this.getPackageAddOnsService
+      .getAddOnById(packageId)
+      .subscribe((data: AvailableAddOns[]) => {
+        this.availableAddOns = data;
+      });
   }
 
   @Output() closeModal = new EventEmitter<void>();
@@ -355,7 +380,11 @@ export class AddReservationModalComponent implements OnInit{
   }
 
   submitForm() {
-    const accountProfileId = this.authService.user()?.accountProfileId;
+    const user = this.authService.getUser(
+      localStorage.getItem(environment.TOKEN_NAME) || ''
+    );
+    const accountProfileId = this.authService.userInfo?.accountProfileId;
+    console.log('Account Profile ID:', accountProfileId);
     const reservationData = {
       ...this.adminReservationForm.value,
       accountProfileId,

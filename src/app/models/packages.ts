@@ -13,6 +13,7 @@ export interface Packages {
   image_url: string;
   inclusions: PackageInclusions[];
   addOns: PackageAddOns[];
+  availableAddOns: PackageAddOns[];
 }
 
 export interface ViewPackages {
