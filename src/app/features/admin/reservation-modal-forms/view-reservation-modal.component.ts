@@ -63,7 +63,7 @@ import { Location } from '@angular/common';
                 id="packageType"
                 type="text"
                 class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.packageName?.packageName"
+                [value]="item?.package?.name"
                 readonly
               />
             </div>
