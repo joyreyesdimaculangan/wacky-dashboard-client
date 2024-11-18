@@ -64,7 +64,7 @@ export class AdminCalendarComponent implements OnInit {
 
         return {
           id: reservation.reservationID,
-          title: reservation.name,
+          title: reservation.package?.name,
           start: reservation.eventDate,
           end: reservation.eventDate, // Assuming eventDate is the same for start and end
           resourceId: resourceId // Assign the appropriate venue based on number of pax

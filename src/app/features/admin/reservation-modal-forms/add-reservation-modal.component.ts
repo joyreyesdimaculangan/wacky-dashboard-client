@@ -62,14 +62,14 @@ import { PackageAddOns } from '../../../models/packageAddOns';
             <!-- Package Type -->
             <div class="relative">
               <label
-                for="packageType"
+                for="packageID"
                 class="block text-sm font-medium text-gray-700"
                 >Package Type</label
               >
               <select
-                id="packageType"
+                id="packageID"
                 type="text"
-                formControlName="packageType"
+                formControlName="packageID"
                 name="packageType"
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
                 required
@@ -258,10 +258,10 @@ import { PackageAddOns } from '../../../models/packageAddOns';
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
               >
                 <option
-                  *ngFor="let availableAddOns of packages" 
+                  *ngFor="let availableAddOns of packages.addOns" 
                   [value]="availableAddOns.addOns"
                 >
-                  {{ availableAddOns.addOns }} 
+                  {{ availableAddOns.addOns.name }} 
                 </option>
               </select>
             </div>
@@ -304,7 +304,7 @@ export class AddReservationModalComponent implements OnInit{
 
   constructor() {
     this.adminReservationForm = this.fb.group({
-      packageType: ['', Validators.required],
+      packageID: ['', Validators.required],
       name: ['', Validators.required],
       contactNumber: ['', Validators.required],
       numberOfPax: [50, Validators.required],
