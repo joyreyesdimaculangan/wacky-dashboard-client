@@ -27,6 +27,8 @@ import { PackageAddOnsService } from '../../../services/packageAddOns.service';
 import { AvailableAddOns, Packages } from '../../../models/packages';
 import { PackageAddOns } from '../../../models/packageAddOns';
 import { environment } from '../../../../environments/environment.development';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-add-reservation-modal',
@@ -39,6 +41,7 @@ import { environment } from '../../../../environments/environment.development';
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
   ],
   template: `
     <div
@@ -256,20 +259,20 @@ import { environment } from '../../../../environments/environment.development';
                 class="block text-sm font-medium text-gray-700"
                 >AddOns Included</label
               >
-              <select
+              <mat-select
                 id="addOns"
-                type="text"
                 formControlName="addOns"
                 name="addOns"
+                multiple
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
               >
-                <option
+                <mat-option
                   *ngFor="let availableAddOns of addonsPackageSelected()"
                   [value]="availableAddOns.addOnID"
                 >
                   {{ availableAddOns.name }}
-                </option>
-              </select>
+                </mat-option>
+              </mat-select>
             </div>
           </div>
 
