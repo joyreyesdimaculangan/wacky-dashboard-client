@@ -1,3 +1,6 @@
+import { GetPackageNameService } from '../features/customer/reservation-form/getPackageName.service';
+import { PackageName, ViewPackages } from './packages';
+
 export interface ReservationForm {
     numberOfPax: number,
     name: string,
@@ -7,7 +10,8 @@ export interface ReservationForm {
     eventTheme: string,
     cakeTheme: string,
     otherRequest: string,
-    packageID: string | null | undefined,
+    packageID: PackageName | null | undefined,
+    packageName: PackageName | null | undefined
     accountProfileId: string | null | undefined,
     status: 'Pending' | 'Approved' | 'Cancelled' 
     paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'PAID'
@@ -24,7 +28,9 @@ export interface EditedReservationForm {
     eventTheme: string,
     cakeTheme: string,
     otherRequest: string,
-    packageID: string | null | undefined,
+    packageID: PackageName | null | undefined,
+    packageName: PackageName | null | undefined,
+    package?: ViewPackages,
     accountProfileId: string | null | undefined,
     status: 'Pending' | 'Approved' | 'Cancelled' 
     paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'PAID'

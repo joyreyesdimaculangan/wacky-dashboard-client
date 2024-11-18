@@ -20,8 +20,8 @@ export interface ViewPackages {
   name: string;
   description: string;
   image_url: string;
-  availableAddOns: AvailableAddOns[];
-  Inclusion: Inclusion[];
+  availableAddOns?: AvailableAddOns[];
+  Inclusion?: Inclusion[];
 }
 
 export interface AvailableAddOns {

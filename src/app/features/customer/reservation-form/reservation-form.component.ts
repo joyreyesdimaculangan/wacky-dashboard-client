@@ -63,13 +63,13 @@ export class ReservationFormComponent implements OnInit {
   private packageNameService = inject(GetPackageNameService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
 
-  packageID!: null | string | undefined;
+  packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
   addOnsId: string[] = [];
 
   packages: any[] = [];
   accountProfileName: any[] = [];
-  packageName: PackageName | null = null;
+  packageName:  PackageName | null | undefined;
   fullyBookedDates: Date[] = [];
 
   isFirstStepComplete = false;
@@ -79,8 +79,10 @@ export class ReservationFormComponent implements OnInit {
   constructor() {
     effect(() => {
       const packages = this.packageNameService.packageName();
-      this.packageID = packages?.packageId;
+      this.packageID = packages?.packageId as PackageName | undefined;
+      this.packageName = packages?.packageName as PackageName | undefined;
       console.log('Package ID:', this.packageID);
+      console.log('Package Name:', this.packageName);
       const accountProfileName = this.getAccountProfileIDService.getAccountProfileName();
       this.accountProfileId = accountProfileName?.accountProfileId;
       console.log('Account Profile ID:', this.accountProfileId);
@@ -242,7 +244,8 @@ export class ReservationFormComponent implements OnInit {
         eventTheme: this.step3.get("eventTheme")?.value,
         cakeTheme: this.step3.get("cakeTheme")?.value,
         otherRequest: this.step3.get("otherRequest")?.value,
-        packageID: this.packageID,
+        packageID: this.packageID || null,
+        packageName: this.packageName,
         accountProfileId: accountProfileId,
         status: statusValue,
         paymentStatus: paymentStatusValue,

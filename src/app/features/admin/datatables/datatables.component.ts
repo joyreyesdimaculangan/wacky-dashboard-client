@@ -163,8 +163,10 @@ export class DatatablesComponent implements OnInit {
   filteredData() {
     return this.reservationData.filter((item) => {
       const formattedEventDate = this.datePipe.transform(item.eventDate, 'MM/dd/yyyy');
+      const packageName = item.package?.name || '';
+      
       return (
-        (this.filters.packageType ? (item.packageID && this.packageMap[item.packageID]?.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
+        (this.filters.packageType ? (item.package?.name && this.packageMap[packageName]?.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
         (this.filters.name ? item.name.toLowerCase().includes(this.filters.name.toLowerCase()) : true) &&
         (this.filters.contactNumber ? item.contactNumber.toString().includes(this.filters.contactNumber) : true) &&
         (this.filters.numberOfPax ? item.numberOfPax.toString().includes(this.filters.numberOfPax) : true) &&
