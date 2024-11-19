@@ -63,6 +63,11 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
             Edit Reservation
           </h2>
 
+          <!-- Subheader for Package Name -->
+          <h3 class="text-xl font-semibold mb-6 text-gray-700 border-b pb-4">
+            {{ item?.package?.name }}
+          </h3>
+
           <!-- Edit Reservation Form -->
           <form [formGroup]="adminEditReservationForm" class="space-y-6">
             <!-- Input Field Group -->
@@ -160,9 +165,10 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
               <mat-form-field appearance="outline" class="w-full mt-2">
                 <input
                   id="eventDate"
-                  [matDatepicker]="datepicker"
                   formControlName="eventDate"
                   matInput
+                  [matDatepicker]="datepicker"
+                  [matDatepickerFilter]="dateFilter"
                   placeholder="Select a date"
                   class="w-full"
                 />
@@ -174,38 +180,37 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
               </mat-form-field>
             </div>
 
-            <!-- Time Input -->
+            <!-- Time Picker -->
             <div class="form-group mb-6">
               <label
                 class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                >Time</label
               >
-                Time
-              </label>
               <ul class="grid grid-cols-2 gap-4">
-                <li
-                  *ngFor="
-                    let time of [
-                      '10:00 AM',
-                      '10:30 AM',
-                      '11:00 AM',
-                      '3:00 PM',
-                      '3:30 PM',
-                      '4:00 PM'
-                    ];
-                    let i = index
-                  "
-                >
+                <li *ngFor="let time of availableTimes; let i = index">
                   <input
                     type="radio"
                     [id]="'time' + i"
                     [value]="time"
                     class="hidden peer"
                     formControlName="eventTime"
+                    [disabled]="
+                      isTimeDisabled(
+                        adminEditReservationForm.get('eventDate')?.value,
+                        time
+                      )
+                    "
                     required
                   />
                   <label
                     [for]="'time' + i"
                     class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
+                    [ngClass]="{
+                      'opacity-50 cursor-not-allowed': isTimeDisabled(
+                        adminEditReservationForm.get('eventDate')?.value,
+                        time
+                      )
+                    }"
                   >
                     {{ time }}
                   </label>
@@ -224,6 +229,22 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
               <textarea
                 id="otherRequest"
                 formControlName="otherRequest"
+                rows="4"
+                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              ></textarea>
+            </div>
+
+            <!-- AddOns -->
+            <div>
+              <label
+                for="otherRequest"
+                class="block text-sm font-medium text-gray-700"
+              >
+                AddOns:
+              </label>
+              <textarea
+                id="addOns"
+                formControlName="addOns"
                 rows="4"
                 class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
               ></textarea>
@@ -310,6 +331,19 @@ export class EditReservationModalComponent implements OnInit {
   accountProfileName: any[] = [];
   packageName: PackageName | null = null;
 
+  fullyBookedDates: Date[] = [];
+  fullyBookedTimes: { [date: string]: string[] } = {};
+  availableTimes: string[] = [
+    '10:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '3:00 PM',
+    '3:30 PM',
+    '4:00 PM',
+  ];
+
+  reservations: EditedReservationForm[] = [];
+
   ngOnInit() {
     this.adminEditReservationForm = this.fb.group({
       name: [this.item?.name || '', Validators.required],
@@ -328,9 +362,84 @@ export class EditReservationModalComponent implements OnInit {
         this.item?.paymentStatus || 'PENDING',
         Validators.required,
       ],
+      addOns: [this.item?.addOns || ''],
     });
 
     this.getReservationById();
+    this.fetchReservations();
+    this.getFullyBookedDates(this.reservations);
+  }
+
+  fetchReservations(): void {
+    this.reservationService.getReservations().subscribe({
+      next: (data: EditedReservationForm[]) => {
+        console.log('Fetched reservations:', data);
+        this.reservations = data;
+        this.fullyBookedDates = this.getFullyBookedDates(data);
+        console.log('Fully booked dates:', this.fullyBookedDates);
+      },
+      error: (error) => {
+        console.error('Error fetching reservations:', error); // Error handling
+      },
+    });
+  }
+
+  getFullyBookedDates(reservations: EditedReservationForm[]): Date[] {
+    // Map to count reservations per date
+    const dateCounts: { [key: string]: number } = {};
+
+    reservations.forEach((reservation) => {
+      const date = new Date(reservation.eventDate).toISOString().split('T')[0]; // Use ISO string for consistent date comparison
+      dateCounts[date] = (dateCounts[date] || 0) + 1;
+    });
+
+    // Return fully booked dates (more than 6 reservations)
+    return Object.keys(dateCounts)
+      .filter((date) => dateCounts[date] > 6)
+      .map((date) => new Date(date));
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) {
+      return false;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of the day
+
+    const isPastDate = date < today;
+    const isFullyBooked = this.fullyBookedDates.some(
+      (bookedDate) =>
+        bookedDate.toISOString().split('T')[0] ===
+        date.toISOString().split('T')[0]
+    );
+
+    const isAvailable = !isPastDate && !isFullyBooked;
+
+    console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
+    return isAvailable;
+  };
+
+  populateFullyBookedTimes(reservations: EditedReservationForm[]): void {
+    this.fullyBookedTimes = {}; // Reset before populating
+
+    reservations.forEach((reservation) => {
+      const date = new Date(reservation.eventDate).toISOString().split('T')[0];
+      if (!this.fullyBookedTimes[date]) {
+        this.fullyBookedTimes[date] = [];
+      }
+      this.fullyBookedTimes[date].push(reservation.eventTime); // Assume reservation.eventTime is a string like '10:00 AM'
+    });
+  }
+
+  isTimeDisabled(date: string, time: string): boolean {
+    const selectedDate = this.adminEditReservationForm.get('eventDate')?.value;
+    if (!selectedDate) {
+      return false; // No date selected yet
+    }
+
+    const selectedDateISO = new Date(selectedDate).toISOString().split('T')[0];
+    return this.fullyBookedTimes[selectedDateISO]?.includes(time) || false;
   }
 
   getReservationById() {

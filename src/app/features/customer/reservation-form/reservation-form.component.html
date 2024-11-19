@@ -231,17 +231,17 @@
                   </li>
                   <mat-error
                     *ngIf="
-                      reservationForm.get('eventTime')?.hasError('required') &&
-                      reservationForm.get('eventTime')?.touched
+                      step2.get('eventTime')?.hasError('required') &&
+                      step2.get('eventTime')?.touched
                     "
                     >Event time is required</mat-error
                   >
                   <mat-error
                     *ngIf="
-                      reservationForm
+                      step2
                         .get('eventTime')
                         ?.hasError('matDatepickerFilter') &&
-                      reservationForm.get('eventTime')?.touched
+                        step2.get('eventTime')?.touched
                     "
                     >Event time is unavailable</mat-error
                   >
@@ -349,13 +349,6 @@
                   rows="3"
                 >
                 </textarea>
-                <mat-error
-                  *ngIf="
-                    step3.get('additionalRequirements')?.hasError('required') &&
-                    step3.get('additionalRequirements')?.touched
-                  "
-                  >Additional requirements are required</mat-error
-                >
                 <mat-error
                   *ngIf="
                     step3.get('additionalRequirements')?.hasError('pattern') &&

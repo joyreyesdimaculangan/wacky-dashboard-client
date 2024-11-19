@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-} from '@angular/core';
-import {
-  EditedReservationForm,
-} from '../../../models/reservation-form';
+import { Component, inject } from '@angular/core';
+import { EditedReservationForm } from '../../../models/reservation-form';
 import { ReservationService } from '../../../services/reservation.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -32,42 +27,17 @@ import { Location } from '@angular/common';
           </button>
 
           <!-- Page Header -->
-          <h2 class="text-2xl font-semibold mb-6 text-green-700 border-b pb-4">
+          <h2 class="text-3xl font-bold mb-2 text-green-700">
             View Reservation Details
           </h2>
 
+          <!-- Subheader for Package Name -->
+          <h3 class="text-xl font-semibold mb-6 text-gray-700 border-b pb-4">
+            {{ item?.package?.name }}
+          </h3>
+
           <!-- Reservation Details (Pre-filled Input Fields) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label
-                for="reservationID"
-                class="block text-sm font-medium text-gray-600"
-                >Reservation ID</label
-              >
-              <input
-                id="reservationID"
-                type="text"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.reservationID"
-                readonly
-              />
-            </div>
-
-            <div>
-              <label
-                for="packageType"
-                class="block text-sm font-medium text-gray-600"
-                >Package Type</label
-              >
-              <input
-                id="packageType"
-                type="text"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.package?.name"
-                readonly
-              />
-            </div>
-
             <div>
               <label
                 for="customerName"
@@ -100,21 +70,6 @@ import { Location } from '@angular/common';
 
             <div>
               <label
-                for="numberOfPax"
-                class="block text-sm font-medium text-gray-600"
-                >Number of Pax</label
-              >
-              <input
-                id="numberOfPax"
-                type="number"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.numberOfPax"
-                readonly
-              />
-            </div>
-
-            <div>
-              <label
                 for="eventDate"
                 class="block text-sm font-medium text-gray-600"
                 >Reservation Date</label
@@ -139,6 +94,21 @@ import { Location } from '@angular/common';
                 type="text"
                 class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
                 [value]="item?.eventTime"
+                readonly
+              />
+            </div>
+
+            <div>
+              <label
+                for="numberOfPax"
+                class="block text-sm font-medium text-gray-600"
+                >Number of Pax</label
+              >
+              <input
+                id="numberOfPax"
+                type="number"
+                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
+                [value]="item?.numberOfPax"
                 readonly
               />
             </div>
@@ -202,34 +172,44 @@ import { Location } from '@angular/common';
               ></textarea>
             </div>
 
+            <!-- Reservation Status -->
             <div>
               <label
                 for="status"
                 class="block text-sm font-medium text-gray-600"
-                >Status</label
+                >Reservation Status</label
               >
-              <input
-                id="status"
-                type="text"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.status"
-                readonly
-              />
+              <span
+                class="inline-block px-3 py-1 font-semibold text-sm rounded-full"
+                [ngClass]="{
+                  'bg-green-200 text-green-800': item?.status === 'Approved',
+                  'bg-yellow-200 text-yellow-800': item?.status === 'Pending',
+                  'bg-red-200 text-red-800': item?.status === 'Cancelled'
+                }"
+              >
+                {{ item?.status }}
+              </span>
             </div>
 
+            <!-- Payment Status -->
             <div>
               <label
                 for="paymentStatus"
                 class="block text-sm font-medium text-gray-600"
                 >Payment Status</label
               >
-              <input
-                id="paymentStatus"
-                type="text"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.paymentStatus"
-                readonly
-              />
+              <span
+                class="inline-block px-3 py-1 font-semibold text-sm rounded-full"
+                [ngClass]="{
+                  'bg-green-200 text-green-800': item?.paymentStatus === 'PAID',
+                  'bg-yellow-200 text-yellow-800':
+                    item?.paymentStatus === 'PENDING',
+                  'bg-blue-200 text-blue-800':
+                    item?.paymentStatus === 'PARTIALLY_PAID'
+                }"
+              >
+                {{ item?.paymentStatus }}
+              </span>
             </div>
           </div>
 

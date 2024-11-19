@@ -147,6 +147,8 @@ export class ReservationFormComponent implements OnInit {
     });
 
     this.fetchReservations();
+    this.getFullyBookedDates(this.reservations);
+    this.populateFullyBookedTimes(this.reservations);
   }
 
   fetchReservations(): void {
@@ -172,9 +174,9 @@ export class ReservationFormComponent implements OnInit {
       dateCounts[date] = (dateCounts[date] || 0) + 1;
     });
   
-    // Return fully booked dates (more than 5 reservations)
+    // Return fully booked dates (more than 6 reservations)
     return Object.keys(dateCounts)
-      .filter(date => dateCounts[date] > 5)
+      .filter(date => dateCounts[date] > 6)
       .map(date => new Date(date));
   }
   
