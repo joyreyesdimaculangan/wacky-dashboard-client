@@ -9,160 +9,493 @@
       Go Back
     </button>
 
-    <div class="flex flex-col items-center mb-6">
-      <img
-        src="assets/images/Wacky's Logo.png"
-        alt="Restaurant Logo"
-        class="mb-4"
-        style="width: 150px; height: auto"
-      />
-      <h2 class="text-3xl font-bold mb-2 text-green-600">Reservation Form</h2>
-    </div>
-    <div class="div" [formGroup]="reservationForm">
-      <mat-stepper #stepper linear>
-        <!-- Personal Details Step -->
-        <mat-step [stepControl]="step1">
-          <form [formGroup]="step1">
-            <ng-template matStepLabel>Personal Details</ng-template>
+    <!-- Reservation Card -->
+    <div
+      class="relative bg-white shadow-xl rounded-lg p-8 w-full max-w-4xl mx-auto"
+    >
+      <!-- Logo -->
+      <div class="absolute top-[-3.5rem] left-1/2 transform -translate-x-1/2">
+        <img
+          src="assets/images/Wacky's Logo.png"
+          alt="Logo"
+          class="h-28 w-28"
+        />
+      </div>
 
-            <!-- Name Input -->
-            <div class="form-group mb-6">
-              <label
-                for="name"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Name</label
-              >
-              <input
-                matInput
-                type="text"
-                id="name"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                formControlName="name"
-                placeholder="Enter your name"
-              />
-              <mat-error *ngIf="step1.get('name')?.hasError('required')">Name is required</mat-error>
-            </div>
+      <h2 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
+        Reservation Form
+      </h2>
+      <div class="space-y-6" [formGroup]="reservationForm">
+        <mat-stepper #stepper linear>
+          <!-- Personal Details Step -->
+          <mat-step [stepControl]="step1">
+            <form [formGroup]="step1">
+              <ng-template matStepLabel>Personal Details</ng-template>
 
-            <!-- Contact Number Input -->
-            <div class="form-group mb-6">
-              <label
-                for="contactNumber"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Contact No.</label
-              >
-              <input
-                matInput
-                type="tel"
-                id="contactNumber"
-                formControlName="contactNumber"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                placeholder="Enter your contact number"
-              />
-              <mat-error *ngIf="step1.get('contactNumber')?.hasError('required')">Contact number is required</mat-error>
-              <mat-error *ngIf="step1.get('contactNumber')?.hasError('pattern')">Invalid contact number</mat-error>
-            </div>
-
-            <!-- Number of Guests Input -->
-            <div class="form-group mb-6">
-              <label
-                for="guests"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Number of Guests</label
-              >
-              <input
-                matInput
-                type="number"
-                id="numberOfPax"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                formControlName="numberOfPax"
-                placeholder="Enter the number of guests"
-                min="50"
-              />
-              <mat-error *ngIf="step1.get('numberOfPax')?.hasError('required')">Number of guests is required</mat-error>
-              <mat-error *ngIf="step1.get('numberOfPax')?.hasError('min')">Minimum of 50 guests required</mat-error>
-            </div>
-
-            <div class="flex justify-end">
-              <button
-                mat-button
-                (click)="goToNextStep()"
-                class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-              >
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-
-        <!-- Event Details Step -->
-        <mat-step [stepControl]="step2">
-          <form [formGroup]="step2">
-            <ng-template matStepLabel>Event Details</ng-template>
-            <!-- Date Picker -->
-            <div class="form-group relative mb-6">
-              <label
-                for="datepicker"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Date</label
-              >
-              <mat-form-field appearance="outline" class="w-full">
+              <!-- Name Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="name"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Name</label
+                >
                 <input
                   matInput
-                  [matDatepicker]="datepicker"
-                  [matDatepickerFilter]="dateFilter"
-                  formControlName="eventDate"
-                  placeholder="Select a date"
-                  class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out"
+                  type="text"
+                  id="name"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
+                  formControlName="name"
+                  placeholder="Enter your name"
                 />
-                <mat-error *ngIf="step2.get('eventDate')?.hasError('required')">Event date is required</mat-error>
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="datepicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #datepicker></mat-datepicker>
-              </mat-form-field>
-            </div>
-
-            <!-- Time Picker -->
-            <div class="form-group mb-6">
-              <label
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Time</label
-              >
-              <ul class="grid grid-cols-2 gap-4">
-                <li
-                  *ngFor="
-                    let time of [
-                      '10:00 AM',
-                      '10:30 AM',
-                      '11:00 AM',
-                      '3:00 PM',
-                      '3:30 PM',
-                      '4:00 PM'
-                    ];
-                    let i = index
+                <mat-error
+                  *ngIf="
+                    step1.get('name')?.hasError('required') &&
+                    step1.get('name')?.touched
                   "
+                  >Name is required</mat-error
                 >
+                <mat-error
+                  *ngIf="
+                    step1.get('name')?.hasError('pattern') &&
+                    step1.get('name')?.touched
+                  "
+                  >Invalid name</mat-error
+                >
+              </div>
+
+              <!-- Contact Number Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="contactNumber"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Contact No.</label
+                >
+                <input
+                  matInput
+                  type="tel"
+                  id="contactNumber"
+                  formControlName="contactNumber"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
+                  placeholder="Enter your contact number"
+                />
+                <mat-error
+                  *ngIf="
+                    step1.get('contactNumber')?.hasError('required') &&
+                    step1.get('contactNumber')?.touched
+                  "
+                  >Contact number is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step1.get('contactNumber')?.hasError('pattern') &&
+                    step1.get('contactNumber')?.touched
+                  "
+                  >Invalid contact number</mat-error
+                >
+              </div>
+
+              <!-- Number of Guests Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="guests"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Number of Guests</label
+                >
+                <input
+                  matInput
+                  type="number"
+                  id="numberOfPax"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
+                  formControlName="numberOfPax"
+                  placeholder="Enter the number of guests"
+                  min="50"
+                />
+                <mat-error
+                  *ngIf="
+                    step1.get('numberOfPax')?.hasError('required') &&
+                    step1.get('numberOfPax')?.touched
+                  "
+                  >Number of guests is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step1.get('numberOfPax')?.hasError('min') &&
+                    step1.get('numberOfPax')?.touched
+                  "
+                  >Minimum of 50 guests required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step1.get('numberOfPax')?.hasError('max') &&
+                    step1.get('numberOfPax')?.touched
+                  "
+                  >Maximum of 200 guests only</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step1.get('numberOfPax')?.hasError('pattern') &&
+                    step1.get('numberOfPax')?.touched
+                  "
+                  >Invalid number of guests</mat-error
+                >
+              </div>
+
+              <div class="flex justify-end">
+                <button
+                  mat-button
+                  (click)="goToNextStep()"
+                  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Event Details Step -->
+          <mat-step [stepControl]="step2">
+            <form [formGroup]="step2">
+              <ng-template matStepLabel>Event Details</ng-template>
+              <!-- Date Picker -->
+              <div class="form-group relative mb-6">
+                <label
+                  for="datepicker"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Date</label
+                >
+                <mat-form-field appearance="outline" class="w-full">
                   <input
-                    type="radio"
-                    [id]="'time' + i"
-                    [value]="time"
-                    class="hidden peer"
-                    formControlName="eventTime"
-                    required
+                    matInput
+                    [matDatepicker]="datepicker"
+                    [matDatepickerFilter]="dateFilter"
+                    formControlName="eventDate"
+                    placeholder="Select a date"
+                    class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out"
                   />
-                  <label
-                    [for]="'time' + i"
-                    class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
+                  <mat-error
+                    *ngIf="
+                      step2.get('eventDate')?.hasError('required') &&
+                      step2.get('eventDate')?.touched
+                    "
+                    >Event date is required</mat-error
                   >
-                    {{ time }}
-                  </label>
-                </li>
-                <mat-error *ngIf="step2.get('eventTime')?.hasError('required')">Event time is required</mat-error>
-              </ul>
+                  <mat-error
+                    *ngIf="
+                      step2.get('eventDate')?.hasError('matDatepickerFilter') &&
+                      step2.get('eventDate')?.touched
+                    "
+                    >Event date is unavailable</mat-error
+                  >
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="datepicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #datepicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Time Picker -->
+              <div class="form-group mb-6">
+                <label
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Time</label
+                >
+                <ul class="grid grid-cols-2 gap-4">
+                  <li *ngFor="let time of availableTimes; let i = index">
+                    <input
+                      type="radio"
+                      [id]="'time' + i"
+                      [value]="time"
+                      class="hidden peer"
+                      formControlName="eventTime"
+                      [disabled]="
+                        isTimeDisabled(
+                          reservationForm.get('eventDate')?.value,
+                          time
+                        )
+                      "
+                      required
+                    />
+                    <label
+                      [for]="'time' + i"
+                      class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
+                      [ngClass]="{
+                        'opacity-50 cursor-not-allowed': isTimeDisabled(
+                          reservationForm.get('eventDate')?.value,
+                          time
+                        )
+                      }"
+                    >
+                      {{ time }}
+                    </label>
+                  </li>
+                  <mat-error
+                    *ngIf="
+                      reservationForm.get('eventTime')?.hasError('required') &&
+                      reservationForm.get('eventTime')?.touched
+                    "
+                    >Event time is required</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      reservationForm
+                        .get('eventTime')
+                        ?.hasError('matDatepickerFilter') &&
+                      reservationForm.get('eventTime')?.touched
+                    "
+                    >Event time is unavailable</mat-error
+                  >
+                </ul>
+              </div>
+
+              <div class="flex justify-between">
+                <button
+                  mat-button
+                  matStepperPrevious
+                  class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Back
+                </button>
+                <button
+                  mat-button
+                  matStepperNext
+                  (click)="goToNextStep()"
+                  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Event Preferences Step -->
+          <mat-step [stepControl]="step3">
+            <form [formGroup]="step3">
+              <ng-template matStepLabel>Event Preferences</ng-template>
+              <!-- Event Theme Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="eventTheme"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Theme of Event</label
+                >
+                <input
+                  matInput
+                  type="text"
+                  id="eventTheme"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
+                  formControlName="eventTheme"
+                  placeholder="Enter event theme"
+                />
+                <mat-error
+                  *ngIf="
+                    step3.get('eventTheme')?.hasError('required') &&
+                    step3.get('eventTheme')?.touched
+                  "
+                  >Event theme is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step3.get('eventTheme')?.hasError('pattern') &&
+                    step3.get('eventTheme')?.touched
+                  "
+                  >Invalid event theme</mat-error
+                >
+              </div>
+
+              <!-- Cake Theme Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="cakeTheme"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Theme of Cake</label
+                >
+                <input
+                  matInput
+                  type="text"
+                  id="cakeTheme"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500"
+                  formControlName="cakeTheme"
+                  placeholder="Enter cake theme"
+                />
+                <mat-error
+                  *ngIf="
+                    step3.get('cakeTheme')?.hasError('required') &&
+                    step3.get('cakeTheme')?.touched
+                  "
+                  >Cake theme is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step3.get('cakeTheme')?.hasError('pattern') &&
+                    step3.get('cakeTheme')?.touched
+                  "
+                  >Invalid cake theme</mat-error
+                >
+              </div>
+
+              <!-- Special Requests Input -->
+              <div class="form-group mb-6">
+                <label
+                  for="specialRequests"
+                  class="block text-base font-semibold text-gray-800 mb-2 text-left"
+                  >Special Requests</label
+                >
+                <textarea
+                  id="otherRequest"
+                  class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500 shadow-sm transition duration-300 ease-in-out hover:shadow-md"
+                  formControlName="otherRequest"
+                  placeholder="Enter any special requests"
+                  rows="3"
+                >
+                </textarea>
+                <mat-error
+                  *ngIf="
+                    step3.get('additionalRequirements')?.hasError('required') &&
+                    step3.get('additionalRequirements')?.touched
+                  "
+                  >Additional requirements are required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    step3.get('additionalRequirements')?.hasError('pattern') &&
+                    step3.get('additionalRequirements')?.touched
+                  "
+                  >Invalid additional requirements</mat-error
+                >
+              </div>
+
+              <div class="flex justify-between">
+                <button
+                  mat-button
+                  matStepperPrevious
+                  class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Back
+                </button>
+                <button
+                  (click)="goToNextStep()"
+                  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Confirm and Submit Step -->
+          <mat-step linear>
+            <ng-template matStepLabel>Confirm and Submit</ng-template>
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-6 w-full">
+              <p class="text-xl font-bold text-green-600 mb-4">
+                Please review your reservation details:
+              </p>
+
+              <div class>
+                <!-- Package Type -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Package Type: </strong>
+                    <span class="text-gray-900">
+                      {{ reservationForm.get("packageName")?.value }}
+                    </span>
+                  </p>
+                </div>
+
+                <!-- Name -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Name: </strong>
+                    <span class="text-gray-900">{{
+                      this.step1.get("name")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Contact Number -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Contact Number: </strong>
+                    <span class="text-gray-900">{{
+                      this.step1.get("contactNumber")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Number of Guests -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Number of Guests: </strong>
+                    <span class="text-gray-900">{{
+                      this.step1.get("numberOfPax")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Event Date -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Event Date: </strong>
+                    <span class="text-gray-900">{{
+                      this.step2.get("eventDate")?.value | date
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Event Time -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Event Time: </strong>
+                    <span class="text-gray-900">{{
+                      this.step2.get("eventTime")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Event Theme -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Event Theme: </strong>
+                    <span class="text-gray-900">{{
+                      this.step3.get("eventTheme")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Cake Theme -->
+                <div class="border-b-2 border-gray-300 py-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Cake Theme: </strong>
+                    <span class="text-gray-900">{{
+                      this.step3.get("cakeTheme")?.value
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Special Requests -->
+                <div class="border-gray-300 py-2 col-span-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>Special Requests: </strong>
+                    <span class="text-gray-900">{{
+                      this.step3.get("otherRequest")?.value || "None"
+                    }}</span>
+                  </p>
+                </div>
+
+                <!-- Add Ons -->
+                <div class="border-gray-300 py-2 col-span-2">
+                  <p class="text-base font-medium text-gray-700">
+                    <strong>AddOns: </strong>
+                    <span class="text-gray-900">{{
+                      reservationForm.get("addOns")?.value
+                    }}</span>
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div class="flex justify-between">
+            <!-- Action Buttons -->
+            <div class="flex justify-between mt-6">
               <button
                 mat-button
                 matStepperPrevious
@@ -172,186 +505,15 @@
               </button>
               <button
                 mat-button
-                matStepperNext
-                (click)="goToNextStep()"
+                (click)="onSubmit()"
                 class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
               >
-                Next
+                Confirm & Submit
               </button>
             </div>
-          </form>
-        </mat-step>
-
-        <!-- Event Preferences Step -->
-        <mat-step [stepControl]="step3">
-          <form [formGroup]="step3">
-            <ng-template matStepLabel>Event Preferences</ng-template>
-            <!-- Event Theme Input -->
-            <div class="form-group mb-6">
-              <label
-                for="eventTheme"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Theme of Event</label
-              >
-              <input
-                matInput
-                type="text"
-                id="eventTheme"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                formControlName="eventTheme"
-                placeholder="Enter event theme"
-              />
-              <mat-error *ngIf="step3.get('eventTheme')?.hasError('required')">Event theme is required</mat-error>
-            </div>
-
-            <!-- Cake Theme Input -->
-            <div class="form-group mb-6">
-              <label
-                for="cakeTheme"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Theme of Cake</label
-              >
-              <input
-                matInput
-                type="text"
-                id="cakeTheme"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500"
-                formControlName="cakeTheme"
-                placeholder="Enter cake theme"
-              />
-              <mat-error *ngIf="step3.get('cakeTheme')?.hasError('required')">Cake theme is required</mat-error>
-            </div>
-
-            <!-- Special Requests Input -->
-            <div class="form-group mb-6">
-              <label
-                for="specialRequests"
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Special Requests</label
-              >
-              <textarea
-                id="otherRequest"
-                class="form-control w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500 shadow-sm transition duration-300 ease-in-out hover:shadow-md"
-                formControlName="otherRequest"
-                placeholder="Enter any special requests"
-                rows="3"
-              >
-              </textarea>
-              <mat-error *ngIf="step3.get('additionalRequirements')?.hasError('required')">Additional requirements are required</mat-error>
-            </div>
-
-            <div class="flex justify-between">
-              <button
-                mat-button
-                matStepperPrevious
-                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-              >
-                Back
-              </button>
-              <button
-                (click)="goToNextStep()"
-                class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-              >
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-
-        <!-- Confirm and Submit Step -->
-        <mat-step linear>
-          <ng-template matStepLabel>Confirm and Submit</ng-template>
-          <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-6 w-full">
-            <p class="text-xl font-bold text-green-600 mb-4">
-              Please review your reservation details:
-            </p>
-
-            <div class>
-              <!-- Name -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Name: </strong>
-                  <span class="text-gray-900">{{ this.step1.get("name")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Contact Number -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Contact Number: </strong>
-                  <span class="text-gray-900">{{ this.step1.get("contactNumber")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Number of Guests -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Number of Guests: </strong>
-                  <span class="text-gray-900">{{ this.step1.get("numberOfPax")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Event Date -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Event Date: </strong>
-                  <span class="text-gray-900">{{ this.step2.get("eventDate")?.value | date }}</span>
-                </p>
-              </div>
-
-              <!-- Event Time -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Event Time: </strong>
-                  <span class="text-gray-900">{{ this.step2.get("eventTime")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Event Theme -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Event Theme: </strong>
-                  <span class="text-gray-900">{{ this.step3.get("eventTheme")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Cake Theme -->
-              <div class="border-b-2 border-gray-300 py-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Cake Theme: </strong>
-                  <span class="text-gray-900">{{ this.step3.get("cakeTheme")?.value }}</span>
-                </p>
-              </div>
-
-              <!-- Special Requests -->
-              <div class="border-gray-300 py-2 col-span-2">
-                <p class="text-base font-medium text-gray-700">
-                  <strong>Special Requests: </strong>
-                  <span class="text-gray-900">{{ this.step3.get("otherRequest")?.value || "None" }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex justify-between mt-6">
-            <button
-              mat-button
-              matStepperPrevious
-              class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-            >
-              Back
-            </button>
-            <button
-              mat-button
-              (click)="onSubmit()"
-              class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-            >
-              Confirm & Submit
-            </button>
-          </div>
-        </mat-step>
-      </mat-stepper>
+          </mat-step>
+        </mat-stepper>
+      </div>
     </div>
   </div>
 </div>

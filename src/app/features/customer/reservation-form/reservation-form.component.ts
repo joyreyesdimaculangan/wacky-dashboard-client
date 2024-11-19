@@ -57,11 +57,11 @@ export class ReservationFormComponent implements OnInit {
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
   private fb = inject(FormBuilder);
-  private location = inject(Location);
   private authService = inject(AuthService);
+  private packageAddOnsService = inject(GetPackageAddOnsService);
+
   private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
-  private packageAddOnsService = inject(GetPackageAddOnsService);
 
   packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
@@ -71,6 +71,10 @@ export class ReservationFormComponent implements OnInit {
   accountProfileName: any[] = [];
   packageName:  PackageName | null | undefined;
   fullyBookedDates: Date[] = [];
+  fullyBookedTimes: { [date: string]: string[] } = {};
+  availableTimes: string[] = ['10:00 AM', '10:30 AM', '11:00 AM', '3:00 PM', '3:30 PM', '4:00 PM'];
+
+  reservations: EditedReservationForm[] = [];
 
   isFirstStepComplete = false;
   isSecondStepComplete = false;
@@ -94,6 +98,7 @@ export class ReservationFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
   confirmReservationForm!: FormGroup; // Use definite assignment operator
+  reservationsMade: EditedReservationForm[] = [];
 
   @Input() item: any;
   @Output() reservationSubmitted = new EventEmitter<any>();
@@ -101,17 +106,17 @@ export class ReservationFormComponent implements OnInit {
 
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       contactNumber: [
         '',
         [Validators.required, Validators.pattern('^[0-9]+$')],
       ],
-      numberOfPax: [50, [Validators.required, Validators.min(50)]],
-      eventDate: ['', Validators.required],
-      eventTime: ['', Validators.required],
-      eventTheme: ['', Validators.required],
-      cakeTheme: ['', Validators.required],
-      otherRequest: [''],
+      numberOfPax: [50, [Validators.required, Validators.min(50), Validators.max(200), Validators.pattern('^[0-9]+$')]], 
+      eventDate: ['', Validators.required, this.dateFilter, Validators.pattern('^[0-9]+$') ],
+      eventTime: ['', Validators.required, this.isTimeDisabled, Validators.pattern('^[0-9]+$')],
+      eventTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
+      cakeTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
+      otherRequest: ['', Validators.pattern('^[a-zA-Z ]+$')],
       paymentStatus: ['PENDING'],
       status: ['Pending'],
     });
@@ -140,49 +145,79 @@ export class ReservationFormComponent implements OnInit {
         otherRequest: new FormControl(''),
       }),
     });
+
+    this.fetchReservations();
   }
 
-  fetchReservations() {
+  fetchReservations(): void {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
-        console.log('Fetched reservations:', data); // Debugging
+        console.log('Fetched reservations:', data);
+        this.reservations = data;
         this.fullyBookedDates = this.getFullyBookedDates(data);
         console.log('Fully booked dates:', this.fullyBookedDates);
       },
       error: (error) => {
         console.error('Error fetching reservations:', error); // Error handling
-      }
+      },
     });
   }
-
+  
   getFullyBookedDates(reservations: EditedReservationForm[]): Date[] {
-    // Logic to determine fully booked dates
-    // For simplicity, assuming a date is fully booked if there are more than 5 reservations on that date
+    // Map to count reservations per date
     const dateCounts: { [key: string]: number } = {};
+  
     reservations.forEach(reservation => {
-      const date = new Date(reservation.eventDate).toDateString();
+      const date = new Date(reservation.eventDate).toISOString().split('T')[0]; // Use ISO string for consistent date comparison
       dateCounts[date] = (dateCounts[date] || 0) + 1;
     });
-
+  
+    // Return fully booked dates (more than 5 reservations)
     return Object.keys(dateCounts)
       .filter(date => dateCounts[date] > 5)
       .map(date => new Date(date));
   }
-
+  
   dateFilter = (date: Date | null): boolean => {
     if (!date) {
       return false;
     }
+  
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set to start of the day
+  
     const isPastDate = date < today;
     const isFullyBooked = this.fullyBookedDates.some(
-      bookedDate => bookedDate.toDateString() === date.toDateString()
+      bookedDate => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
     );
+  
     const isAvailable = !isPastDate && !isFullyBooked;
+  
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;
   };
+
+  populateFullyBookedTimes(reservations: EditedReservationForm[]): void {
+    this.fullyBookedTimes = {}; // Reset before populating
+  
+    reservations.forEach(reservation => {
+      const date = new Date(reservation.eventDate).toISOString().split('T')[0];
+      if (!this.fullyBookedTimes[date]) {
+        this.fullyBookedTimes[date] = [];
+      }
+      this.fullyBookedTimes[date].push(reservation.eventTime); // Assume reservation.eventTime is a string like '10:00 AM'
+    });
+  }
+
+  isTimeDisabled(date: string, time: string): boolean {
+    const selectedDate = this.reservationForm.get('eventDate')?.value; 
+    if (!selectedDate) {
+      return false; // No date selected yet
+    }
+  
+    const selectedDateISO = new Date(selectedDate).toISOString().split('T')[0];
+    return this.fullyBookedTimes[selectedDateISO]?.includes(time) || false;
+  }
 
   openReservationForm() {
     this.isReservationOpen = true;
