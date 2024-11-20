@@ -28,5 +28,9 @@ export const CustomerRoutes: Routes = [
     loadComponent: () => import('./review-section/add-reviews/add-reviews.component').then((m) => m.AddReviewsComponent),
     canActivate: [hasRoleGuard],
     data: { roles: ['customer'] }
+  },
+  {
+    path: 'confirmation',
+    loadComponent: () => import('./reservation-form/confirmationPage/confirmationPage.component').then((m) => m.ConfirmationPageComponent),
   }
 ];

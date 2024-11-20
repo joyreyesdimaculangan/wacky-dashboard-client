@@ -23,11 +23,11 @@
         />
       </div>
 
-      <div class="lg:w-1/2 w-full lg:pl-6 flex flex-col overflow-y-auto max-h-[70vh]">
+      <div
+        class="lg:w-1/2 w-full lg:pl-6 flex flex-col overflow-y-auto max-h-[70vh]"
+      >
         <!-- Package Title -->
-        <h2
-        class="text-2xl font-semibold text-green-700 mb-3 text-left"
-        >
+        <h2 class="text-2xl font-semibold text-green-700 mb-3 text-left">
           {{ packageData?.name }}
         </h2>
         <!-- Package Description -->
@@ -60,23 +60,32 @@
           <!-- Aligning to the left -->
           <ul class="text-base text-gray-700 space-y-1">
             <li
-              *ngFor="let addOn of packageData?.availableAddOns"
+              *ngFor="let addOn of packageData?.availableAddOns || []"
               class="flex items-center"
             >
-              <i 
-              (click)="pushAddOn(addOn.addOnID)"
-              class="fas fa-plus-circle text-blue-500 mr-2"></i>
-              {{ addOn?.name }}
+              <input
+                type="checkbox"
+                [id]="addOn.addOnID"
+                (change)="onAddOnChange(addOn.addOnID, $event)"
+                class="mr-2"
+              />
+              <label [for]="addOn.addOnID">{{ addOn?.name }}</label>
             </li>
           </ul>
         </div>
 
         <!-- Action Buttons -->
         <div class="mt-4 flex justify-end space-x-3">
-          <button class="bg-gray-300 text-gray-700 text-base px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 transition" (click)="closeModal()">
+          <button
+            class="bg-gray-300 text-gray-700 text-base px-6 py-2 rounded-lg shadow-md hover:bg-gray-400 transition"
+            (click)="closeModal()"
+          >
             Close
           </button>
-          <button (click)="reservePackage()" class="bg-green-700 text-white text-base px-6 py-2 rounded-lg shadow-md hover:bg-green-800 transition">
+          <button
+            (click)="reservePackage()"
+            class="bg-green-700 text-white text-base px-6 py-2 rounded-lg shadow-md hover:bg-green-800 transition"
+          >
             Reserve Now
           </button>
         </div>

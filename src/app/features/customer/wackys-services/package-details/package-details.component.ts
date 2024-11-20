@@ -64,16 +64,18 @@ export class PackageDetailsComponent implements OnInit {
     console.log('Add-ons:', this.packageDetails.addOnsId());
   }
 
-  onAddOnChange(addOn: string, isChecked: boolean): void {
+  onAddOnChange(addOn: string, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
-      this.selectedAddOns.push(addOn);
+      this.packageDetails.addOnsId().push(addOn);
     } else {
-      const index = this.selectedAddOns.indexOf(addOn);
+      const index = this.packageDetails.addOnsId().indexOf(addOn);
       if (index > -1) {
-        this.selectedAddOns.splice(index, 1);
+        this.packageDetails.addOnsId().splice(index, 1);
       }
     }
-    this.addOnsSelected.emit(this.selectedAddOns);
+    this.addOnsSelected.emit(this.packageDetails.addOnsId());
+    console.log('Add-ons:', this.packageDetails.addOnsId());
   }
 
   getPackageInclusions() {

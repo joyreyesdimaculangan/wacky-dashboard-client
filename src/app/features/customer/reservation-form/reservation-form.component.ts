@@ -295,7 +295,7 @@ export class ReservationFormComponent implements OnInit {
         (response) => {
           console.log('Reservation created:', response);
           this.reservationSubmitted.emit(response);
-          this.close.emit();
+          this.router.navigate(['/customer/confirmation']);
           this.resetAddOns();
         },
         (error) => {

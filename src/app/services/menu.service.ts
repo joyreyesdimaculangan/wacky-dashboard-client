@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MenuService {
-  private readonly http = inject(HttpClient)
+  private readonly http = inject(HttpClient);
  
   private apiUrl = environment.apiUrl + '/menu';
 
