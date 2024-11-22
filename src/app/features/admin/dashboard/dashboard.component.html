@@ -8,49 +8,69 @@
       <h1 class="text-3xl font-bold text-green-600">Dashboard</h1>
       <div class="flex items-center space-x-4">
         <!-- Notification Button -->
-        <button class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none transition duration-200 ease-in-out">
+        <button
+          class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none transition duration-200 ease-in-out"
+        >
           <i class="fas fa-bell text-gray-600"></i>
-          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">3</span> <!-- Notification Count -->
+          <span
+            class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
+            >3</span
+          >
         </button>
 
         <!-- Admin Profile Dropdown -->
         <div class="relative" (click)="toggleDropdown()">
-          <button class="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 focus:outline-none transition duration-200 ease-in-out">
-            <img src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU" alt="Admin Profile" class="w-8 h-8 rounded-full mr-2" />
+          <button
+            class="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 focus:outline-none transition duration-200 ease-in-out"
+          >
+            <img
+              src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU"
+              alt="Admin Profile"
+              class="w-8 h-8 rounded-full mr-2"
+            />
             <span class="text-gray-800">John Doe</span>
             <i class="fas fa-caret-down ml-2"></i>
           </button>
-          <div *ngIf="dropdownOpen" class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</a>
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</a>
+          <div
+            *ngIf="dropdownOpen"
+            class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+          >
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >Profile</a
+            >
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >Settings</a
+            >
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >Logout</a
+            >
           </div>
         </div>
       </div>
     </div>
-
 
     <!-- Admin Greeting and Statistics -->
     <div class="flex flex-wrap gap-6 mb-8">
       <div class="flex-1 bg-white shadow-2xl rounded-lg p-6">
         <div class="mb-6">
           <div class="flex items-start space-x-4 mb-6">
-            <!-- Admin Profile Picture -->
             <img
               src="https://media.licdn.com/dms/image/D4E03AQEU5oUdF_SYkg/profile-displayphoto-shrink_800_800/0/1713251114252?e=1728518400&v=beta&t=i8RKxR53cdIGBIApcjJv-meYwxUrnUpQAHNhhbo11RU"
               alt="Admin Profile"
               class="w-20 h-20 rounded-full shadow-lg"
             />
             <div>
-              <!-- Welcome Message -->
-              <h2 class="text-xl font-semibold text-green-600">Welcome Back, John Doe!</h2>
+              <h2 class="text-xl font-semibold text-green-600">
+                Welcome Back, John Doe!
+              </h2>
               <p class="text-gray-600">Administrator</p>
-              <p class="text-gray-600 mt-2 font-medium text-lg">Here’s an overview of key metrics and recent updates.</p>
+              <p class="text-gray-600 mt-2 font-medium text-lg">
+                Here’s an overview of key metrics and recent updates.
+              </p>
             </div>
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Statistics Part -->
           <div class="bg-green-100 p-4 rounded-lg shadow-md">
             <h3 class="text-lg font-semibold text-green-800">Inquiries</h3>
             <div class="text-2xl font-bold text-green-600">{{ inquiries }}</div>
@@ -65,19 +85,21 @@
           </div>
         </div>
       </div>
-
-      <!-- Enhanced Notifications -->
       <div class="flex-1 bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-green-600 mb-4">Notifications </h2>
+        <h2 class="text-xl font-semibold text-green-600 mb-4">Notifications</h2>
         <div class="max-h-60 overflow-y-auto">
           <ul class="space-y-3">
             @for (notification of notifications; track $index) {
-            <li class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out">
+            <li
+              class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out"
+            >
               <i class="fas fa-bell text-green-500 mr-3"></i>
               <div>
-                <p class="font-semibold">{{ notification.title }}</p> <!-- Notification Title -->
-                <p class="text-sm text-gray-500">{{ notification.message }}</p> <!-- Notification Message -->
-                <span class="text-xs text-gray-400">{{ notification.date | date:'short' }}</span> <!-- Timestamp -->
+                <p class="font-semibold">{{ notification.title }}</p>
+                <p class="text-sm text-gray-500">{{ notification.message }}</p>
+                <span class="text-xs text-gray-400">{{
+                  notification.date | date : "short"
+                }}</span>
               </div>
             </li>
             }
@@ -88,45 +110,147 @@
 
     <!-- Filter Buttons -->
     <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
-      <button 
-        (click)="setFilter('all')" 
-        [ngClass]="{'bg-green-700 text-white': activeFilter === 'all', 'text-green-700 border-green-600 bg-white hover:bg-green-700': activeFilter !== 'all'}" 
-        class="border hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out">
+      <button
+        (click)="setFilter('all')"
+        [ngClass]="{
+          'bg-green-700 text-white': activeFilter === 'all',
+          'text-green-700 border-green-600 bg-white hover:bg-green-700':
+            activeFilter !== 'all'
+        }"
+        class="border hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
+      >
         All Sales
       </button>
-      
-      <button 
-        (click)="setFilter('sales')" 
-        [ngClass]="{'bg-green-700 text-white': activeFilter === 'sales', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'sales'}" 
-        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out">
+
+      <button
+        (click)="setFilter('sales')"
+        [ngClass]="{
+          'bg-green-700 text-white': activeFilter === 'sales',
+          'text-gray-900 border-white hover:bg-gray-200':
+            activeFilter !== 'sales'
+        }"
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
+      >
         Revenue
       </button>
-      
-      <button 
-        (click)="setFilter('reservations')" 
-        [ngClass]="{'bg-green-700 text-white': activeFilter === 'reservations', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'reservations'}" 
-        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out">
+
+      <button
+        (click)="setFilter('reservations')"
+        [ngClass]="{
+          'bg-green-700 text-white': activeFilter === 'reservations',
+          'text-gray-900 border-white hover:bg-gray-200':
+            activeFilter !== 'reservations'
+        }"
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
+      >
         Reservations
       </button>
-      
-      <button 
-        (click)="setFilter('customers')" 
-        [ngClass]="{'bg-green-700 text-white': activeFilter === 'customers', 'text-gray-900 border-white hover:bg-gray-200': activeFilter !== 'customers'}" 
-        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out">
+
+      <button
+        (click)="setFilter('customers')"
+        [ngClass]="{
+          'bg-green-700 text-white': activeFilter === 'customers',
+          'text-gray-900 border-white hover:bg-gray-200':
+            activeFilter !== 'customers'
+        }"
+        class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
+      >
         Customers
       </button>
     </div>
 
+    <!-- Favorite and Least Favorite Packages -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-green-600 mb-4">
+          Top Favorite Packages
+        </h2>
+        <ul class="space-y-3">
+          <li
+            *ngFor="let package of topFavoritePackages"
+            class="p-4 bg-green-50 rounded-lg flex items-center justify-between"
+          >
+            <span class="font-medium text-green-700">{{ package.name }}</span>
+            <span
+              class="bg-green-600 text-white text-sm font-semibold py-1 px-2 rounded-full"
+              >{{ package.count }} Favorites</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-red-600 mb-4">
+          Least Favorite Packages
+        </h2>
+        <ul class="space-y-3">
+          <li
+            *ngFor="let package of leastSoldPackages"
+            class="p-4 bg-red-50 rounded-lg flex items-center justify-between"
+          >
+            <span class="font-medium text-red-700">{{ package.name }}</span>
+            <span
+              class="bg-red-600 text-white text-sm font-semibold py-1 px-2 rounded-full"
+              >{{ package.count }} Dislikes</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <!-- Graph Cards (Filtered) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-      @for (card of filteredCards; track $index) {
-      <div class="bg-white shadow-2xl rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-3xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div *ngFor="let card of cards; let i = index" class="bg-white shadow-lg rounded-lg p-6 flex flex-col">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ card.title }}</h2>
-        <div class="h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-          <p class="text-gray-600">{{ card.content }}</p>
+        <div class="flex-grow">
+          <!-- Render chart for cards with charts -->
+          <ng-container *ngIf="card.category === 'monthly_reservations'; else otherCharts">
+            <apx-chart
+              [series]="lineChartOptions.series || []"
+              [chart]="lineChartOptions.chart || { type: 'line' }"
+              [xaxis]="lineChartOptions.xaxis || {}"
+              [dataLabels]="lineChartOptions.dataLabels || {}"
+              [title]="lineChartOptions.title || {}"
+              class="w-full h-full"
+            ></apx-chart>
+          </ng-container>
+          <ng-template #otherCharts>
+            <ng-container *ngIf="card.category === 'monthly_reservations_per_year'; else eventPackages">
+              <apx-chart
+                [series]="barChartOptions.series || []"
+                [chart]="barChartOptions.chart || { type: 'bar' }"
+                [xaxis]="barChartOptions.xaxis || {}"
+                [dataLabels]="barChartOptions.dataLabels || {}"
+                [title]="barChartOptions.title || {}"
+                class="w-full h-full"
+              ></apx-chart>
+            </ng-container>
+            <ng-template #eventPackages>
+              <ng-container *ngIf="card.category === 'event_packages'; else reservationDensity">
+                <apx-chart
+                  [series]="areaChartOptions.series || []"
+                  [chart]="areaChartOptions.chart || { type: 'area' }"
+                  [xaxis]="areaChartOptions.xaxis || {}"
+                  [dataLabels]="areaChartOptions.dataLabels || {}"
+                  [title]="areaChartOptions.title || {}"
+                  [fill]="areaChartOptions.fill || {}"
+                  class="w-full h-full"
+                ></apx-chart>
+              </ng-container>
+              <ng-template #reservationDensity>
+                <ng-container *ngIf="card.category === 'reservation_density'">
+                  <apx-chart
+                    [series]="heatmapChartOptions.series || []"
+                    [chart]="heatmapChartOptions.chart || { type: 'heatmap' }"
+                    [plotOptions]="heatmapChartOptions.plotOptions || {}"
+                    [title]="heatmapChartOptions.title || {}"
+                    class="w-full h-full"
+                  ></apx-chart>
+                </ng-container>
+              </ng-template>
+            </ng-template>
+          </ng-template>
         </div>
       </div>
-      }
     </div>
   </main>
 </div>

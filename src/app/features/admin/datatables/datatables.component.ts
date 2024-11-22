@@ -37,10 +37,10 @@ export class DatatablesComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 5;
   itemsPerPageOptions: number[] = [5, 10, 15, 20];
-  viewingItem: any = null;
-  addingItem: any = null;
-  editingItem: any = null;
-  deletingItem: any = null;
+  viewingItem: EditedReservationForm | any = null;
+  addingItem: EditedReservationForm | any = null;
+  editingItem: EditedReservationForm | any = null;
+  deletingItem: EditedReservationForm | any = null;
   selectedTab: string = 'all';
 
   private readonly reservationService = inject(ReservationService);
@@ -83,8 +83,13 @@ export class DatatablesComponent implements OnInit {
   }
 
   getReservations() {
-    this.reservationService.getReservations().subscribe((data: any) => {
-      this.reservationData = data;
+    this.reservationService.getReservations().subscribe({
+      next: (data: EditedReservationForm[]) => {
+        this.reservationData = data.reverse();
+      },
+      error: (error) => {
+        console.error('Error fetching reservations:', error); // Error handling
+      }
     });
   }
 
@@ -166,7 +171,7 @@ export class DatatablesComponent implements OnInit {
       const packageName = item.package?.name || '';
       
       return (
-        (this.filters.packageType ? (item.package?.name && this.packageMap[packageName]?.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
+        (this.filters.packageType ? (item.package?.name && packageName.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
         (this.filters.name ? item.name.toLowerCase().includes(this.filters.name.toLowerCase()) : true) &&
         (this.filters.contactNumber ? item.contactNumber.toString().includes(this.filters.contactNumber) : true) &&
         (this.filters.numberOfPax ? item.numberOfPax.toString().includes(this.filters.numberOfPax) : true) &&
@@ -175,6 +180,7 @@ export class DatatablesComponent implements OnInit {
         (this.filters.status ? item.status.toLowerCase().includes(this.filters.status.toLowerCase()) : true) &&
         (this.filters.paymentStatus ? item.paymentStatus.toLowerCase().includes(this.filters.paymentStatus.toLowerCase()) : true) &&
         (this.searchText ? (
+          item.package?.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
           item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
           item.contactNumber.toString().includes(this.searchText) ||
           item.numberOfPax.toString().includes(this.searchText) ||
@@ -216,8 +222,12 @@ export class DatatablesComponent implements OnInit {
     }
   }
 
-  changeItemsPerPage() {
-    this.currentPage = 1;
+  changeItemsPerPage(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    if (selectElement) {
+      this.itemsPerPage = parseInt(selectElement.value, 10);
+      this.currentPage = 1; // Reset to first page
+    }
   }
 
   resetSearch() {

@@ -1,117 +1,13 @@
-/* Custom styles for the calendar */
-#calendar {
-  .fc-toolbar {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    padding: 10px;
-  }
+/* Custom styles for FullCalendar events */
+.fc-event {
+  font-size: 1.5rem; /* Adjust the font size as needed */
+  padding: 0.5rem; /* Adjust the padding as needed */
+}
 
-  .fc-button {
-    background-color: #378006;
-    border: none;
-    color: #ffffff;
-    margin: 0 5px;
-    padding: 5px 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
+.fc-event-title {
+  font-weight: bold; /* Make the event title bold */
+}
 
-  .fc-button:hover {
-    background-color: #2e6b05;
-  }
-
-  .fc-button:focus {
-    box-shadow: none;
-  }
-
-  .fc-button-group {
-    margin: 0 5px;
-  }
-
-  .fc-event {
-    border: 1px solid #ffffff;
-    background-color: #378006;
-    color: #ffffff;
-    padding: 5px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-
-  .fc-event:hover {
-    background-color: #2e6b05;
-  }
-
-  .fc-daygrid-day {
-    border: 1px solid #dee2e6;
-  }
-
-  .fc-daygrid-day-number {
-    color: #495057;
-  }
-
-  .fc-daygrid-day-top {
-    padding: 5px;
-  }
-
-  .fc-daygrid-day-frame {
-    padding: 5px;
-  }
-
-  .fc-daygrid-day-events {
-    margin-top: 5px;
-  }
-
-  .fc-daygrid-event-dot {
-    border: 1px solid #ffffff;
-    background-color: #378006;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-dot {
-    background-color: #2e6b05;
-  }
-
-  .fc-daygrid-event-title {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-title {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event-time {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-time {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event:hover {
-    background-color: #2e6b05;
-  }
-
-  .fc-daygrid-event-dot {
-    border: 1px solid #ffffff;
-    background-color: #378006;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-dot {
-    background-color: #2e6b05;
-  }
-
-  .fc-daygrid-event-title {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-title {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event-time {
-    color: #ffffff;
-  }
-
-  .fc-daygrid-event:hover .fc-daygrid-event-time {
-    color: #ffffff;
-  }
+.fc-event-time {
+  font-size: 1.2rem; /* Adjust the font size of the event time */
 }

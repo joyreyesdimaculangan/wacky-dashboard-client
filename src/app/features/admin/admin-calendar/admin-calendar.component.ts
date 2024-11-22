@@ -6,16 +6,17 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Router } from '@angular/router';
-import { DrawerComponent } from "../drawer/drawer.component";
+import { DrawerComponent } from '../drawer/drawer.component';
 import { ReservationService } from '../../../services/reservation.service';
 import { EditedReservationForm } from '../../../models/reservation-form';
+import moment from 'moment';
 
 @Component({
   selector: 'app-admin-calendar',
   standalone: true,
   imports: [CommonModule, DrawerComponent],
   templateUrl: './admin-calendar.component.html',
-  styleUrls: ['./admin-calendar.component.scss']
+  styleUrls: ['./admin-calendar.component.scss'],
 })
 export class AdminCalendarComponent implements OnInit {
   calendar!: Calendar;
@@ -32,14 +33,21 @@ export class AdminCalendarComponent implements OnInit {
   fetchReservations() {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
-        console.log('Fetched reservations:', data); // Debugging
-        this.reservations = data;
+        this.reservations = data.map((reservation) => ({
+          ...reservation,
+          start: this.convertToISO(reservation.eventDate),
+          end: this.convertToISO(reservation.eventDate),
+        }));
         this.initializeCalendar();
       },
       error: (error) => {
         console.error('Error fetching reservations:', error); // Error handling
-      }
+      },
     });
+  }
+
+  convertToISO(dateString: string): string {
+    return moment(dateString, 'MM/DD/YYYY').toISOString();
   }
 
   initializeCalendar() {
@@ -49,14 +57,17 @@ export class AdminCalendarComponent implements OnInit {
       const venues = [
         { id: 'venueA', title: 'Venue A (100-200 Pax)' },
         { id: 'venueB', title: 'Venue B (50-99 Pax)' },
-        { id: 'venueC', title: 'Venue C (<=50 Pax)' }
+        { id: 'venueC', title: 'Venue C (<=50 Pax)' },
       ];
 
-      const events = this.reservations.map(reservation => {
+      const events = this.reservations.map((reservation) => {
         let resourceId = '';
         if (reservation.numberOfPax >= 100 && reservation.numberOfPax <= 200) {
           resourceId = 'venueA';
-        } else if (reservation.numberOfPax >= 50 && reservation.numberOfPax < 100) {
+        } else if (
+          reservation.numberOfPax >= 50 &&
+          reservation.numberOfPax < 100
+        ) {
           resourceId = 'venueB';
         } else if (reservation.numberOfPax <= 50) {
           resourceId = 'venueC';
@@ -67,7 +78,7 @@ export class AdminCalendarComponent implements OnInit {
           title: reservation.package?.name,
           start: reservation.eventDate,
           end: reservation.eventDate, // Assuming eventDate is the same for start and end
-          resourceId: resourceId // Assign the appropriate venue based on number of pax
+          resourceId: resourceId, // Assign the appropriate venue based on number of pax
         };
       });
 
@@ -76,42 +87,69 @@ export class AdminCalendarComponent implements OnInit {
 
       this.calendar = new Calendar(calendarEl, {
         schedulerLicenseKey: this.schedulerLicenseKey,
-        plugins: [resourceTimelinePlugin, dayGridPlugin, timeGridPlugin, interactionPlugin],
-        initialView: 'resourceTimeline',
+        plugins: [
+          resourceTimelinePlugin,
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin,
+        ],
+        initialView: 'dayGridMonth',
         resourceAreaHeaderContent: 'Venue',
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth'
+          right: 'dayGridMonth,timeGridWeek,timeGridDay',
+        },
+        views: {
+          dayGridMonth: {
+            titleFormat: { year: 'numeric', month: 'long' },
+          },
+          timeGridWeek: {
+            titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+          },
+          timeGridDay: {
+            titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+          },
         },
         resources: venues,
         events: events,
         eventClick: this.handleEventClick.bind(this),
         timeZone: 'UTC', // Ensure consistent timezone handling
-        height: 'auto', // Adjust height to fit content
-        contentHeight: 'auto', // Adjust content height to fit content
+        height: '100%', // Ensure the calendar fits the container
+        contentHeight: 'auto', // Adjust the content height to fit the container
+        slotMinTime: '08:00:00', // Adjust the start time of the grid
+        slotMaxTime: '20:00:00', // Adjust the end time of the grid
+        slotDuration: '00:30:00', // Adjust the duration of each slot
+        eventContent: function (arg) {
+          return {
+            html: `<div class="fc-event-title">${arg.event.title}</div>`,
+          };
+        },
         aspectRatio: 1.5, // Adjust aspect ratio for better layout
         eventColor: '#378006', // Set a default event color
         eventTextColor: '#ffffff', // Set a default event text color
         eventDisplay: 'block', // Display events as blocks
         eventBorderColor: '#ffffff', // Set a default event border color
         eventBackgroundColor: '#378006', // Set a default event background color
-        eventTimeFormat: { // Customize event time format
+        eventTimeFormat: {
+          // Customize event time format
           hour: '2-digit',
           minute: '2-digit',
-          meridiem: false
+          meridiem: false,
         },
-        slotLabelFormat: { // Customize slot label format
+        slotLabelFormat: {
+          // Customize slot label format
           hour: '2-digit',
           minute: '2-digit',
-          meridiem: false
+          meridiem: false,
         },
-        dayHeaderFormat: { // Customize day header format
+        dayHeaderFormat: {
+          // Customize day header format
           weekday: 'short',
           month: 'numeric',
           day: 'numeric',
-          omitCommas: true
-        }
+          omitCommas: true,
+        },
       });
 
       this.calendar.render();

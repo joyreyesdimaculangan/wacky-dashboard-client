@@ -362,7 +362,6 @@ export class EditReservationModalComponent implements OnInit {
         this.item?.paymentStatus || 'PENDING',
         Validators.required,
       ],
-      addOns: [this.item?.addOns || ''],
     });
 
     this.getReservationById();

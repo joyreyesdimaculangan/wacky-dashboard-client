@@ -51,5 +51,9 @@ export const AdminRoutes: Routes = [
   {
     path: 'edit-reservations/:reservationID',
     loadComponent: () => import('./reservation-modal-forms/edit-reservation-modal.component').then((m) => m.EditReservationModalComponent),
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./notification-page/notification-page.component').then((m) => m.NotificationPageComponent),
   }
 ];

@@ -17,20 +17,6 @@ export class ReservationService {
 
   private apiUrl = environment.apiUrl + '/reservation'; // NestJS API endpoint
 
-  // Get all reservation data locally
-  // getReservationData() {
-  //   return this.reservation;
-  // }
-
-  // Get specific statistics locally
-  getStatistics() {
-  return {
-      inquiries: this.reservation.inquiries,
-      pending: this.reservation.pending,
-      approved: this.reservation.approved,
-    };
-  }
-
   // ------------------- New Backend Methods -------------------
 
   // Fetch all reservations from the backend
