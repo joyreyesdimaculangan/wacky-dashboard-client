@@ -18,10 +18,16 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'dashboard',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   {
     path: 'reservations',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./datatables/datatables.component').then((m) => m.DatatablesComponent),
   },
   {
@@ -34,6 +40,9 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'add-reservations',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./reservation-modal-forms/add-reservation-modal.component').then((m) => m.AddReservationModalComponent),
   },
   {
@@ -63,6 +72,9 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'edit-reservations/:reservationID',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./reservation-modal-forms/edit-reservation-modal.component').then((m) => m.EditReservationModalComponent),
   },
   {

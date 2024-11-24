@@ -201,7 +201,7 @@ import { Location } from '@angular/common';
               <span
                 class="inline-block px-3 py-1 font-semibold text-sm rounded-full"
                 [ngClass]="{
-                  'bg-green-200 text-green-800': item?.paymentStatus === 'PAID',
+                  'bg-green-200 text-green-800': item?.paymentStatus === 'FULLY_PAID',
                   'bg-yellow-200 text-yellow-800':
                     item?.paymentStatus === 'PENDING',
                   'bg-blue-200 text-blue-800':

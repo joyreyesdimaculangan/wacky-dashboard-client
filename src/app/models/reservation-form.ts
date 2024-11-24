@@ -33,7 +33,7 @@ export interface EditedReservationForm {
     package?: ViewPackages,
     accountProfileId: string | null | undefined,
     status: 'Pending' | 'Approved' | 'Cancelled' 
-    paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'PAID'
+    paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'FULLY_PAID'
     addOnIds: string[],
 }
   

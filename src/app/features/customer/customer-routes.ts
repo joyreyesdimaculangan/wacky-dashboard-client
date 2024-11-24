@@ -19,10 +19,16 @@ export const CustomerRoutes: Routes = [
   },
   {
     path: 'edit-profile',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('../../features/customer/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
   },
   {
     path: 'reservations',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./reservation-form/reservation-form.component').then((m) => m.ReservationFormComponent),
     canActivate: [hasRoleGuard],
     data: { roles: ['customer'] }
@@ -35,6 +41,9 @@ export const CustomerRoutes: Routes = [
   },
   {
     path: 'confirmation',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./reservation-form/confirmationPage/confirmationPage.component').then((m) => m.ConfirmationPageComponent),
   },
 ];

@@ -14,7 +14,19 @@ export class AccountProfileService {
     return this.http.get<any>(this.apiUrl);
   }
 
+  getAccountProfileByID(id: string){
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
   createAccountProfile(accountProfile: any) {
     return this.http.post<any>(this.apiUrl, accountProfile);
+  }
+
+  updateAccountProfile(id: string, accountProfile: any) {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, accountProfile);
+  }
+
+  deleteAccountProfile(id: string) {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

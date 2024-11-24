@@ -26,6 +26,8 @@ import { GetAccountIdService } from '../../customer/reservation-form/getAccountI
 import { PackageName } from '../../../models/packages';
 import { GetPackageNameService } from '../../customer/reservation-form/getPackageName.service';
 import { GetPackageAddOnsService } from '../../customer/reservation-form/getPackageAddOns.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-reservation-modal',
@@ -65,7 +67,7 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
 
           <!-- Subheader for Package Name -->
           <h3 class="text-xl font-semibold mb-6 text-gray-700 border-b pb-4">
-            {{ item?.package?.name }}
+            {{ packageName }}
           </h3>
 
           <!-- Edit Reservation Form -->
@@ -182,11 +184,10 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
 
             <!-- Time Picker -->
             <div class="form-group mb-6">
-              <label
-                class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                >Time</label
+              <label class="block text-sm font-medium text-gray-700"
+                >Select Time</label
               >
-              <ul class="grid grid-cols-2 gap-4">
+              <ul class="grid grid-cols-2 gap-4 mt-2">
                 <li *ngFor="let time of availableTimes; let i = index">
                   <input
                     type="radio"
@@ -194,22 +195,14 @@ import { GetPackageAddOnsService } from '../../customer/reservation-form/getPack
                     [value]="time"
                     class="hidden peer"
                     formControlName="eventTime"
-                    [disabled]="
-                      isTimeDisabled(
-                        adminEditReservationForm.get('eventDate')?.value,
-                        time
-                      )
-                    "
+                    [disabled]="isTimeDisabled(time)"
                     required
                   />
                   <label
                     [for]="'time' + i"
                     class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
                     [ngClass]="{
-                      'opacity-50 cursor-not-allowed': isTimeDisabled(
-                        adminEditReservationForm.get('eventDate')?.value,
-                        time
-                      )
+                      'opacity-50 cursor-not-allowed': isTimeDisabled(time)
                     }"
                   >
                     {{ time }}
@@ -327,9 +320,11 @@ export class EditReservationModalComponent implements OnInit {
   accountProfileId!: null | string | undefined;
   addOnsId: string[] = [];
 
+  location = inject(Location);
   packages: any[] = [];
   accountProfileName: any[] = [];
   packageName: PackageName | null = null;
+  toastNotifications = inject(ToastNotificationsComponent);
 
   fullyBookedDates: Date[] = [];
   fullyBookedTimes: { [date: string]: string[] } = {};
@@ -388,13 +383,28 @@ export class EditReservationModalComponent implements OnInit {
     const dateCounts: { [key: string]: number } = {};
 
     reservations.forEach((reservation) => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0]; // Use ISO string for consistent date comparison
-      dateCounts[date] = (dateCounts[date] || 0) + 1;
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
+      }
+
+      eventDate.setHours(adjustedHours, minutes);
+
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
+      dateCounts[localDateISO] = (dateCounts[localDateISO] || 0) + 1;
     });
+
+    console.log('Date counts:', dateCounts);
 
     // Return fully booked dates (more than 6 reservations)
     return Object.keys(dateCounts)
-      .filter((date) => dateCounts[date] > 6)
+      .filter((date) => dateCounts[date] >= 6)
       .map((date) => new Date(date));
   }
 
@@ -407,13 +417,17 @@ export class EditReservationModalComponent implements OnInit {
     today.setHours(0, 0, 0, 0); // Set to start of the day
 
     const isPastDate = date < today;
+    const oneMonthFromToday = new Date();
+    oneMonthFromToday.setMonth(today.getMonth() + 1);
+
+    const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
       (bookedDate) =>
-        bookedDate.toISOString().split('T')[0] ===
-        date.toISOString().split('T')[0]
+        bookedDate.toLocaleDateString('en-CA') ===
+        date.toLocaleDateString('en-CA')
     );
 
-    const isAvailable = !isPastDate && !isFullyBooked;
+    const isAvailable = !isPastDate && !isWithinOneMonth && !isFullyBooked;
 
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;
@@ -423,21 +437,34 @@ export class EditReservationModalComponent implements OnInit {
     this.fullyBookedTimes = {}; // Reset before populating
 
     reservations.forEach((reservation) => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0];
-      if (!this.fullyBookedTimes[date]) {
-        this.fullyBookedTimes[date] = [];
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
       }
-      this.fullyBookedTimes[date].push(reservation.eventTime); // Assume reservation.eventTime is a string like '10:00 AM'
+
+      eventDate.setHours(adjustedHours, minutes);
+
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
+      if (!this.fullyBookedTimes[localDateISO]) {
+        this.fullyBookedTimes[localDateISO] = [];
+      }
+      this.fullyBookedTimes[localDateISO].push(reservation.eventTime);
     });
   }
 
-  isTimeDisabled(date: string, time: string): boolean {
+  isTimeDisabled(time: string): boolean {
     const selectedDate = this.adminEditReservationForm.get('eventDate')?.value;
     if (!selectedDate) {
       return false; // No date selected yet
     }
 
-    const selectedDateISO = new Date(selectedDate).toISOString().split('T')[0];
+    const selectedDateISO = new Date(selectedDate).toLocaleDateString('en-CA');
     return this.fullyBookedTimes[selectedDateISO]?.includes(time) || false;
   }
 
@@ -468,17 +495,18 @@ export class EditReservationModalComponent implements OnInit {
       .subscribe(
         () => {
           console.log('Reservation updated successfully', reservationID);
+          this.toastNotifications.showSuccess('Reservation updated successfully', 'Success');
           this.save.emit(this.adminEditReservationForm.value);
           this.router.navigate(['/admin/reservations']); // Navigate back to reservations list
         },
         (error: any) => {
           console.error('Error updating reservation:', reservationID, error);
+          this.toastNotifications.showError('Error updating reservation', 'Error');
         }
       );
   }
 
   cancelEdit() {
-    this.cancel.emit(); // Emit event to cancel editing
-    this.router.navigate(['/admin/reservations']); // Navigate back to reservations list
+    this.location.back();
   }
 }

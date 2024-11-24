@@ -209,10 +209,7 @@
                       class="hidden peer"
                       formControlName="eventTime"
                       [disabled]="
-                        isTimeDisabled(
-                          reservationForm.get('eventDate')?.value,
-                          time
-                        )
+                        isTimeDisabled(time)
                       "
                       required
                     />
@@ -220,10 +217,7 @@
                       [for]="'time' + i"
                       class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
                       [ngClass]="{
-                        'opacity-50 cursor-not-allowed': isTimeDisabled(
-                          reservationForm.get('eventDate')?.value,
-                          time
-                        )
+                        'opacity-50 cursor-not-allowed': isTimeDisabled(time)
                       }"
                     >
                       {{ time }}
@@ -390,7 +384,7 @@
                   <p class="text-base font-medium text-gray-700">
                     <strong>Package Type: </strong>
                     <span class="text-gray-900">
-                      {{ reservationForm.get("packageName")?.value }}
+                      {{ packageName }}
                     </span>
                   </p>
                 </div>
@@ -466,7 +460,7 @@
                 </div>
 
                 <!-- Special Requests -->
-                <div class="border-gray-300 py-2 col-span-2">
+                <div class="border-b-2 border-gray-300 py-2">
                   <p class="text-base font-medium text-gray-700">
                     <strong>Special Requests: </strong>
                     <span class="text-gray-900">{{
@@ -480,7 +474,7 @@
                   <p class="text-base font-medium text-gray-700">
                     <strong>AddOns: </strong>
                     <span class="text-gray-900">{{
-                      reservationForm.get("addOns")?.value
+                      addOnsName
                     }}</span>
                   </p>
                 </div>

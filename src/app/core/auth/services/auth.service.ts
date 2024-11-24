@@ -34,8 +34,11 @@ export class AuthService {
       this.userInfo = this.getUser(token);
       this.user.set(this.userInfo);
       this.accountType.set(this.userInfo?.account_type);
+      this.accountProfileName = this.userInfo?.account?.accountProfileName; 
       console.log('User Info:', this.userInfo);
       this._isLoggedIn$.next(true);
+    } else {
+      this.loadUserInfoFromLocalStorage();
     }
   }
 
@@ -72,7 +75,11 @@ export class AuthService {
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
         this.accountProfileName = response.accountProfileName;
-        this.getAccountIdService.setAccountProfileName(response.accountProfileId, response.accountProfileName);
+        this.getAccountIdService.setAccountProfileName(
+          response.accountProfileId,
+          response.accountProfileName
+        );
+        this.saveUserInfoToLocalStorage();
       }),
       catchError((error) => {
         console.error('Login failed:', error);
@@ -81,7 +88,14 @@ export class AuthService {
     );
   }
 
-  register(name: string, contactNo: string, address: string, email: string, password: string, confirmPassword: string): Observable<any> {
+  register(
+    name: string,
+    contactNo: string,
+    address: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
     const user = { name, contactNo, address, email, password, confirmPassword };
     return this.http.post(`${this.apiUrl}/register`, user).pipe(
       tap((response: any) => {
@@ -112,17 +126,30 @@ export class AuthService {
   }
 
   resetPassword(newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, { newPassword }).pipe(
+    return this.http
+      .post(`${this.apiUrl}/reset-password`, { newPassword })
+      .pipe(
+        tap((response: any) => {
+          console.log('Password reset:', response);
+        }),
+        catchError((error) => {
+          console.error('Password reset failed:', error);
+          return throwError(error);
+        })
+      );
+  }
+
+  updateUserProfile(updatedProfile: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update-profile`, updatedProfile).pipe(
       tap((response: any) => {
-        console.log('Password reset:', response);
+        console.log('Profile updated successfully:', response);
       }),
       catchError((error) => {
-        console.error('Password reset failed:', error);
+        console.error('Profile update failed:', error);
         return throwError(error);
       })
     );
   }
-
 
   isLoggedIn(): boolean {
     return this._isLoggedIn$.value;
@@ -133,12 +160,20 @@ export class AuthService {
   }
 
   logout() {
+    const token = localStorage.getItem(environment.TOKEN_NAME);
+    if (token) {
+        localStorage.removeItem(environment.TOKEN_NAME);
+    }
+
     this._isLoggedIn$.next(false);
-    localStorage.removeItem(environment.TOKEN_NAME);
     this.userInfo = null;
-    this.user.set(null);
+    this.user.set(null); 
     this.accountType.set(undefined);
+    this.accountProfileName = undefined;
+
+    this.router.navigate(['/home']);
   }
+
 
   public isAdmin(): boolean {
     return this.userInfo?.account_type === 'admin';
@@ -154,5 +189,22 @@ export class AuthService {
       return null;
     }
     return JSON.parse(atob(token.split('.')[1])) as User;
+  }
+
+  private saveUserInfoToLocalStorage(): void {
+    if (this.userInfo) {
+      localStorage.setItem('userInfo', JSON.stringify(this.userInfo));
+    }
+  }
+
+  private loadUserInfoFromLocalStorage(): void {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      this.userInfo = JSON.parse(userInfo);
+      this.user.set(this.userInfo);
+      this.accountType.set(this.userInfo?.account_type);
+      this.accountProfileName = this.userInfo?.account?.accountProfileName;
+      this._isLoggedIn$.next(true);
+    }
   }
 }

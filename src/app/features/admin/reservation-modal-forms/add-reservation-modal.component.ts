@@ -30,6 +30,7 @@ import { environment } from '../../../../environments/environment.development';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { EditedReservationForm } from '../../../models/reservation-form';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-add-reservation-modal',
@@ -63,7 +64,7 @@ import { EditedReservationForm } from '../../../models/reservation-form';
 
         <!-- Modal Header -->
         <h2
-          class="text-3xl font-extrabold mb-8 text-green-700 text-center text-green py-2 rounded-lg"
+          class="text-3xl font-extrabold mb-8 text-green-700 text-center py-2 rounded-lg"
         >
           Create Reservation
         </h2>
@@ -108,10 +109,20 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:ring-green-500 focus:border-green-500 transition-all"
                 required
               />
-              <mat-error *ngIf="adminReservationForm.get('name')?.hasError('required') && adminReservationForm.get('name')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('name')?.hasError('required') &&
+                  adminReservationForm.get('name')?.touched
+                "
+              >
                 Please enter a name
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('name')?.hasError('pattern') && adminReservationForm.get('name')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('name')?.hasError('pattern') &&
+                  adminReservationForm.get('name')?.touched
+                "
+              >
                 Please enter a valid name
               </mat-error>
             </div>
@@ -131,10 +142,24 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:ring-green-500 focus:border-green-500 transition-all"
                 required
               />
-              <mat-error *ngIf="adminReservationForm.get('contactNumber')?.hasError('required') && adminReservationForm.get('contactNumber')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('contactNumber')
+                    ?.hasError('required') &&
+                  adminReservationForm.get('contactNumber')?.touched
+                "
+              >
                 Please enter a contact number
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('contactNumber')?.hasError('pattern') && adminReservationForm.get('contactNumber')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('contactNumber')
+                    ?.hasError('pattern') &&
+                  adminReservationForm.get('contactNumber')?.touched
+                "
+              >
                 Please enter a valid contact number
               </mat-error>
             </div>
@@ -155,53 +180,83 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 required
                 min="1"
               />
-              <mat-error *ngIf="adminReservationForm.get('numberOfPax')?.hasError('required') && adminReservationForm.get('numberOfPax')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('numberOfPax')
+                    ?.hasError('required') &&
+                  adminReservationForm.get('numberOfPax')?.touched
+                "
+              >
                 Please enter the number of pax
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('numberOfPax')?.hasError('min') && adminReservationForm.get('numberOfPax')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('numberOfPax')?.hasError('min') &&
+                  adminReservationForm.get('numberOfPax')?.touched
+                "
+              >
                 Minimum of 50 pax
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('numberOfPax')?.hasError('max') && adminReservationForm.get('numberOfPax')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('numberOfPax')?.hasError('max') &&
+                  adminReservationForm.get('numberOfPax')?.touched
+                "
+              >
                 Maximum of 200 pax
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('numberOfPax')?.hasError('pattern') && adminReservationForm.get('numberOfPax')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('numberOfPax')
+                    ?.hasError('pattern') &&
+                  adminReservationForm.get('numberOfPax')?.touched
+                "
+              >
                 Please enter a valid number
               </mat-error>
             </div>
 
-            <!-- Reservation Date -->
-            <div class="form-group relative">
-              <label
-                for="eventDate"
-                class="block text-sm font-medium text-gray-700"
-                >Reservation Date</label
+            <!-- Date Picker -->
+
+            <label
+              for="datepicker"
+              class="block text-base font-semibold text-gray-800 mb-2 text-left"
+              >Date</label
+            >
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                [matDatepicker]="datepicker"
+                [matDatepickerFilter]="dateFilter"
+                formControlName="eventDate"
+                placeholder="Select a date"
+                class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out"
+              />
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('eventDate')?.hasError('required') &&
+                  adminReservationForm.get('eventDate')?.touched
+                "
               >
-              <mat-form-field appearance="outline" class="w-full">
-                <input
-                  matInput
-                  [matDatepicker]="datepicker"
-                  [matDatepickerFilter]="dateFilter"
-                  formControlName="eventDate"
-                  placeholder="Select a date"
-                  class="text-sm p-3 text-gray-900 focus:ring-green-500 focus:border-green-500 w-full rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out"
-                />
-                <mat-error *ngIf="adminReservationForm.get('eventDate')?.hasError('required') && adminReservationForm.get('eventDate')?.touched">
-                  Please select a date
-                </mat-error>
-                <mat-error
-                    *ngIf="
-                      adminReservationForm.get('eventDate')?.hasError('matDatepickerFilter') &&
-                      adminReservationForm.get('eventDate')?.touched
-                    "
-                    >Event date is unavailable</mat-error
-                  >
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="datepicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #datepicker></mat-datepicker>
-              </mat-form-field>
-            </div>
+                Please select a date
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('eventDate')
+                    ?.hasError('matDatepickerFilter') &&
+                  adminReservationForm.get('eventDate')?.touched
+                "
+                >Event date is unavailable</mat-error
+              >
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="datepicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #datepicker></mat-datepicker>
+            </mat-form-field>
 
             <!-- Time Picker -->
             <div class="relative">
@@ -216,43 +271,37 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                     [value]="time"
                     class="hidden peer"
                     formControlName="eventTime"
-                    [disabled]="
-                      isTimeDisabled(
-                        adminReservationForm.get('eventDate')?.value,
-                        time
-                      )
-                    "
+                    [disabled]="isTimeDisabled(time)"
                     required
                   />
                   <label
                     [for]="'time' + i"
                     class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
                     [ngClass]="{
-                      'opacity-50 cursor-not-allowed': isTimeDisabled(
-                        adminReservationForm.get('eventDate')?.value,
-                        time
-                      )
+                      'opacity-50 cursor-not-allowed': isTimeDisabled(time)
                     }"
                   >
                     {{ time }}
                   </label>
                 </li>
                 <mat-error
-                    *ngIf="
-                      adminReservationForm.get('eventTime')?.hasError('required') &&
-                      adminReservationForm.get('eventTime')?.touched
-                    "
-                    >Event time is required</mat-error
-                  >
-                  <mat-error
-                    *ngIf="
-                      adminReservationForm
-                        .get('eventTime')
-                        ?.hasError('matDatepickerFilter') &&
-                        adminReservationForm.get('eventTime')?.touched
-                    "
-                    >Event time is unavailable</mat-error
-                  >
+                  *ngIf="
+                    adminReservationForm
+                      .get('eventTime')
+                      ?.hasError('required') &&
+                    adminReservationForm.get('eventTime')?.touched
+                  "
+                  >Event time is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    adminReservationForm
+                      .get('eventTime')
+                      ?.hasError('matDatepickerFilter') &&
+                    adminReservationForm.get('eventTime')?.touched
+                  "
+                  >Event time is unavailable</mat-error
+                >
               </ul>
             </div>
 
@@ -270,10 +319,22 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 name="eventTheme"
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:ring-green-500 focus:border-green-500 transition-all"
               />
-              <mat-error *ngIf="adminReservationForm.get('eventTheme')?.hasError('required') && adminReservationForm.get('eventTheme')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('eventTheme')
+                    ?.hasError('required') &&
+                  adminReservationForm.get('eventTheme')?.touched
+                "
+              >
                 Please enter an event theme
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('eventTheme')?.hasError('pattern') && adminReservationForm.get('eventTheme')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('eventTheme')?.hasError('pattern') &&
+                  adminReservationForm.get('eventTheme')?.touched
+                "
+              >
                 Please enter a valid event theme
               </mat-error>
             </div>
@@ -291,10 +352,20 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 name="cakeTheme"
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:ring-green-500 focus:border-green-500 transition-all"
               />
-              <mat-error *ngIf="adminReservationForm.get('cakeTheme')?.hasError('required') && adminReservationForm.get('cakeTheme')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('cakeTheme')?.hasError('required') &&
+                  adminReservationForm.get('cakeTheme')?.touched
+                "
+              >
                 Please enter a cake theme
               </mat-error>
-              <mat-error *ngIf="adminReservationForm.get('cakeTheme')?.hasError('pattern') && adminReservationForm.get('cakeTheme')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('cakeTheme')?.hasError('pattern') &&
+                  adminReservationForm.get('cakeTheme')?.touched
+                "
+              >
                 Please enter a valid cake theme
               </mat-error>
             </div>
@@ -312,7 +383,14 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                 name="otherRequest"
                 class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:ring-green-500 focus:border-green-500 transition-all"
               />
-              <mat-error *ngIf="adminReservationForm.get('otherRequest')?.hasError('pattern') && adminReservationForm.get('otherRequest')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm
+                    .get('otherRequest')
+                    ?.hasError('pattern') &&
+                  adminReservationForm.get('otherRequest')?.touched
+                "
+              >
                 Please enter a valid request
               </mat-error>
             </div>
@@ -338,7 +416,12 @@ import { EditedReservationForm } from '../../../models/reservation-form';
                   {{ availableAddOns.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="adminReservationForm.get('addOns')?.hasError('required') && adminReservationForm.get('addOns')?.touched">
+              <mat-error
+                *ngIf="
+                  adminReservationForm.get('addOns')?.hasError('required') &&
+                  adminReservationForm.get('addOns')?.touched
+                "
+              >
                 Please select at least one add-on
               </mat-error>
             </div>
@@ -379,6 +462,7 @@ export class AddReservationModalComponent implements OnInit {
   packages: Packages[] = [];
   addOns: PackageAddOns[] = [];
   packageSelected!: Packages | undefined;
+  toastNotification = inject(ToastNotificationsComponent);
 
   fullyBookedDates: Date[] = [];
   fullyBookedTimes: { [date: string]: string[] } = {};
@@ -401,9 +485,22 @@ export class AddReservationModalComponent implements OnInit {
         '',
         [Validators.required, Validators.pattern('^[0-9]+$')],
       ],
-      numberOfPax: [50, [Validators.required, Validators.min(50), Validators.max(200), Validators.pattern('^[0-9]+$')]], 
-      eventDate: ['', Validators.required, this.dateFilter, Validators.pattern('^[0-9]+$') ],
-      eventTime: ['', Validators.required, this.isTimeDisabled, Validators.pattern('^[0-9]+$')],
+      numberOfPax: [
+        50,
+        [
+          Validators.required,
+          Validators.min(50),
+          Validators.max(200),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
+      eventDate: ['', Validators.required, this.dateFilter],
+      eventTime: [
+        '',
+        Validators.required,
+        this.isTimeDisabled,
+        Validators.pattern('^[0-9]+$'),
+      ],
       eventTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       cakeTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       addOns: [[], Validators.required],
@@ -456,13 +553,28 @@ export class AddReservationModalComponent implements OnInit {
     const dateCounts: { [key: string]: number } = {};
 
     reservations.forEach((reservation) => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0]; // Use ISO string for consistent date comparison
-      dateCounts[date] = (dateCounts[date] || 0) + 1;
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
+      }
+
+      eventDate.setHours(adjustedHours, minutes);
+
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
+      dateCounts[localDateISO] = (dateCounts[localDateISO] || 0) + 1;
     });
+
+    console.log('Date counts:', dateCounts);
 
     // Return fully booked dates (more than 6 reservations)
     return Object.keys(dateCounts)
-      .filter((date) => dateCounts[date] > 6)
+      .filter((date) => dateCounts[date] >= 6)
       .map((date) => new Date(date));
   }
 
@@ -475,13 +587,17 @@ export class AddReservationModalComponent implements OnInit {
     today.setHours(0, 0, 0, 0); // Set to start of the day
 
     const isPastDate = date < today;
+    const oneMonthFromToday = new Date();
+    oneMonthFromToday.setMonth(today.getMonth() + 1);
+
+    const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
       (bookedDate) =>
-        bookedDate.toISOString().split('T')[0] ===
-        date.toISOString().split('T')[0]
+        bookedDate.toLocaleDateString('en-CA') ===
+        date.toLocaleDateString('en-CA')
     );
 
-    const isAvailable = !isPastDate && !isFullyBooked;
+    const isAvailable = !isPastDate && !isWithinOneMonth && !isFullyBooked;
 
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;
@@ -491,21 +607,34 @@ export class AddReservationModalComponent implements OnInit {
     this.fullyBookedTimes = {}; // Reset before populating
 
     reservations.forEach((reservation) => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0];
-      if (!this.fullyBookedTimes[date]) {
-        this.fullyBookedTimes[date] = [];
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
       }
-      this.fullyBookedTimes[date].push(reservation.eventTime); // Assume reservation.eventTime is a string like '10:00 AM'
+
+      eventDate.setHours(adjustedHours, minutes);
+
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
+      if (!this.fullyBookedTimes[localDateISO]) {
+        this.fullyBookedTimes[localDateISO] = [];
+      }
+      this.fullyBookedTimes[localDateISO].push(reservation.eventTime);
     });
   }
 
-  isTimeDisabled(date: string, time: string): boolean {
+  isTimeDisabled(time: string): boolean {
     const selectedDate = this.adminReservationForm.get('eventDate')?.value;
     if (!selectedDate) {
       return false; // No date selected yet
     }
 
-    const selectedDateISO = new Date(selectedDate).toISOString().split('T')[0];
+    const selectedDateISO = new Date(selectedDate).toLocaleDateString('en-CA');
     return this.fullyBookedTimes[selectedDateISO]?.includes(time) || false;
   }
 
@@ -557,9 +686,17 @@ export class AddReservationModalComponent implements OnInit {
     this.reservationService.createReservation(reservationData).subscribe(
       (response) => {
         console.log('Reservation created:', response);
+        this.toastNotification.showSuccess(
+          'Reservation created successfully!',
+          'Success'
+        );
         this.closeAddReservation();
       },
       (error) => {
+        this.toastNotification.showError(
+          'Error creating reservation. Please try again later.',
+          'Error'
+        );
         console.error('Error creating reservation:', error);
       }
     );

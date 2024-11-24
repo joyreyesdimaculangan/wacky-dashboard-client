@@ -28,7 +28,7 @@
               alt="Admin Profile"
               class="w-8 h-8 rounded-full mr-2"
             />
-            <span class="text-gray-800">John Doe</span>
+            <span class="text-gray-800"> {{ accountProfileName }}</span>
             <i class="fas fa-caret-down ml-2"></i>
           </button>
           <div
@@ -38,10 +38,7 @@
             <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
               >Profile</a
             >
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >Settings</a
-            >
-            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+            <a (click)="logout()" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
               >Logout</a
             >
           </div>
@@ -61,7 +58,7 @@
             />
             <div>
               <h2 class="text-xl font-semibold text-green-600">
-                Welcome Back, John Doe!
+                Welcome Back, {{ accountProfileName }}
               </h2>
               <p class="text-gray-600">Administrator</p>
               <p class="text-gray-600 mt-2 font-medium text-lg">

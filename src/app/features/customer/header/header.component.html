@@ -113,7 +113,7 @@
           }}</span>
         </div>
         <ul class="py-3" aria-labelledby="user-menu-button">
-          <li *ngIf="authService.isAdmin()">
+          <li *ngIf="auth.isAdmin()">
             <a
               [routerLink]="['/admin/dashboard']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
@@ -122,7 +122,7 @@
               Dashboard
             </a>
           </li>
-          <li *ngIf="authService.isCustomer()">
+          <li *ngIf="auth.isCustomer()">
             <a
               [routerLink]="['/reservations']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
@@ -131,7 +131,7 @@
               Reservations
             </a>
           </li>
-          <li *ngIf="authService.isAdmin()">
+          <li *ngIf="auth.isAdmin()">
             <a
               [routerLink]="['/admin/notifications']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
@@ -140,7 +140,7 @@
               Notifications
             </a>
           </li>
-          <li *ngIf="authService.isCustomer()">
+          <li *ngIf="auth.isCustomer()">
             <a
               [routerLink]="['/customer/notifications']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
@@ -149,18 +149,18 @@
               Notifications
             </a>
           </li>
-          <li *ngIf="authService.isAdmin()">
+          <li *ngIf="auth.isAdmin()">
             <a
-              [routerLink]="['/admin/profile']"
+              [routerLink]="['/admin/edit-profile']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">person</mat-icon>
               Profile
             </a>
           </li>
-          <li *ngIf="authService.isCustomer()">
+          <li *ngIf="auth.isCustomer()">
             <a
-              [routerLink]="['/customer/profile']"
+              [routerLink]="['/customer/edit-profile']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">person</mat-icon>

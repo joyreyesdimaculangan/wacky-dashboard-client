@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +9,13 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../../core/auth/services/user.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { AccountProfileService } from '../../../services/account-profile.service';
+import { AccountProfile } from '../../../models/accountProfile';
+import { environment } from '../../../../environments/environment.development';
+import { User } from '../../../core/auth/models/user.model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -46,7 +52,7 @@ import { ActivatedRoute } from '@angular/router';
           Edit Profile
         </h2>
 
-        <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="editProfileForm">
           <!-- Name Input -->
           <div class="mb-6">
             <label for="name" class="block text-green-900 font-semibold mb-2"
@@ -62,29 +68,15 @@ import { ActivatedRoute } from '@angular/router';
 
           <!-- Email Input -->
           <div class="mb-6">
-            <label for="email" class="block text-green-900 font-semibold mb-2"
-              >Email</label
+            <label for="contactNo" class="block text-green-900 font-semibold mb-2"
+              >Contact No.</label
             >
             <input
-              id="email"
-              formControlName="email"
-              type="email"
-              class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-              placeholder="Enter your email"
-            />
-          </div>
-
-          <!-- Phone Input -->
-          <div class="mb-6">
-            <label for="phone" class="block text-green-900 font-semibold mb-2"
-              >Phone</label
-            >
-            <input
-              id="phone"
-              formControlName="phone"
+              id="contactNo"
+              formControlName="contactNo"
               type="tel"
               class="w-full p-4 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-              placeholder="Enter your phone number"
+              placeholder="Enter your Contact Number"
             />
           </div>
 
@@ -101,79 +93,25 @@ import { ActivatedRoute } from '@angular/router';
             />
           </div>
 
-          <div class="relative mb-6">
-            <label
-              for="password"
-              class="block text-green-900 font-semibold mb-2"
-              >Password</label
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-4 mt-4">
+            <!-- Cancel Button -->
+            <button
+              (click)="onCancel()"
+              type="button"
+              class="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 font-semibold rounded-md text-sm px-6 py-2 transition duration-300 shadow-sm hover:shadow-md"
             >
-            <div class="relative">
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                formControlName="password"
-                class="w-full p-4 pr-12 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                placeholder="Create a password"
-              />
-              <button
-                type="button"
-                (click)="togglePasswordVisibility()"
-                class="absolute inset-y-0 right-0 flex items-center px-4 cursor-pointer text-gray-400 focus:outline-none"
-                style="top: 50%; transform: translateY(-50%);"
-              >
-                <ng-container *ngIf="showPassword; else hidePassword">
-                  <svg
-                    class="w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
-                    ></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </ng-container>
-                <ng-template #hidePassword>
-                  <svg
-                    class="w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
-                    <path
-                      d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
-                    ></path>
-                    <path
-                      d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
-                    ></path>
-                    <line x1="2" x2="22" y1="2" y2="22"></line>
-                  </svg>
-                </ng-template>
-              </button>
-            </div>
+              Cancel
+            </button>
 
-            <!-- Action Buttons -->
-            <div class="flex justify-end gap-4 mt-4">
-              <!-- Cancel Button -->
-              <button
-                type="button"
-                class="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 font-semibold rounded-md text-sm px-6 py-2 transition duration-300 shadow-sm hover:shadow-md"
-              >
-                Cancel
-              </button>
-
-              <!-- Save Button -->
-              <button
-                type="button"
-                class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-400 font-semibold rounded-md text-sm px-6 py-2 transition duration-300 shadow-lg hover:shadow-xl"
-              >
-                Save
-              </button>
-            </div>
+            <!-- Save Button -->
+            <button
+              (click)="onSubmit()"
+              type="button"
+              class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-400 font-semibold rounded-md text-sm px-6 py-2 transition duration-300 shadow-lg hover:shadow-xl"
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
@@ -183,22 +121,24 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditProfileComponent {
-  editProfileForm!: FormGroup;
   profileImage: string | undefined;
   showPassword: boolean = false;
+  toastNotifications = inject(ToastNotificationsComponent);
 
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
+  private readonly accountProfileService = inject(AccountProfileService);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
+
+  public readonly editProfileForm = this.fb.nonNullable.group<AccountProfile>({
+    accountProfileID: this.fb.nonNullable.control('', Validators.required),
+    name: this.fb.nonNullable.control('', [Validators.required]),
+    contactNo: this.fb.nonNullable.control('', Validators.required),
+    address: this.fb.nonNullable.control('', Validators.required),
+  });
 
   ngOnInit(): void {
-    // Initialize the form
-    this.editProfileForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-    });
-
-    // Load user data here if available
     this.loadUserProfile();
   }
 
@@ -207,27 +147,38 @@ export class EditProfileComponent {
   }
 
   loadUserProfile(): void {
-    // Simulated data fetch; replace with actual data fetching
-    this.editProfileForm.patchValue({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      phone: '123-456-7890',
-    });
-
-    // Placeholder image; replace with user's profile image URL if available
-    this.profileImage = 'assets/profile-image.png';
+    const accountProfileID = this.route.snapshot.params['accountProfileID'];
+    console.log('Account ID:', accountProfileID);
+    this.accountProfileService
+      .getAccountProfileByID(accountProfileID)
+      .subscribe((accountProfile) => {
+        this.editProfileForm.patchValue(accountProfile);
+      });
   }
 
   onSubmit(): void {
-    if (this.editProfileForm.valid) {
-      const profileData = this.editProfileForm.value;
-      console.log('Profile updated:', profileData);
-      // Perform save operation here
-    }
+    const accountProfileID = this.route.snapshot.params['accountProfileID'];
+    const updatedUser = this.editProfileForm.value;
+    this.accountProfileService
+      .updateAccountProfile(accountProfileID, updatedUser)
+      .subscribe({
+        next: () => {
+          this.toastNotifications.showSuccess(
+            'Profile updated successfully.',
+            'Success'
+          );
+        },
+        error: (error: any) => {
+          this.toastNotifications.showError(
+            'Failed to update profile. Please try again.',
+            'Error'
+          );
+          console.error('Profile update error:', error);
+        },
+      });
   }
 
   onCancel(): void {
-    // Reset or navigate away as needed
-    console.log('Edit cancelled');
+    this.location.back();
   }
 }

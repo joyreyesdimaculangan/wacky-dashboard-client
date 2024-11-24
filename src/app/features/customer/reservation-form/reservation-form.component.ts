@@ -27,14 +27,18 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterModule } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
 import { Location } from '@angular/common';
-import { EditedReservationForm, ReservationForm } from '../../../models/reservation-form';
+import {
+  EditedReservationForm,
+  ReservationForm,
+} from '../../../models/reservation-form';
 import { GetPackageAddOnsService } from './getPackageAddOns.service';
 import { GetPackageNameService } from './getPackageName.service';
 import { AccountProfileService } from '../../../services/account-profile.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
-import { PackageName } from '../../../models/packages';
+import { PackageName, Packages } from '../../../models/packages';
 import { GetAccountIdService } from './getAccountId.service';
-
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { toZonedTime } from 'date-fns-tz';
 
 @Component({
   selector: 'app-reservation-form',
@@ -48,7 +52,7 @@ import { GetAccountIdService } from './getAccountId.service';
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './reservation-form.component.html',
   styleUrls: ['./reservation-form.component.scss'], // Corrected from styleUrl to styleUrls
@@ -62,6 +66,7 @@ export class ReservationFormComponent implements OnInit {
 
   private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
+  toastNotifications = inject(ToastNotificationsComponent);
 
   packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
@@ -69,10 +74,18 @@ export class ReservationFormComponent implements OnInit {
 
   packages: any[] = [];
   accountProfileName: any[] = [];
-  packageName:  PackageName | null | undefined;
+  packageName: PackageName | null | undefined;
+  addOnsName: Packages | null | undefined;
   fullyBookedDates: Date[] = [];
   fullyBookedTimes: { [date: string]: string[] } = {};
-  availableTimes: string[] = ['10:00 AM', '10:30 AM', '11:00 AM', '3:00 PM', '3:30 PM', '4:00 PM'];
+  availableTimes: string[] = [
+    '10:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '3:00 PM',
+    '3:30 PM',
+    '4:00 PM',
+  ];
 
   reservations: EditedReservationForm[] = [];
 
@@ -87,11 +100,15 @@ export class ReservationFormComponent implements OnInit {
       this.packageName = packages?.packageName as PackageName | undefined;
       console.log('Package ID:', this.packageID);
       console.log('Package Name:', this.packageName);
-      const accountProfileName = this.getAccountProfileIDService.getAccountProfileName();
+      const accountProfileName =
+        this.getAccountProfileIDService.getAccountProfileName();
       this.accountProfileId = accountProfileName?.accountProfileId;
       console.log('Account Profile ID:', this.accountProfileId);
+      const addOns = this.packageAddOnsService.addOnsName();
       this.addOnsId = this.packageAddOnsService.addOnsId();
-      console.log('Add-ons:', this.addOnsId);
+      this.addOnsName = addOns as Packages | null | undefined;
+      console.log('Add-ons ID:', this.addOnsId);
+      console.log('Add-ons Name:', this.addOnsName);
     });
   }
 
@@ -111,9 +128,27 @@ export class ReservationFormComponent implements OnInit {
         '',
         [Validators.required, Validators.pattern('^[0-9]+$')],
       ],
-      numberOfPax: [50, [Validators.required, Validators.min(50), Validators.max(200), Validators.pattern('^[0-9]+$')]], 
-      eventDate: ['', Validators.required, this.dateFilter, Validators.pattern('^[0-9]+$') ],
-      eventTime: ['', Validators.required, this.isTimeDisabled, Validators.pattern('^[0-9]+$')],
+      numberOfPax: [
+        50,
+        [
+          Validators.required,
+          Validators.min(50),
+          Validators.max(200),
+          Validators.pattern('^[0-9]+$'),
+        ],
+      ],
+      eventDate: [
+        '',
+        Validators.required,
+        this.dateFilter,
+        Validators.pattern('^[0-9]+$'),
+      ],
+      eventTime: [
+        '',
+        Validators.required,
+        this.isTimeDisabled,
+        Validators.pattern('^[0-9]+$'),
+      ],
       eventTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       cakeTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       otherRequest: ['', Validators.pattern('^[a-zA-Z ]+$')],
@@ -164,37 +199,58 @@ export class ReservationFormComponent implements OnInit {
       },
     });
   }
-  
+
   getFullyBookedDates(reservations: EditedReservationForm[]): Date[] {
     // Map to count reservations per date
     const dateCounts: { [key: string]: number } = {};
   
-    reservations.forEach(reservation => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0]; // Use ISO string for consistent date comparison
-      dateCounts[date] = (dateCounts[date] || 0) + 1;
+    reservations.forEach((reservation) => {
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+  
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
+      }
+  
+      eventDate.setHours(adjustedHours, minutes);
+  
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
+      dateCounts[localDateISO] = (dateCounts[localDateISO] || 0) + 1;
     });
+
+    console.log('Date counts:', dateCounts);
   
     // Return fully booked dates (more than 6 reservations)
     return Object.keys(dateCounts)
-      .filter(date => dateCounts[date] > 6)
-      .map(date => new Date(date));
-  }
-  
+      .filter((date) => dateCounts[date] >= 6)
+      .map((date) => new Date(date));
+    }
+
   dateFilter = (date: Date | null): boolean => {
     if (!date) {
       return false;
     }
-  
+
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set to start of the day
-  
+
     const isPastDate = date < today;
+    const oneMonthFromToday = new Date();
+    oneMonthFromToday.setMonth(today.getMonth() + 1);
+    
+    const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
-      bookedDate => bookedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+      (bookedDate) =>
+        bookedDate.toLocaleDateString('en-CA') ===
+        date.toLocaleDateString('en-CA')
     );
-  
-    const isAvailable = !isPastDate && !isFullyBooked;
-  
+
+    const isAvailable = !isPastDate && !isWithinOneMonth && !isFullyBooked;
+
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;
   };
@@ -202,22 +258,35 @@ export class ReservationFormComponent implements OnInit {
   populateFullyBookedTimes(reservations: EditedReservationForm[]): void {
     this.fullyBookedTimes = {}; // Reset before populating
   
-    reservations.forEach(reservation => {
-      const date = new Date(reservation.eventDate).toISOString().split('T')[0];
-      if (!this.fullyBookedTimes[date]) {
-        this.fullyBookedTimes[date] = [];
+    reservations.forEach((reservation) => {
+      const eventDate = new Date(reservation.eventDate);
+      const [time, period] = reservation.eventTime.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+  
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
       }
-      this.fullyBookedTimes[date].push(reservation.eventTime); // Assume reservation.eventTime is a string like '10:00 AM'
+  
+      eventDate.setHours(adjustedHours, minutes);
+  
+      const localDateISO = eventDate.toLocaleDateString('en-CA')
+      if (!this.fullyBookedTimes[localDateISO]) {
+        this.fullyBookedTimes[localDateISO] = [];
+      }
+      this.fullyBookedTimes[localDateISO].push(reservation.eventTime);
     });
   }
 
-  isTimeDisabled(date: string, time: string): boolean {
-    const selectedDate = this.reservationForm.get('eventDate')?.value; 
+  isTimeDisabled(time: string): boolean {
+    const selectedDate = this.reservationForm.get('eventDate')?.value;
     if (!selectedDate) {
       return false; // No date selected yet
     }
-  
-    const selectedDateISO = new Date(selectedDate).toISOString().split('T')[0];
+
+    const selectedDateISO = new Date(selectedDate).toLocaleDateString('en-CA');
     return this.fullyBookedTimes[selectedDateISO]?.includes(time) || false;
   }
 
@@ -230,7 +299,7 @@ export class ReservationFormComponent implements OnInit {
   }
 
   goToNextStep() {
-    console.log(this.stepper)
+    console.log(this.stepper);
     console.log('Current step index:', this.stepper.selectedIndex);
     if (this.stepper.selectedIndex === 0 && this.step1.valid) {
       console.log('It works', this.step1.valid);
@@ -268,19 +337,49 @@ export class ReservationFormComponent implements OnInit {
     if (this.reservationForm.valid) {
       const accountProfileId = this.authService.user()?.accountProfileId;
       // Ensure the status is properly set, defaulting to 'Pending' if undefined
-      const statusValue: 'Pending' = this.reservationForm.value.status || 'Pending';
-      const paymentStatusValue: 'PENDING' = this.reservationForm.value.paymentStatus || 'PENDING';
+      const statusValue: 'Pending' =
+        this.reservationForm.value.status || 'Pending';
+      const paymentStatusValue: 'PENDING' =
+        this.reservationForm.value.paymentStatus || 'PENDING';
+
+      // Combine date and time
+      const eventDateValue = this.step2.get('eventDate')?.value;
+      const eventTimeValue = this.step2.get('eventTime')?.value;
+
+      if (!eventDateValue || !eventTimeValue) {
+        console.error('Invalid date or time value');
+        return;
+      }
+
+      const eventDate = new Date(eventDateValue);
+      const [time, period] = eventTimeValue.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+
+      let adjustedHours = hours;
+      if (period === 'PM' && hours < 12) {
+        adjustedHours += 12;
+      } else if (period === 'AM' && hours === 12) {
+        adjustedHours = 0;
+      }
+
+      eventDate.setHours(adjustedHours, minutes);
+
+      if (isNaN(eventDate.getTime())) {
+        this.toastNotifications.showError('Invalid date or time value', 'Error');
+        console.error('Invalid date or time value');
+        return;
+      }
 
       // Map form values to the ReservationForm interface
       const reservationData: ReservationForm = {
-        numberOfPax: this.step1.get("numberOfPax")?.value,
-        name: this.step1.get("name")?.value || this.accountProfileName,
-        contactNumber: this.step1.get("contactNumber")?.value,
-        eventDate: this.step2.get("eventDate")?.value,
-        eventTime: this.step2.get("eventTime")?.value,
-        eventTheme: this.step3.get("eventTheme")?.value,
-        cakeTheme: this.step3.get("cakeTheme")?.value,
-        otherRequest: this.step3.get("otherRequest")?.value,
+        numberOfPax: this.step1.get('numberOfPax')?.value,
+        name: this.step1.get('name')?.value || this.accountProfileName,
+        contactNumber: this.step1.get('contactNumber')?.value,
+        eventDate: eventDate.toISOString(), // Ensure the date is in ISO format
+        eventTime: eventTimeValue,
+        eventTheme: this.step3.get('eventTheme')?.value,
+        cakeTheme: this.step3.get('cakeTheme')?.value,
+        otherRequest: this.step3.get('otherRequest')?.value,
         packageID: this.packageID || null,
         packageName: this.packageName,
         accountProfileId: accountProfileId,
@@ -296,12 +395,14 @@ export class ReservationFormComponent implements OnInit {
           console.log('Reservation created:', response);
           this.reservationSubmitted.emit(response);
           this.router.navigate(['/customer/confirmation']);
-          this.resetAddOns();
         },
         (error) => {
           console.error('Error creating reservation:', error);
-        },
+        }
       );
+      this.resetAddOns();
+    } else {
+      this.toastNotifications.showWarning('Please fill out all required fields', 'Warning');
     }
   }
 
@@ -310,5 +411,3 @@ export class ReservationFormComponent implements OnInit {
     this.packageAddOnsService.setAddOnsId([]);
   }
 }
-
-

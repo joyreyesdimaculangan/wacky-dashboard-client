@@ -1,10 +1,9 @@
 export interface AccountProfile {
   accountID: string;
-  name: string;
+  accountProfileName: string;
   contactNo: string;
   address: string;
   userId?: string;
-  socialMediaId?: string;
 }
 
 export interface User {
@@ -12,5 +11,6 @@ export interface User {
   email: string;
   password: string;
   account_type: string;
-  accountProfileId: string; // Optional to allow lazy loading or if the profile may not always be present
+  accountProfileId: string;
+  account?: AccountProfile, // Optional to allow lazy loading or if the profile may not always be present
 }

@@ -16,6 +16,7 @@ import { ReservationService } from '../../../services/reservation.service';
 import { GetPackageNameService } from '../../customer/reservation-form/getPackageName.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-datatables',
@@ -42,6 +43,7 @@ export class DatatablesComponent implements OnInit {
   editingItem: EditedReservationForm | any = null;
   deletingItem: EditedReservationForm | any = null;
   selectedTab: string = 'all';
+  toastNotifications = inject(ToastNotificationsComponent);
 
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
@@ -118,21 +120,12 @@ export class DatatablesComponent implements OnInit {
             this.deleteItemEvent.emit(id);
             console.log('Reservation deleted successfully', id);
             this.getReservations(); // Refresh the list
-            this.snackBar.open('Reservation deleted successfully.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotifications.showSuccess('Reservation deleted successfully', 'Success');
           });
       } else
         (error: any) => {
           console.error('Error deleting selected items:', error);
-          this.snackBar.open('Failed to delete selected items.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-            panelClass: ['custom-snackbar-error'],
-          });
+          this.toastNotifications.showError('Error deleting selected items', 'Error');
         };
     });
   }

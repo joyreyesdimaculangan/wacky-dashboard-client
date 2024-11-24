@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { InquiryFormComponent } from '../contactUs/inquiry-form.component';
 import { PackageDetailsComponent } from './package-details/package-details.component';
 import { PackagesCrmComponent } from '../../admin/admin-crm/packages-crm/createAddedPackages/packages-crm.component';
 import { PackagesService } from '../../../services/packages.service';

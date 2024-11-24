@@ -499,7 +499,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   // Method to go to the next section
   nextSection() {
-    if (this.currentSection < 3) {
+    if (this.currentSection === 1 && this.registerForm.get('name')?.valid && this.registerForm.get('contactNo')?.valid && this.registerForm.get('address')?.valid) {
       this.currentSection++;
     }
   }
