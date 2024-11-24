@@ -2,10 +2,14 @@ import { Routes } from '@angular/router';
 import { hasTokenGuard } from './core/auth/guards/hasToken.guard';
 import { authGuard } from './core/auth/guards/isAuthenticated.guard';
 import { hasRoleGuard } from './core/auth/guards/hasRole.guard';
+import { ToastNotificationsComponent } from './core/toastNotifications/toastNotifications.component';
 
 export const routes: Routes = [
   {
     path: 'home',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () =>
       import('./features/home/home.component').then((m) => m.HomeComponent),
     title: 'Home Page',
@@ -41,6 +45,9 @@ export const routes: Routes = [
   },
   {
     path: 'signInFirst',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () =>
       import('./features/customer/reservation-form/signInFirst/signInFirst.component').then((m) => m.SignInFirstComponent),
     title: 'Sign In First',
@@ -52,5 +59,10 @@ export const routes: Routes = [
     title: 'Admin Page',
     canActivate: [hasRoleGuard],
     data: { roles: ['admin'] }
+  },
+  {
+    path: 'toast-notifications',
+    loadComponent: () =>
+      import('./core/toastNotifications/toastNotifications.component').then((m) => m.ToastNotificationsComponent),
   }
 ];

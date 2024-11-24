@@ -11,6 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-menu',
@@ -37,6 +38,7 @@ export class MenuComponent implements OnInit {
   public menuValues: MenuValues[] = [];
   userRole: string | null = null;
   isDragging = false;
+  toastNotification = inject(ToastNotificationsComponent);
 
   ngOnInit(): void {
     this.getMenus();
@@ -63,21 +65,12 @@ export class MenuComponent implements OnInit {
           this.menuService.deleteMenu(menuID).subscribe(() => {
             console.log('Menu deleted successfully', menuID);
             this.getMenus();
-            this.snackBar.open('Menu deleted successfully.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotification.showSuccess('Menu deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotification.showError('Failed to delete menu', 'Error');
           };
       });
     }
@@ -114,22 +107,12 @@ export class MenuComponent implements OnInit {
             console.log('Selected items deleted successfully');
             this.getMenus();
             this.selectedItems.clear();
-            this.snackBar.open('Selected items deleted successfully.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotification.showSuccess('Selected items deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotification.showError('Failed to delete selected items', 'Error');
           };
       });
     }
@@ -154,22 +137,12 @@ export class MenuComponent implements OnInit {
             console.log('All items deleted successfully');
             this.getMenus();
             this.selectedItems.clear();
-            this.snackBar.open('All items deleted successfully.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotification.showSuccess('All items deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotification.showError('Failed to delete all items', 'Error');
           };
       });
     }

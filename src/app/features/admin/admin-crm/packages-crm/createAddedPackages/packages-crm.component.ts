@@ -28,11 +28,23 @@ import { PackageAddOns } from '../../../../../models/packageAddOns';
 import { ViewPackages } from '../../../../../models/packages';
 import { FileUploadService } from '../../../../../services/file-upload.service';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../../../core/auth/services/auth.service';
+import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-packages-crm',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   template: `
     <div
       class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
@@ -68,6 +80,14 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
                   placeholder="Type product name"
                   required=""
                 />
+                <mat-error
+                  *ngIf="
+                    addPackagesForm.controls['name'].hasError('required') &&
+                    addPackagesForm.controls['name']?.touched
+                  "
+                >
+                  Name is required
+                </mat-error>
               </div>
 
               <div class="col-span-2">
@@ -125,6 +145,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
                     />
                   </label>
                 </div>
+                <mat-error *ngIf="!selectedFile"> Image is required </mat-error>
               </div>
 
               <div class="col-span-2">
@@ -141,6 +162,15 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Write product description here"
                 ></textarea>
+                <mat-error
+                  *ngIf="
+                    addPackagesForm.controls['description'].hasError(
+                      'required'
+                    ) && addPackagesForm.controls['description']?.touched
+                  "
+                >
+                  Description is required
+                </mat-error>
               </div>
             </div>
 
@@ -239,9 +269,11 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
       </div>
     </div>
   `,
+  styleUrls: ['./packages-crm.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesCrmComponent {
+  private readonly authService = inject(AuthService);
   private readonly packageService = inject(PackagesService);
   private readonly additionalInclusionsService = inject(
     PackageInclusionsService
@@ -254,10 +286,12 @@ export class PackagesCrmComponent {
   addPackagesSubscription = new Subscription();
   selectedFile: File | null = null;
   previewUrl = signal<string | ArrayBuffer | null>(null);
+  toastNotification = inject(ToastNotificationsComponent);
+  location = inject(Location);
 
   addPackagesForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
-    image_url: ['', Validators.required],
+    image_url: [''],
     description: ['', Validators.required],
     additionalInclusions: this.fb.array([]),
     addOns: this.fb.array([]),
@@ -289,7 +323,7 @@ export class PackagesCrmComponent {
 
   closeAddPackages() {
     this.addPackagesForm.reset();
-    this.router.navigate(['/admin/home']);
+    this.location.back();
   }
 
   onFileSelected(event: Event): void {
@@ -308,28 +342,35 @@ export class PackagesCrmComponent {
   }
 
   submitForm() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      const addOns: string[] = this.addPackagesForm.controls['addOns'].value;
-      const additionalInclusions: string[] =
-        this.addPackagesForm.controls['additionalInclusions'].value;
-      formData.append('image', this.selectedFile, this.selectedFile.name);
-      formData.append('name', this.addPackagesForm.controls['name'].value);
-      formData.append(
-        'description',
-        this.addPackagesForm.controls['description'].value
-      );
-      formData.append('addOns', JSON.stringify(addOns));
-      formData.append('inclusions', JSON.stringify(additionalInclusions));
+    if (this.authService.isAdmin()) {
+      if (this.addPackagesForm.valid && this.selectedFile) {
+        const formData = new FormData();
+        const addOns: string[] = this.addPackagesForm.controls['addOns'].value;
+        const additionalInclusions: string[] =
+          this.addPackagesForm.controls['additionalInclusions'].value;
+        formData.append('image', this.selectedFile, this.selectedFile.name);
+        formData.append('name', this.addPackagesForm.controls['name'].value);
+        formData.append(
+          'description',
+          this.addPackagesForm.controls['description'].value
+        );
+        formData.append('addOns', JSON.stringify(addOns));
+        formData.append('inclusions', JSON.stringify(additionalInclusions));
 
-      // Create the package first
-      this.packageService.createPackage(formData).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.addPackagesForm.reset();
-          this.router.navigate(['/admin/home']);
-        },
-      });
+        // Create the package first
+        this.packageService.createPackage(formData).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.toastNotification.showSuccess('Package added successfully', 'Success');
+            this.addPackagesForm.reset();
+            this.router.navigate(['/admin/home']);
+          },
+          error: (err) => {
+            console.error('Error adding package:', err);
+            this.toastNotification.showError('Failed to add package. Please try again.', 'Error');
+          }
+        });
+      }
     }
   }
 }

@@ -50,7 +50,7 @@
             class="relative shadow-lg flex flex-col justify-between h-full cursor-pointer"
             [class.border-2]="isSelected(offer.packageID.toString())"
             [class.border-red-500]="isSelected(offer.packageID.toString())"
-            (click)="authService.isAdmin() ? toggleSelection(offer.packageID.toString()) : null"
+            (click)="authService.isAdmin() ?toggleSelection(offer.packageID.toString()) : null"
           >
             <!-- Image Section -->
             <div class="w-full">

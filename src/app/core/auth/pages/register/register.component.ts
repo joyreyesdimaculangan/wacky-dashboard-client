@@ -18,8 +18,7 @@ import { catchError, Subscription, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
+import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-register',
@@ -30,8 +29,7 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
     RouterModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule,
-],
+  ],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -188,31 +186,6 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
             >
               Next
             </button>
-
-            <!-- Divider with "or" Text -->
-            <div class="flex items-center my-6">
-              <div class="flex-grow border-t border-gray-300"></div>
-              <span class="px-4 text-gray-500">or</span>
-              <div class="flex-grow border-t border-gray-300"></div>
-            </div>
-
-            <!-- Social Sign-in Options -->
-            <div class="flex justify-center gap-4 mb-6">
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #4285F4;"
-              >
-                <i class="fab fa-google text-2xl mr-2"></i>
-                Sign up with Google
-              </button>
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #1877F2;"
-              >
-                <i class="fab fa-facebook-square text-2xl mr-2"></i>
-                Sign up with Facebook
-              </button>
-            </div>
 
             <p class="text-center text-green-900 mt-4">
               Already have an account?
@@ -433,31 +406,6 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
               Register
             </button>
 
-            <!-- Divider with "or" Text -->
-            <div class="flex items-center my-6">
-              <div class="flex-grow border-t border-gray-300"></div>
-              <span class="px-4 text-gray-500">or</span>
-              <div class="flex-grow border-t border-gray-300"></div>
-            </div>
-
-            <!-- Social Sign-in Options -->
-            <div class="flex justify-center gap-4 mb-6">
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #4285F4;"
-              >
-                <i class="fab fa-google text-2xl mr-2"></i>
-                Sign up with Google
-              </button>
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #1877F2;"
-              >
-                <i class="fab fa-facebook-square text-2xl mr-2"></i>
-                Sign up with Facebook
-              </button>
-            </div>
-
             <p class="text-center text-green-900 mt-4">
               Already have an account?
               <button
@@ -475,7 +423,7 @@ import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent implements OnInit,OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy {
   currentSection = 1;
   registerForm!: FormGroup;
   registerError = '';
@@ -484,7 +432,7 @@ export class RegisterComponent implements OnInit,OnDestroy {
   authService = inject(AuthService);
   router = inject(Router);
   registerFormSubscription = new Subscription();
-  snackBar = inject(MatSnackBar);
+  toastNotification = inject(ToastNotificationsComponent);
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -563,59 +511,71 @@ export class RegisterComponent implements OnInit,OnDestroy {
     }
   }
 
-  onRegister() {
+  onRegister(): void {
     console.log('Register form:', this.registerForm.value);
+
     if (this.registerForm.valid) {
+      const user = this.registerForm.value;
       this.registerFormSubscription.add(
         this.authService
           .register(
-            this.registerForm.value.name,
-            this.registerForm.value.contactNo,
-            this.registerForm.value.address,
-            this.registerForm.value.email,
-            this.registerForm.value.password,
-            this.registerForm.value.confirmPassword
+            user.name,
+            user.contactNo,
+            user.address,
+            user.email,
+            user.password,
+            user.confirmPassword
           )
           .pipe(
             catchError((error: HttpErrorResponse) => {
               if (error.status === 401) {
-                this.showSnackbar('Invalid Credentials', 'error');
+                this.toastNotification.showError(
+                  'Invalid Credentials',
+                  'Error'
+                );
               } else if (error.status === 400) {
-                this.showSnackbar('Email is already registered. Use a different email.', 'error');
+                this.toastNotification.showError(
+                  'Email is already registered. Use a different email.',
+                  'Error'
+                );
               } else {
-                this.showSnackbar('An error occurred. Please try again.', 'error');
+                this.toastNotification.showError(
+                  'Registration failed. Please try again.',
+                  'Error'
+                );
               }
               return throwError(error);
             })
           )
           .subscribe((response) => {
-            if (response?.message === 'Account created successfully. Please log in.') {
-              this.showSnackbar('Registration successful. Please log in.', 'success');
-              this.router.navigate(['auth/login']);
+            if (
+              response?.status === 200 ||
+              response?.status === 201 ||
+              response?.message ===
+                'Account created successfully. Please check your email to verify your account.'
+            ) {
+              this.toastNotification.showSuccess(
+                'Registration successful. Please check your email to verify your account.',
+                'Success'
+              );
             } else {
-              this.showSnackbar('An error occurred. Please try again.', 'error');
+              this.toastNotification.showError(
+                'Registration failed. Please try again.',
+                'Error'
+              );
             }
           })
       );
     } else {
-      this.showSnackbar('Please fill in all required fields.', 'error');
+      this.toastNotification.showWarning(
+        'Please fill in all required fields.',
+        'Error'
+      );
     }
-  }
-
-  showSnackbar(message: string, type: 'success' | 'error'): void {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message,
-        icon: type === 'success' ? 'check_circle' : 'error'
-      },
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error'
-    });
   }
 
   ngOnDestroy() {
     this.registerFormSubscription.unsubscribe();
+    console.log('Register form subscription unsubscribed');
   }
 }

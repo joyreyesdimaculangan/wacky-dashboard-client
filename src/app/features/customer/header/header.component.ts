@@ -15,6 +15,7 @@ import { GetAccountIdService } from '../reservation-form/getAccountId.service';
 export class HeaderComponent {
   private readonly getAccountNameService = inject(GetAccountIdService);
   private route = inject(ActivatedRoute);
+  authService = inject(AuthService);
   currentFragment: string | null = null;
   isDropdownOpen = false;
 

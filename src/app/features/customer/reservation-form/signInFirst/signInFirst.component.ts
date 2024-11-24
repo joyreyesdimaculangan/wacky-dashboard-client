@@ -12,11 +12,11 @@ import { Router, RouterModule } from '@angular/router';
 import { catchError, Subscription, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
 import { GetAccountIdService } from '../getAccountId.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ToastNotificationsComponent } from '../../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-sign-in-first',
@@ -246,7 +246,7 @@ export class SignInFirstComponent implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
   loginSubscription = new Subscription();
-  snackBar = inject(MatSnackBar);
+  toastNotification = inject(ToastNotificationsComponent);
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -277,15 +277,15 @@ export class SignInFirstComponent implements OnInit {
           catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
               if (error.error.message === 'Incorrect password') {
-                this.showSnackbar(
+                this.toastNotification.showError(
                   'Incorrect password. Please try again.',
                   'error'
                 );
               } else {
-                this.showSnackbar('Invalid Credentials', 'error');
+                this.toastNotification.showError('Invalid Credentials', 'error');
               }
             } else {
-              this.showSnackbar(
+              this.toastNotification.showError(
                 'An error occurred. Please try again later.',
                 'error'
               );
@@ -296,6 +296,7 @@ export class SignInFirstComponent implements OnInit {
         .subscribe((response: any) => {
           if (response['status'] == 200) {
             console.log('Account Profile Name:', this.authService.accountProfileName);
+            this.toastNotification.showSuccess('Login successful.', 'Success');
             if (this.authService.user()?.account_type === 'admin') {
               this.router.navigate(['admin/dashboard']);
             } else {
@@ -305,22 +306,9 @@ export class SignInFirstComponent implements OnInit {
             response['status'] == 401 &&
             response['message'] === 'Incorrect password'
           ) {
-            this.showSnackbar('Incorrect password. Please try again.', 'error');
+            this.toastNotification.showError('Incorrect password. Please try again.', 'error');
           }
         })
     );
-  }
-
-  showSnackbar(message: string, type: 'success' | 'error'): void {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message,
-        icon: type === 'success' ? 'check_circle' : 'error',
-      },
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error',
-    });
   }
 }

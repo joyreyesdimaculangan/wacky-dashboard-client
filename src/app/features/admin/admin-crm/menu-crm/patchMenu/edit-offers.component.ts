@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from '../../../../../services/menu.service';
 import { EditMenuValues, Menu } from '../../../../../models/menu';
 import { FileUploadService } from '../../../../../services/file-upload.service';
+import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-edit-offers',
@@ -104,6 +105,7 @@ export class EditOffersComponent {
   private readonly menuService = inject(MenuService);
   private readonly router = inject(Router);
   private readonly imageService = inject(FileUploadService);
+  toastNotification = inject(ToastNotificationsComponent);
   selectedFile: File | null = null;
   previewUrl = signal<string | ArrayBuffer | null>(null);
   public readonly editMenuForm = this.fb.nonNullable.group<Menu>({
@@ -143,9 +145,11 @@ export class EditOffersComponent {
         next: () => {
           console.log('Menu updated successfully');
           this.editMenuForm.reset();
+          this.toastNotification.showSuccess('Menu updated successfully', 'Success');
           this.router.navigate(['/admin/home']);
         },
         error: (err) => {
+          this.toastNotification.showError('Error updating menu', 'Error');
           console.error('Error updating menu:', err);
         },
       });

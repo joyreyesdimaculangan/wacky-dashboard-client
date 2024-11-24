@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { hasRoleGuard } from '../../core/auth/guards/hasRole.guard';
 import { hasTokenGuard } from '../../core/auth/guards/hasToken.guard';
+import { ToastNotificationsComponent } from '../../core/toastNotifications/toastNotifications.component';
 
 export const AdminRoutes: Routes = [
   {
@@ -10,6 +11,9 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'home',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('../home/home.component').then((m) => m.HomeComponent),
   },
   {
@@ -34,14 +38,23 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'add-menu',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./admin-crm/menu-crm/createAddedMenu/offers-crm.component').then((m) => m.OffersCrmComponent),
   },
   {
     path: 'edit-menu/:menuID',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./admin-crm/menu-crm/patchMenu/edit-offers.component').then((m) => m.EditOffersComponent),
   },
   {
     path: 'add-packages',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./admin-crm/packages-crm/createAddedPackages/packages-crm.component').then((m) => m.PackagesCrmComponent),
   },
   {

@@ -25,20 +25,4 @@ input {
   padding-right: 3rem; // Ensure enough space for the icon
 }
 
-.snackbar-success {
-  background-color: #4caf50 !important; // Green background for success messages
-  color: white !important; // White text color
-}
-
-.snackbar-error {
-  background-color: #f44336 !important; // Red background for error messages
-  color: white !important; // White text color
-}
-
-.snackbar-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-}
 

@@ -23,11 +23,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CreateMenu, Menu } from '../../../../../models/menu';
 import { FileUploadService } from '../../../../../services/file-upload.service';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-offers-crm',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   template: `
     <div
       class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
@@ -66,6 +75,14 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
                   placeholder="Type product name"
                   required=""
                 />
+                <mat-error
+                  *ngIf="
+                    addContentForm.controls['name'].hasError('required') &&
+                    addContentForm.controls['name']?.touched
+                  "
+                >
+                  Name is required
+                </mat-error>
               </div>
 
               <!-- Image upload dropzone -->
@@ -128,6 +145,7 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
                     />
                   </label>
                 </div>
+                <mat-error *ngIf="!selectedFile"> Image is required </mat-error>
               </div>
 
               <!-- Description input -->
@@ -143,7 +161,17 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
                   rows="4"
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Write product description here"
-                ></textarea>
+                >
+                </textarea>
+                <mat-error
+                  *ngIf="
+                    addContentForm.controls['description'].hasError(
+                      'required'
+                    ) && addContentForm.controls['description']?.touched
+                  "
+                >
+                  Description is required
+                </mat-error>
               </div>
             </div>
 
@@ -183,11 +211,12 @@ export class OffersCrmComponent {
   addContentForm: FormGroup;
   selectedFile: File | null = null;
   previewUrl = signal<string | ArrayBuffer | null>(null);
+  toastNotification = inject(ToastNotificationsComponent);
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
   }
-    
+
   constructor(private fb: FormBuilder) {
     this.addContentForm = this.fb.group({
       name: ['', Validators.required],
@@ -213,12 +242,12 @@ export class OffersCrmComponent {
         console.log(this.previewUrl);
       };
       reader.readAsDataURL(this.selectedFile);
-    }
+    } 
   }
 
   onSubmit() {
     if (this.authService.isAdmin()) {
-      if (this.selectedFile) {
+      if(this.addContentForm.valid && this.selectedFile) {
         const formData = new FormData();
         formData.append('image', this.selectedFile, this.selectedFile.name);
         formData.append('name', this.addContentForm.controls['name'].value);
@@ -227,11 +256,22 @@ export class OffersCrmComponent {
           this.addContentForm.controls['description'].value
         );
 
-        this.menuService.createMenu(formData).subscribe(() => {
-          this.addContentForm.reset();
-          this.router.navigate(['/admin/home']);
+        this.menuService.createMenu(formData).subscribe({
+          next: () => {
+            this.toastNotification.showSuccess('Content added successfully', 'Success');
+            this.addContentForm.reset();
+            this.router.navigate(['/admin/home']);
+          },
+          error: (err) => {
+            console.error('Error saving content:', err);
+            this.toastNotification.showError('Failed to add content. Please try again.', 'Error');
+          }
         });
+      } else {
+        this.toastNotification.showError('Please fill all required fields and upload an image', 'Error');
       }
+    } else {
+      this.toastNotification.showError('You do not have permission to add content', 'Error');
     }
   }
 }

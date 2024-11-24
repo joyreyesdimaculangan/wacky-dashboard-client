@@ -9,23 +9,31 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, Subscription, throwError } from 'rxjs';
 import {
+  EmailValidator,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../../../snackbar/snackbar.component';
 import { GetAccountIdService } from '../../../../features/customer/reservation-form/getAccountId.service';
+import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -65,103 +73,101 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
               placeholder="Enter your email"
             />
             <mat-error
-                *ngIf="
-                  loginForm.get('email')?.hasError('required') &&
-                  loginForm.get('email')?.touched
-                "
-              >
-                Email is required</mat-error
-              >
-              <mat-error
-                *ngIf="
-                  loginForm.get('email')?.hasError('email') &&
-                  loginForm.get('email')?.touched
-                "
-              >
-                Invalid email</mat-error
-              >
+              *ngIf="
+                loginForm.get('email')?.hasError('required') &&
+                loginForm.get('email')?.touched
+              "
+            >
+              Email is required</mat-error
+            >
+            <mat-error
+              *ngIf="
+                loginForm.get('email')?.hasError('email') &&
+                loginForm.get('email')?.touched
+              "
+            >
+              Invalid email</mat-error
+            >
           </div>
-          
+
           <!-- Password Input -->
           <div class="relative mb-6">
-              <label
-                for="password"
-                class="block text-green-900 font-semibold mb-2"
-                >Password</label
+            <label
+              for="password"
+              class="block text-green-900 font-semibold mb-2"
+              >Password</label
+            >
+            <div class="relative">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="w-full p-4 pr-12 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                placeholder="Create a password"
+              />
+              <button
+                type="button"
+                (click)="togglePasswordVisibility()"
+                class="absolute inset-y-0 right-0 flex items-center px-4 cursor-pointer text-gray-400 focus:outline-none"
+                style="top: 50%; transform: translateY(-50%);"
               >
-              <div class="relative">
-                <input
-                  [type]="showPassword ? 'text' : 'password'"
-                  id="password"
-                  formControlName="password"
-                  class="w-full p-4 pr-12 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                  placeholder="Create a password"
-                />
-                <button
-                  type="button"
-                  (click)="togglePasswordVisibility()"
-                  class="absolute inset-y-0 right-0 flex items-center px-4 cursor-pointer text-gray-400 focus:outline-none"
-                  style="top: 50%; transform: translateY(-50%);"
-                >
-                  <ng-container *ngIf="showPassword; else hidePassword">
-                    <svg
-                      class="w-6 h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </ng-container>
-                  <ng-template #hidePassword>
-                    <svg
-                      class="w-6 h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
-                      <path
-                        d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
-                      ></path>
-                      <path
-                        d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
-                      ></path>
-                      <line x1="2" x2="22" y1="2" y2="22"></line>
-                    </svg>
-                  </ng-template>
-                </button>
-              </div>
-              <mat-error *ngIf="loginForm.get('password')?.touched">
-                <ng-container
-                  *ngIf="loginForm.get('password')?.hasError('required')"
-                >
-                  Password is required.
+                <ng-container *ngIf="showPassword; else hidePassword">
+                  <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
                 </ng-container>
-                <ng-container
-                  *ngIf="loginForm.get('password')?.hasError('minlength')"
-                >
-                  Password must be at least 8 characters.
-                </ng-container>
-                <ng-container
-                  *ngIf="loginForm.get('password')?.hasError('pattern')"
-                >
-                  Password must contain at least one number, one uppercase
-                  letter, and one lowercase letter.
-                </ng-container>
-                <ng-container
-                  *ngIf="
-                    loginForm.get('password')?.hasError('confirmPassword')
-                  "
-                >
-                  Passwords do not match.
-                </ng-container>
-              </mat-error>
+                <ng-template #hidePassword>
+                  <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path
+                      d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                    ></path>
+                    <path
+                      d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                    ></path>
+                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                  </svg>
+                </ng-template>
+              </button>
+            </div>
+            <mat-error *ngIf="loginForm.get('password')?.touched">
+              <ng-container
+                *ngIf="loginForm.get('password')?.hasError('required')"
+              >
+                Password is required.
+              </ng-container>
+              <ng-container
+                *ngIf="loginForm.get('password')?.hasError('minlength')"
+              >
+                Password must be at least 8 characters.
+              </ng-container>
+              <ng-container
+                *ngIf="loginForm.get('password')?.hasError('pattern')"
+              >
+                Password must contain at least one number, one uppercase letter,
+                and one lowercase letter.
+              </ng-container>
+              <ng-container
+                *ngIf="loginForm.get('password')?.hasError('confirmPassword')"
+              >
+                Passwords do not match.
+              </ng-container>
+            </mat-error>
           </div>
 
           <!-- Remember Me and Forgot Password -->
@@ -173,10 +179,9 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
               />
               <span class="ml-2">Remember Me</span>
             </label>
-            <button
-              class="text-green-700 hover:text-green-500 font-semibold"
-              >Forgot Password?</button
-            >
+            <button (click)="goToPasswordReset()" class="text-green-700 hover:text-green-500 font-semibold">
+              Forgot Password?
+            </button>
           </div>
 
           <!-- Login Button -->
@@ -186,32 +191,6 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
           >
             Log In
           </button>
-
-          <!-- Divider with "or" Text -->
-          <div class="flex items-center my-6">
-              <div class="flex-grow border-t border-gray-300"></div>
-              <span class="px-4 text-gray-500">or</span>
-              <div class="flex-grow border-t border-gray-300"></div>
-            </div>
-
-            <!-- Social Sign-in Options -->
-            <div class="flex justify-center gap-4 mb-6">
-              <button
-                (click)="loginWithGoogle()"
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #4285F4;"
-              >
-                <i class="fab fa-google text-2xl mr-2"></i>
-                Log in with Google
-              </button>
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #1877F2;"
-              >
-                <i class="fab fa-facebook-square text-2xl mr-2"></i>
-                Log in with Facebook
-              </button>
-            </div>
 
           <!-- Sign Up Link -->
           <p class="text-center text-green-900 mt-8">
@@ -235,11 +214,11 @@ export class LoginPageComponent {
   loginForm!: FormGroup;
   loginError = '';
   showPassword: boolean = false;
-  
+
   authService = inject(AuthService);
   router = inject(Router);
   loginSubscription = new Subscription();
-  snackBar = inject(MatSnackBar);
+  toastNotification = inject(ToastNotificationsComponent);
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -262,53 +241,70 @@ export class LoginPageComponent {
     });
   }
 
-  loginWithGoogle() {
-    console.log('Login with Google');
+  goToPasswordReset() {
+    this.router.navigate(['auth/password-recovery']);
   }
 
   login() {
-    this.loginSubscription.add(
-      this.authService
-        .login(this.loginForm.value.email, this.loginForm.value.password)
-        .pipe(
-          catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-              if (error.error.message === 'Incorrect password') {
-                this.showSnackbar('Incorrect password. Please try again.', 'error');
+    if (this.loginForm.valid) {
+      this.loginSubscription.add(
+        this.authService
+          .login(this.loginForm.value.email, this.loginForm.value.password)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              if (error.status === 401) {
+                if (error.error.message === 'Incorrect password') {
+                  this.toastNotification.showError(
+                    'Incorrect password. Please try again.',
+                    'Error'
+                  );
+                } else {
+                  this.toastNotification.showError(
+                    'Invalid Credentials',
+                    'Error'
+                  );
+                }
               } else {
-                this.showSnackbar('Invalid Credentials', 'error');
+                this.toastNotification.showError(
+                  'An error occurred. Please try again later.',
+                  'Error'
+                );
               }
-            } else {
-              this.showSnackbar('An error occurred. Please try again later.', 'error');
+              return throwError(error);
+            })
+          )
+          .subscribe((response: any) => {
+            if (response['status'] == 200) {
+              console.log(
+                'Account Profile Name:',
+                this.authService.accountProfileName
+              );
+              this.toastNotification.showSuccess(
+                'Login successful.',
+                'Success'
+              );
+              if (this.authService.user()?.account_type === 'admin') {
+                this.router.navigate(['admin/dashboard']);
+              } else {
+                this.router.navigate(['customer/home']);
+              }
+            } else if (
+              response['status'] == 401 &&
+              response['message'] === 'Incorrect password'
+            ) {
+              this.toastNotification.showError(
+                'Incorrect password. Please try again.',
+                'Error'
+              );
             }
-            return throwError(error);
           })
-        )
-        .subscribe((response: any) => {
-          if (response['status'] == 200) {
-            console.log('Account Profile Name:', this.authService.accountProfileName);
-            if (this.authService.user()?.account_type === 'admin') {
-              this.router.navigate(['admin/dashboard']);
-            } else {
-              this.router.navigate(['customer/home']);
-            }
-          } else if (response['status'] == 401 && response['message'] === 'Incorrect password') {
-            this.showSnackbar('Incorrect password. Please try again.', 'error');
-          }
-        })
-    );
+      );
+    } else {
+      this.toastNotification.showWarning('Invalid Credentials', 'Error');
+    }
   }
 
-  showSnackbar(message: string, type: 'success' | 'error'): void {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message,
-        icon: type === 'success' ? 'check_circle' : 'error'
-      },
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error'
-    });
+  ngOnDestroy() {
+    this.loginSubscription.unsubscribe();
   }
 }

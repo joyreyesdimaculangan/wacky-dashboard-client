@@ -9,7 +9,6 @@ import { MatIcon } from '@angular/material/icon';
   imports: [
     CommonModule,
     MatDialogModule,
-    MatIcon
   ],
   template: `
    <div class="flex justify-center items-center my-4">

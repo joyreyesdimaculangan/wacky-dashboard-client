@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-email-verification',
@@ -16,28 +24,39 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         A verification link has been sent to your email. Please check your inbox
         and click on the link to verify your email address.
       </p>
-      <div class="flex items-center justify-center mb-4">
-        <span
-          class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center"
-        >
-          <i class="material-icons">email</i>
-        </span>
-      </div>
-      <button
-        (click)="resendVerificationEmail()"
-        class="w-full py-2 mt-4 bg-green-600 text-white font-semibold rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
-      >
-        Resend Verification Email
-      </button>
     </div>
   </div> `,
   styleUrl: './email-verification.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmailVerificationComponent {
-  resendVerificationEmail(): void {
-    // Logic to trigger an email resend
-    console.log('Resending verification email...');
-    // Implement API call or service method to resend verification email
+export class EmailVerificationComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private router = inject(Router);
+  toastNotifications = inject(ToastNotificationsComponent);
+
+  ngOnInit(): void {
+    const token = this.route.snapshot.queryParamMap.get('token');
+    if (token) {
+      this.authService.verifyEmail(token).subscribe({
+        next: () => {
+          this.toastNotifications.showSuccess(
+            'Email verified successfully. You can now log in.',
+            'Success'
+          );
+          this.router.navigate(['/auth/login']);
+        },
+        error: () => {
+          this.toastNotifications.showError(
+            'Email verification failed. Please try again.',
+            'Error'
+          );
+          this.router.navigate(['/auth/register']);
+        },
+      });
+    } else {
+      this.toastNotifications.showError('Invalid verification link.', 'Error');
+      this.router.navigate(['/auth/register']);
+    }
   }
 }

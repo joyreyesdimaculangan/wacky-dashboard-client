@@ -16,6 +16,7 @@ import { GetPackageAddOnsService } from '../reservation-form/getPackageAddOns.se
 import { GetPackageNameService } from '../reservation-form/getPackageName.service';
 import { effect as angularEffect } from '@angular/core';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 declare const Flowbite: any;
 
 @Component({
@@ -40,6 +41,7 @@ export class ServicesComponent implements OnInit {
   public selectedItems: Set<string> = new Set<string>();
   public packages: Packages[] = [];
   userRole: string | null = null;
+  toastNotifications = inject(ToastNotificationsComponent);
 
   @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
 
@@ -82,21 +84,12 @@ export class ServicesComponent implements OnInit {
           this.packageService.deletePackage(packageID).subscribe(() => {
             console.log('Packages deleted successfully', packageID);
             this.getPackages();
-            this.snackBar.open('Package deleted successfully!', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotifications.showSuccess('Package deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotifications.showError('Failed to delete package', 'Error');
           };
       });
     }
@@ -111,8 +104,7 @@ export class ServicesComponent implements OnInit {
   }
 
   isSelected(packageID: string): boolean {
-    this.selectedItems.has(packageID);
-    return false;
+    return this.selectedItems.has(packageID);
   }
 
   deleteSelectedItems() {
@@ -134,26 +126,12 @@ export class ServicesComponent implements OnInit {
             console.log('Selected items deleted successfully');
             this.getPackages();
             this.selectedItems.clear();
-            this.snackBar.open(
-              'Selected items deleted successfully.',
-              'Close',
-              {
-                duration: 3000,
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-                panelClass: ['custom-snackbar-success'],
-              }
-            );
+            this.toastNotifications.showSuccess('Selected items deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotifications.showError('Failed to delete selected items', 'Error');
           };
       });
     }
@@ -178,27 +156,16 @@ export class ServicesComponent implements OnInit {
             console.log('All items deleted successfully');
             this.getPackages();
             this.selectedItems.clear();
-            this.snackBar.open('All items deleted successfully.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-success'],
-            });
+            this.toastNotifications.showSuccess('All items deleted successfully', 'Success');
           });
         } else
           (error: any) => {
             console.error('Error deleting selected items:', error);
-            this.snackBar.open('Failed to delete selected items.', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              panelClass: ['custom-snackbar-error'],
-            });
+            this.toastNotifications.showError('Failed to delete selected items', 'Error');
           };
       });
     }
   }
 }
-function effect(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}
+
+

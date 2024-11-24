@@ -84,10 +84,7 @@
         Sign In
       </button>
     </div>
-    <div
-      class="flex-none relative flex items-center"
-      *ngIf="isLoggedIn()"
-    >
+    <div class="flex-none relative flex items-center" *ngIf="isLoggedIn()">
       <button
         type="button"
         class="flex items-center justify-center bg-white text-green-600 border border-green-600 rounded-full focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition duration-200"
@@ -108,37 +105,66 @@
         [ngClass]="{ 'scale-100': isDropdownOpen }"
       >
         <div class="px-6 py-4">
-          <span class="block text-lg text-green-600">{{ accountProfileName }}</span>
+          <span class="block text-lg text-green-600">{{
+            accountProfileName
+          }}</span>
           <span class="block text-sm text-gray-500 truncate">{{
             userEmail
           }}</span>
         </div>
         <ul class="py-3" aria-labelledby="user-menu-button">
-          <li>
+          <li *ngIf="authService.isAdmin()">
             <a
-              [routerLink]="['/']"
+              [routerLink]="['/admin/dashboard']"
+              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+            >
+              <mat-icon class="mr-2">dashboard</mat-icon>
+              Dashboard
+            </a>
+          </li>
+          <li *ngIf="authService.isCustomer()">
+            <a
+              [routerLink]="['/reservations']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">event</mat-icon>
               Reservations
             </a>
           </li>
-          <li>
+          <li *ngIf="authService.isAdmin()">
             <a
-              [routerLink]="['/']"
+              [routerLink]="['/admin/notifications']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">notifications</mat-icon>
               Notifications
             </a>
           </li>
-          <li>
+          <li *ngIf="authService.isCustomer()">
             <a
-              [routerLink]="['/customer/edit-profile']"
+              [routerLink]="['/customer/notifications']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
-              <mat-icon class="mr-2">settings</mat-icon>
-              Settings
+              <mat-icon class="mr-2">notifications</mat-icon>
+              Notifications
+            </a>
+          </li>
+          <li *ngIf="authService.isAdmin()">
+            <a
+              [routerLink]="['/admin/profile']"
+              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+            >
+              <mat-icon class="mr-2">person</mat-icon>
+              Profile
+            </a>
+          </li>
+          <li *ngIf="authService.isCustomer()">
+            <a
+              [routerLink]="['/customer/profile']"
+              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+            >
+              <mat-icon class="mr-2">person</mat-icon>
+              Profile
             </a>
           </li>
           <li>
@@ -147,7 +173,7 @@
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">logout</mat-icon>
-              Sign out
+              Logout
             </a>
           </li>
         </ul>

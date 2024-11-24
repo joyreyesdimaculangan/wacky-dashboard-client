@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
@@ -54,8 +53,7 @@ import { Notifications } from '../../../models/notifications';
   </div>
 </section>
 `,
-  styleUrls: ['./notification-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./notification-page.component.scss']
 })
 export class NotificationPageComponent implements OnInit {
   notifications: Notifications[] = [];

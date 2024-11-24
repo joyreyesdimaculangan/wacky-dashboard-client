@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,6 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -186,7 +187,8 @@ export class EditProfileComponent {
   profileImage: string | undefined;
   showPassword: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     // Initialize the form

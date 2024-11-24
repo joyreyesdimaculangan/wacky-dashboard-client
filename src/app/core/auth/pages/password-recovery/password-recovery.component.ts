@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 
 @Component({
   standalone: true,
@@ -49,6 +50,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
       <!-- Recovery Button -->
       <button
+        (click)="onSubmit()"
         class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
         type="submit"
       >
@@ -58,11 +60,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
       <!-- Login Link -->
       <p class="text-center text-green-900 mt-8">
         Remember your password?
-        <a
-          [routerLink]="['/auth/login']"
-          ]
+        <button
+          (click) = "goToLogin()"
           class="text-green-700 hover:text-green-500 font-bold"
-          >Log In</a
+          >Log In</button
         >
       </p>
       </form>
@@ -72,12 +73,37 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordRecoveryComponent {
-  passwordRecoveryForm!: FormGroup;
-  fb = inject(FormBuilder);
+  passwordRecoveryForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private toastNotifications = inject(ToastNotificationsComponent);
 
-  constructor(private router: Router) {
+
+  constructor() {
     this.passwordRecoveryForm = this.fb.group({
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
     });
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/auth/login']);
+  }
+
+  onSubmit(): void {
+    if (this.passwordRecoveryForm.valid) {
+      const email = this.passwordRecoveryForm.value.email;
+      this.authService.forgotPassword(email).subscribe({
+        next: () => {
+          this.toastNotifications.showSuccess('Password recovery email sent. Please check your email.', 'Success');
+        },
+        error: (error) => {
+          this.toastNotifications.showError('Failed to send password recovery email. Please try again.', 'Error');
+          console.error('Password recovery error:', error);
+        }
+      });
+    } else {
+      this.toastNotifications.showWarning('Please enter a valid email address.', 'Warning');
+    }
   }
 }
