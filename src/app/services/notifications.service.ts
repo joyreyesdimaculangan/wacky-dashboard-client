@@ -21,6 +21,10 @@ export class NotificationsService {
     );
   }
 
+  getNotificationById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
   markAsRead(id: string): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/mark-as-read/${id}`, {}).pipe(
       map(response => {

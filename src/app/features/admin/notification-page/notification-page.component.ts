@@ -115,8 +115,8 @@ export class NotificationPageComponent implements OnInit {
 
   navigateToReservation(notification: any): void {
     if (notification.isNew) {
-      this.markAsRead(notification.notificationId);
-      console.log('Notification marked as read:', notification.notificationId);
+      this.markAsRead(notification.id);
+      console.log('Notification marked as read:', notification.id);
     }
     this.router.navigate([
       '/admin/edit-reservations',
@@ -124,13 +124,24 @@ export class NotificationPageComponent implements OnInit {
     ]);
   }
 
-  
+  getNotificationById() {
+    const notificationId = this.route.snapshot.params['id'];
+    console.log('Notification ID:', notificationId);
+    this.notificationService.getNotificationById(notificationId).subscribe({
+      next: (notification) => {
+        this.reservationId = notification.reservationId;
+      },
+      error: (error) => {
+        console.error('Error fetching notification:', error);
+      },
+    });
+  }
 
-  markAsRead(id: string): void {
-    this.notificationService.markAsRead(id).subscribe({
+  markAsRead(notificationId: string): void {
+    this.notificationService.markAsRead(notificationId).subscribe({
       next: () => {
         this.notifications = this.notifications.map((notification) =>
-          notification.id === id
+          notification.id === notificationId
             ? { ...notification, isNew: false }
             : notification
         );
@@ -158,7 +169,7 @@ export class NotificationPageComponent implements OnInit {
   }
 
   trackById(index: number, item: any): string {
-    return item.notificationId;
+    return item.notificationId || index.toString();
   }
 
   onClose() {
