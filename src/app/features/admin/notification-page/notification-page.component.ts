@@ -5,13 +5,17 @@ import { Notifications } from '../../../models/notifications';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DrawerComponent } from '../drawer/drawer.component';
 
 @Component({
   selector: 'app-notification-page',
   standalone: true,
-  imports: [CommonModule, DatePipe, MatIconModule],
+  imports: [CommonModule, DatePipe, MatIconModule, DrawerComponent],
   template: `
-    <section class="notification-page">
+  <div class="flex h-screen bg-gray-100">
+  <app-drawer></app-drawer>
+  <section class="dashboard-page flex-1 overflow-auto">
+    <div class="dashboard-content">
       <header class="header">
         <h1>Notifications</h1>
         <button class="close-button" (click)="onClose()">&#10005;</button>
@@ -30,10 +34,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         </div>
 
         <!-- Notifications List -->
-        <div
-          *ngIf="!loading && notifications.length > 0"
-          class="notification-list"
-        >
+        <div *ngIf="!loading && notifications.length > 0" class="notification-list flex-1 p-6 overflow-auto">
           <div class="button-container">
             <button (click)="markAllAsRead()" class="mark-all-button">
               Mark All as Read
@@ -42,20 +43,15 @@ import { ActivatedRoute, Router } from '@angular/router';
           <ul class="space-y-3">
             <li
               *ngFor="let notification of notifications; trackBy: trackById"
-              [ngClass]="{
-                'bg-yellow-100': notification.isNew,
-                'bg-white': !notification.isNew
-              }"
+              [ngClass]="{ 'bg-yellow-100': notification.isNew, 'bg-white': !notification.isNew }"
               class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out cursor-pointer"
-              (click)="navigateToReservation(notification); markAsRead(notification.notificationId)"  
+              (click)="navigateToReservation(notification)"
             >
               <i class="fas fa-bell text-green-500 mr-3"></i>
               <div>
                 <p class="font-semibold">{{ notification.title }}</p>
                 <p class="text-sm text-gray-500">{{ notification.message }}</p>
-                <span class="text-xs text-gray-400">{{
-                  notification.date | date : 'short'
-                }}</span>
+                <span class="text-xs text-gray-400">{{ notification.date | date : 'short' }}</span>
               </div>
             </li>
           </ul>
@@ -66,7 +62,9 @@ import { ActivatedRoute, Router } from '@angular/router';
           <p>No notifications available.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+</div>
   `,
   styleUrls: ['./notification-page.component.scss'],
 })
@@ -126,11 +124,13 @@ export class NotificationPageComponent implements OnInit {
     ]);
   }
 
-  markAsRead(notificationId: string): void {
-    this.notificationService.markAsRead(notificationId).subscribe({
+  
+
+  markAsRead(id: string): void {
+    this.notificationService.markAsRead(id).subscribe({
       next: () => {
         this.notifications = this.notifications.map((notification) =>
-          notification.notificationId === notificationId
+          notification.id === id
             ? { ...notification, isNew: false }
             : notification
         );

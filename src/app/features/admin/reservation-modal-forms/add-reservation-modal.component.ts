@@ -494,11 +494,10 @@ export class AddReservationModalComponent implements OnInit {
           Validators.pattern('^[0-9]+$'),
         ],
       ],
-      eventDate: ['', Validators.required, this.dateFilter],
+      eventDate: ['', Validators.required],
       eventTime: [
         '',
         Validators.required,
-        this.isTimeDisabled,
         Validators.pattern('^[0-9]+$'),
       ],
       eventTheme: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],

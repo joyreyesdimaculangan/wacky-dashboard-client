@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
@@ -45,6 +45,10 @@ export class DatatablesComponent implements OnInit {
   selectedTab: string = 'all';
   toastNotifications = inject(ToastNotificationsComponent);
 
+  location = inject(Location);
+  loading = true;
+  errorMessage: string | null = null;
+
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
   private readonly datePipe = inject(DatePipe);
@@ -88,6 +92,7 @@ export class DatatablesComponent implements OnInit {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
         this.reservationData = data.reverse();
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching reservations:', error); // Error handling
@@ -265,6 +270,10 @@ export class DatatablesComponent implements OnInit {
   selectTab(tab: string) {
     this.selectedTab = tab;
     this.currentPage = 1; // Reset to first page on tab change
+  }
+
+  onClose() {
+    this.location.back();
   }
 
   getTabData() {

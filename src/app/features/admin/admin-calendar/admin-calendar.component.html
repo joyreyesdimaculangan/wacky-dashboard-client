@@ -1,17 +1,25 @@
-<div class="flex h-screen bg-gray-100 overflow-hidden">
-  <!-- Drawer Component -->
+<div class="flex h-screen bg-gray-100">
   <app-drawer></app-drawer>
+  <section class="dashboard-page flex-1 overflow-auto">
+    <div class="dashboard-content">
+      <header class="header">
+        <h1>Calendar</h1>
+        <button class="close-button" (click)="onClose()">&#10005;</button>
+      </header>
 
-  <!-- Calendar Component with margins on all sides -->
-  <div class="flex-grow bg-white shadow-lg rounded-lg p-4 m-4 overflow-auto">
-    <!-- Header for the Calendar -->
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="py-5 text-2xl font-bold text-green-600">Reservation Calendar</h1>
+      <div class="content">
+        <!-- Calendar Component with margins on all sides -->
+        <div
+          class="flex-grow bg-white shadow-lg rounded-lg p-4 m-4 overflow-auto"
+        >
+          <!-- Calendar Display with green accent and margin -->
+          <div
+            id="calendar"
+            class="w-full h-full rounded-lg shadow-md border border-gray-300 bg-green-50 p-4 m-2"
+          ></div>
+          
+        </div>
+      </div>
     </div>
-
-    <!-- Calendar Display with green accent and margin -->
-    <div id="calendar" class="w-full h-full rounded-lg shadow-md border border-gray-300 bg-green-50 p-4 m-2">
-      <!-- Optional Calendar Initialization Here -->
-    </div>
-  </div>
+  </section>
 </div>

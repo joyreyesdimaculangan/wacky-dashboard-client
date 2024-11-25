@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Calendar } from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -26,6 +26,10 @@ export class AdminCalendarComponent implements OnInit {
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
 
+  location = inject(Location);
+  loading = true;
+  errorMessage: string | null = null;
+
   ngOnInit() {
     this.fetchReservations();
   }
@@ -51,6 +55,7 @@ export class AdminCalendarComponent implements OnInit {
   }
 
   initializeCalendar() {
+    this.loading = false;
     const calendarEl: HTMLElement | null = document.getElementById('calendar');
 
     if (calendarEl) {
@@ -161,5 +166,9 @@ export class AdminCalendarComponent implements OnInit {
 
   handleEventClick(info: any) {
     this.router.navigate(['/admin/view-reservations', info.event.id]);
+  }
+
+  onClose() {
+    this.location.back();
   }
 }

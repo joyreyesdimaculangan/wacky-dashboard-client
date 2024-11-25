@@ -140,24 +140,6 @@
               Notifications
             </a>
           </li>
-          <li *ngIf="auth.isAdmin()">
-            <a
-              [routerLink]="['/admin/edit-profile']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
-            >
-              <mat-icon class="mr-2">person</mat-icon>
-              Profile
-            </a>
-          </li>
-          <li *ngIf="auth.isCustomer()">
-            <a
-              [routerLink]="['/customer/edit-profile']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
-            >
-              <mat-icon class="mr-2">person</mat-icon>
-              Profile
-            </a>
-          </li>
           <li>
             <a
               (click)="logout()"

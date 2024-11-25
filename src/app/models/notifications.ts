@@ -1,5 +1,5 @@
 export interface Notifications {
-    notificationId: string;
+    id: string;
     title: string;
     message: string;
     date: string;

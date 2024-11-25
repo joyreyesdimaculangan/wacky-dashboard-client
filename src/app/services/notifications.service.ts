@@ -21,11 +21,11 @@ export class NotificationsService {
     );
   }
 
-  markAsRead(notificationId: string): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/${notificationId}/mark-as-read/`, {}).pipe(
+  markAsRead(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/mark-as-read/${id}`, {}).pipe(
       map(response => {
         this.notifications = this.notifications.map(notification =>
-          notification.notificationId === notificationId ? { ...notification, isNew: false } : notification
+          notification.id === id ? { ...notification, isNew: false } : notification
         );
         return response;
       })

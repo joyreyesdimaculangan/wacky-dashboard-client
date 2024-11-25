@@ -4,7 +4,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { DrawerComponent } from '../drawer/drawer.component';
 import { FormsModule } from '@angular/forms';
 import { ReservationService } from '../../../services/reservation.service';
@@ -48,7 +48,7 @@ export type ChartOptions = {
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
-  
+
   newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
   activeFilter: string = 'all';
@@ -61,6 +61,10 @@ export class DashboardComponent implements OnInit {
   userEmail: string | null = null;
   auth = inject(AuthService);
   router = inject(Router);
+  
+  location = inject(Location);
+  loading = true;
+  errorMessage: string | null = null;
 
   userRole: string | null = null;
 
@@ -95,10 +99,11 @@ export class DashboardComponent implements OnInit {
     this.notificationService.getNotifications().subscribe({
       next: (data: any[]) => {
         this.newNotifications = data;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching new notifications:', error);
-      }
+      },
     });
   }
 
@@ -402,7 +407,20 @@ export class DashboardComponent implements OnInit {
       this.toastNotifications.showSuccess('Logged out successfully', 'Success');
     } catch (error) {
       console.error('Logout failed:', error);
-      this.toastNotifications.showError('Logout failed. Please try again.', 'Error');
+      this.toastNotifications.showError(
+        'Logout failed. Please try again.',
+        'Error'
+      );
     }
   }
+
+  trackById(index: number, item: any): number {
+    return item.id;
+  }
+
+  onClose() {
+    this.location.back();
+  }
 }
+
+
