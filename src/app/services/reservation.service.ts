@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment.development';
 import { ReservationForm } from '../models/reservation-form';
 
@@ -9,11 +10,7 @@ import { ReservationForm } from '../models/reservation-form';
 })
 export class ReservationService {
   private readonly http = inject(HttpClient)
-  private reservation: any = {
-    inquiries: 0,
-    pending: 0,
-    approved: 0,
-  };
+  private reservations: any[] = [];
 
   private apiUrl = environment.apiUrl + '/reservation'; // NestJS API endpoint
 
@@ -50,6 +47,29 @@ export class ReservationService {
 
   getAccountProfileById(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
+  }
+
+  markAsRead(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/viewed/${id}`, {}).pipe(
+      map(response => {
+        this.reservations = this.reservations.map(reservations =>
+          reservations.id === id ? { ...reservations, isNew: false } : reservations
+        );
+        return response;
+      })
+    );
+  }
+
+  markAllAsRead(): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/viewed/all`, {}).pipe(
+      map(response => {
+        this.reservations = this.reservations.map(reservations => ({
+          ...reservations,
+          isNew: false
+        }));
+        return response;
+      })
+    );
   }
 
   getStatus(): Observable<any> {

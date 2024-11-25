@@ -26,6 +26,8 @@ import { AuthService } from '../../../core/auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetAccountIdService } from '../../customer/reservation-form/getAccountId.service';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { PushNotificationService } from '../../../services/pushNotification.service';
+import { DescriptiveAnalyticsService } from '../../../services/descriptiveAnalytics.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -82,6 +84,7 @@ export class DashboardComponent implements OnInit {
   private readonly reservationService = inject(ReservationService);
   private readonly dashboardService = inject(DashboardService);
   public authService = inject(AuthService);
+  private descriptiveAnalyticsService = inject(DescriptiveAnalyticsService);
   accountInfo: { id: string; name: string } | null = null;
 
   fetchNotifications() {
@@ -115,6 +118,7 @@ export class DashboardComponent implements OnInit {
     this.setFilter('all');
     this.fetchNotifications();
     this.fetchNewNotifications();
+    this.fetchChartData();
 
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
@@ -131,78 +135,127 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  constructor() {
-    this.lineChartOptions = {
-      series: [
-        {
-          name: 'Reservations',
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148], // Fake data
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'line',
+  fetchChartData() {
+    this.descriptiveAnalyticsService.getMonthlyTrends(new Date().getFullYear()).subscribe({
+      next: (data: any) => {
+        this.lineChartOptions = {
+          series: [
+            {
+              name: 'Reservations',
+              data: data.monthlyTrends, // Use the fetched data
+            }
+          ],
+          chart: {
+            type: 'line',
+            height: 350
+          },
+          xaxis: {
+            categories: data.months, // Use the fetched categories
+          },
+          dataLabels: {
+            enabled: false,
+          },
+        };
       },
-      title: {
-        text: 'Monthly Reservation Trends',
-      },
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ], // Fake data
-      },
-      dataLabels: {
-        enabled: false,
-      },
-    };
+      error: (error) => {
+        console.error('Error fetching monthly trends data:', error);
+      }
+    });
 
-    this.barChartOptions = {
-      series: [
-        {
-          name: '2021',
-          data: [30, 40, 45, 50, 49, 60, 70, 91, 125], // Fake data
-        },
-        {
-          name: '2022',
-          data: [20, 30, 35, 40, 39, 50, 60, 81, 105], // Fake data
-        },
-        {
-          name: '2023',
-          data: [25, 35, 40, 45, 44, 55, 65, 85, 110], // Fake data
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'bar',
+    this.descriptiveAnalyticsService.getAnalyticsYearOverYear().subscribe({
+      next: (data: any) => {
+        this.barChartOptions = {
+          series: data.yearOverYearSeries, // Use the fetched data
+          chart: {
+            type: 'bar',
+            height: 350
+          },
+          xaxis: {
+            categories: data.years, // Use the fetched categories
+          },
+          dataLabels: {
+            enabled: false,
+          },
+        };
       },
-      title: {
-        text: 'Monthly Reservation Compared Year-over-Year',
-      },
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ], // Fake data
-      },
-      dataLabels: {
-        enabled: false,
-      },
-    };
+      error: (error) => {
+        console.error('Error fetching year-over-year data:', error);
+      }
+    });
+  }
+
+  constructor() {
+    // this.lineChartOptions = {
+    //   series: [
+    //     {
+    //       name: 'Reservations',
+    //       data: [10, 41, 35, 51, 49, 62, 69, 91, 148], // Fake data
+    //     },
+    //   ],
+    //   chart: {
+    //     height: 350,
+    //     type: 'line',
+    //   },
+    //   title: {
+    //     text: 'Monthly Reservation Trends',
+    //   },
+    //   xaxis: {
+    //     categories: [
+    //       'Jan',
+    //       'Feb',
+    //       'Mar',
+    //       'Apr',
+    //       'May',
+    //       'Jun',
+    //       'Jul',
+    //       'Aug',
+    //       'Sep',
+    //     ], // Fake data
+    //   },
+    //   dataLabels: {
+    //     enabled: false,
+    //   },
+    // };
+
+    // this.barChartOptions = {
+    //   series: [
+    //     {
+    //       name: '2021',
+    //       data: [30, 40, 45, 50, 49, 60, 70, 91, 125], // Fake data
+    //     },
+    //     {
+    //       name: '2022',
+    //       data: [20, 30, 35, 40, 39, 50, 60, 81, 105], // Fake data
+    //     },
+    //     {
+    //       name: '2023',
+    //       data: [25, 35, 40, 45, 44, 55, 65, 85, 110], // Fake data
+    //     },
+    //   ],
+    //   chart: {
+    //     height: 350,
+    //     type: 'bar',
+    //   },
+    //   title: {
+    //     text: 'Monthly Reservation Compared Year-over-Year',
+    //   },
+    //   xaxis: {
+    //     categories: [
+    //       'Jan',
+    //       'Feb',
+    //       'Mar',
+    //       'Apr',
+    //       'May',
+    //       'Jun',
+    //       'Jul',
+    //       'Aug',
+    //       'Sep',
+    //     ], // Fake data
+    //   },
+    //   dataLabels: {
+    //     enabled: false,
+    //   },
+    // };
 
     this.areaChartOptions = {
       series: [

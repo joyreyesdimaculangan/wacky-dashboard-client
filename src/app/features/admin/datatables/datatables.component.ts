@@ -6,7 +6,7 @@ import { ViewReservationModalComponent } from '../reservation-modal-forms/view-r
 import { AddReservationModalComponent } from '../reservation-modal-forms/add-reservation-modal.component';
 import { EditReservationModalComponent } from '../reservation-modal-forms/edit-reservation-modal.component';
 import { DeleteReservationModalComponent } from '../reservation-modal-forms/delete-reservation-modal.component';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import {
   EditedReservationForm,
@@ -51,6 +51,7 @@ export class DatatablesComponent implements OnInit {
 
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly datePipe = inject(DatePipe);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -91,13 +92,60 @@ export class DatatablesComponent implements OnInit {
   getReservations() {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
-        this.reservationData = data.reverse();
+        this.reservationData = data;
         this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching reservations:', error); // Error handling
       }
     });
+  }
+
+  getReservationsId() {
+    const reservationId = this.route.snapshot.params['reservationID'];
+    console.log('Reservation ID:', reservationId);
+    this.reservationService.getReservationById(reservationId).subscribe({
+      next: (reservation) => {
+        const index = this.reservationData.findIndex(item => item.reservationID === reservationId);
+        if (index !== -1) {
+          this.reservationData[index] = reservation;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching reservation:', error);
+      }
+    });
+  }
+
+  markAsRead(reservationId: string): void {
+    this.reservationService.markAsRead(reservationId).subscribe({
+      next: () => {
+        this.reservationData = this.reservationData.map(reservation =>
+          reservation.reservationID === reservationId ? { ...reservation, isNew: false } : reservation
+        );
+      },
+      error: (error) => {
+        console.error('Error marking reservation as read:', error);
+      }
+    });
+  }
+
+  markAllAsRead(): void {
+    this.reservationService.markAllAsRead().subscribe({
+      next: () => {
+        this.reservationData = this.reservationData.map(reservation => ({
+          ...reservation,
+          isNew: false
+        }));
+      },
+      error: (error) => {
+        console.error('Error marking all reservations as read:', error);
+      }
+    });
+  }
+
+  trackById(index: number, item: any): string {
+    return item.reservationId || index.toString();
   }
 
   viewReservation(reservationID: string) {

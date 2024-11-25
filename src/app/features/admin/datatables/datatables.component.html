@@ -54,6 +54,12 @@
             </div>
             <div class="flex items-center space-x-4">
               <button
+                (click)="markAllAsRead()"
+                class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+              >
+                Mark All as Read
+              </button>
+              <button
                 (click)="openAdd()"
                 class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
               >
@@ -218,8 +224,10 @@
               </thead>
               <tbody class="text-gray-700 divide-y divide-gray-200">
                 <tr
-                  *ngFor="let reservation of pagedData()"
+                  *ngFor="let reservation of pagedData(); trackBy: trackById"
+                  [ngClass]="{ 'bg-yellow-100': reservation.isNew, 'bg-white': !reservation.isNew }"
                   class="hover:bg-gray-50 transition duration-200"
+                  (click)="markAsRead(reservation.reservationID)"
                 >
                   <td class="p-4">{{ reservation.package?.name }}</td>
                   <td class="p-4">{{ reservation.name }}</td>

@@ -74,6 +74,9 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'view-reservations/:reservationID',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./reservation-modal-forms/view-reservation-modal.component').then((m) => m.ViewReservationModalComponent),
   },
   {

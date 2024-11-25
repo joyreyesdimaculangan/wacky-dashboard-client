@@ -28,7 +28,7 @@ export const AuthRoutes: Routes = [
   {
     path: 'login', 
     providers: [
-      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent },
     ],
     loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),
   },
