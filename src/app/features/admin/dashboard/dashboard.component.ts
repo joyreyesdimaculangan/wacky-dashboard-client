@@ -25,6 +25,7 @@ import {
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetAccountIdService } from '../../customer/reservation-form/getAccountId.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -47,7 +48,8 @@ export type ChartOptions = {
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
-
+  
+  newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
   activeFilter: string = 'all';
   inquiries: number = 0;
@@ -70,6 +72,7 @@ export class DashboardComponent implements OnInit {
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
 
+  private readonly toastNotifications = inject(ToastNotificationsComponent);
   private readonly getAccountNameService = inject(GetAccountIdService);
   private readonly notificationService = inject(NotificationsService);
   private readonly reservationService = inject(ReservationService);
@@ -88,6 +91,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  fetchNewNotifications(): void {
+    this.notificationService.getNotifications().subscribe({
+      next: (data: any[]) => {
+        this.newNotifications = data;
+      },
+      error: (error) => {
+        console.error('Error fetching new notifications:', error);
+      }
+    });
+  }
+
   searchTerm: string = ''; // For the search input
   dropdownOpen: boolean = false; // For the dropdown visibility
 
@@ -95,6 +109,7 @@ export class DashboardComponent implements OnInit {
     this.loadStatistics();
     this.setFilter('all');
     this.fetchNotifications();
+    this.fetchNewNotifications();
 
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
@@ -377,8 +392,17 @@ export class DashboardComponent implements OnInit {
     return series;
   }
 
+  goToNotifications() {
+    this.router.navigate(['/admin/notifications']);
+  }
+
   logout() {
-    this.authService.logout();
-    console.log('Logged out');
+    try {
+      this.auth.logout();
+      this.toastNotifications.showSuccess('Logged out successfully', 'Success');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      this.toastNotifications.showError('Logout failed. Please try again.', 'Error');
+    }
   }
 }

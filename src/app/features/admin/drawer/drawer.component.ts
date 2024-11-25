@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-drawer',
@@ -11,6 +12,7 @@ import { AuthService } from '../../../core/auth/services/auth.service';
   styleUrl: './drawer.component.scss'
 })
 export class DrawerComponent {
+  toastNotifications = inject(ToastNotificationsComponent);
   isOpen = false;
 
   toggleDrawer() {
@@ -19,6 +21,12 @@ export class DrawerComponent {
   auth = inject(AuthService);
 
   logout() {
-    this.auth.logout();
+    try {
+      this.auth.logout();
+      this.toastNotifications.showSuccess('Logged out successfully', 'Success');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      this.toastNotifications.showError('Logout failed. Please try again.', 'Error');
+    }
   }
 }

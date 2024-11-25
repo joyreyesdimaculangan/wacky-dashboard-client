@@ -32,10 +32,16 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'calendar',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./admin-calendar/admin-calendar.component').then((m) => m.AdminCalendarComponent),
   },
   {
     path: 'customer_reviews',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./admin-review/admin-review.component').then((m) => m.AdminReviewComponent),
   },
   {
@@ -79,6 +85,9 @@ export const AdminRoutes: Routes = [
   },
   {
     path: 'notifications',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () => import('./notification-page/notification-page.component').then((m) => m.NotificationPageComponent),
   }
 ];

@@ -8,11 +8,15 @@ import { HeaderComponent } from '../customer/header/header.component';
 import { FooterComponent } from '../customer/footer/footer.component';
 
 import { ActivatedRoute } from '@angular/router';
+import { LoadingSpinnerService } from '../loadingFunction/loadingSpinner.service';
+import { CommonModule } from '@angular/common';
+import { LoadingFunctionComponent } from "../loadingFunction/loadingFunction.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
+    CommonModule,
     OffersComponent,
     ReviewSectionComponent,
     HeaderComponent,
@@ -20,28 +24,35 @@ import { ActivatedRoute } from '@angular/router';
     MenuComponent,
     ServicesComponent,
     InquiryFormComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoadingFunctionComponent
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {}
+  private readonly route = inject(ActivatedRoute);
+  private loadingService = inject(LoadingSpinnerService);
+  loading$ = this.loadingService.loading$;
 
-  ngOnInit() {
-    // Subscribe to fragment changes
+   ngOnInit() {
+    this.loadingService.show();
+
     this.route.fragment.subscribe((fragment) => {
       if (fragment) {
         this.scrollToFragment(fragment);
       }
     });
 
-    // Check if there's a fragment on initial load
     this.route.fragment.subscribe((fragment) => {
       if (fragment) {
         this.scrollToFragment(fragment);
       }
     });
+
+    setTimeout(() => {
+      this.loadingService.hide();
+    }, 2000); 
   }
 
   private scrollToFragment(fragment: string) {

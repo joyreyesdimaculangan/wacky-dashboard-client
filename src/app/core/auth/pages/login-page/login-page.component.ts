@@ -3,9 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Input,
   signal,
 } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, Subscription, throwError } from 'rxjs';
 import {
@@ -22,6 +23,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetAccountIdService } from '../../../../features/customer/reservation-form/getAccountId.service';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
+import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
+import { LoadingFunctionComponent } from "../../../../features/loadingFunction/loadingFunction.component";
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +36,8 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-  ],
+    LoadingFunctionComponent
+],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -188,8 +192,12 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
           <button
             (click)="login()"
             class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
+            [disabled]="loading$ | async"
           >
-            Log In
+            <ng-container *ngIf="loading$ | async; else loginText">
+              <app-loading-function [inline]="true"></app-loading-function>
+            </ng-container>
+            <ng-template #loginText>Log In</ng-template>
           </button>
 
           <!-- Sign Up Link -->
@@ -211,6 +219,7 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
 })
 export class LoginPageComponent {
   private readonly getAccountProfileId = inject(GetAccountIdService);
+  @Input() inline: boolean = false;
   loginForm!: FormGroup;
   loginError = '';
   showPassword: boolean = false;
@@ -219,6 +228,10 @@ export class LoginPageComponent {
   router = inject(Router);
   loginSubscription = new Subscription();
   toastNotification = inject(ToastNotificationsComponent);
+  route = inject(ActivatedRoute);
+
+  loadingService = inject(LoadingSpinnerService);
+  loading$ = this.loadingService.loading$;
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -239,6 +252,25 @@ export class LoginPageComponent {
         ],
       ],
     });
+
+    // const token = this.route.snapshot.queryParamMap.get('token');
+    // if (token) {
+    //   this.loadingService.show();
+    //   this.authService.verifyEmail(token).subscribe({
+    //     next: () => {
+    //       this.loadingService.hide();
+    //       this.toastNotification.showSuccess('Email verified successfully', 'Success');
+    //       this.router.navigate(['/home']);
+    //     },
+    //     error: () => {
+    //       this.loadingService.hide();
+    //       this.toastNotification.showError('Email verification failed', 'Error');
+    //     }
+    //   });
+    // } else {
+    //   this.toastNotification.showError('Invalid verification token', 'Error');
+    //   this.router.navigate(['/home']);
+    // }
   }
 
   goToPasswordReset() {
@@ -247,11 +279,13 @@ export class LoginPageComponent {
 
   login() {
     if (this.loginForm.valid) {
+      this.loadingService.show();
       this.loginSubscription.add(
         this.authService
           .login(this.loginForm.value.email, this.loginForm.value.password)
           .pipe(
             catchError((error: HttpErrorResponse) => {
+              this.loadingService.hide();
               if (error.status === 401) {
                 if (error.error.message === 'Incorrect password') {
                   this.toastNotification.showError(
@@ -274,6 +308,7 @@ export class LoginPageComponent {
             })
           )
           .subscribe((response: any) => {
+            this.loadingService.hide();
             if (response['status'] == 200) {
               console.log(
                 'Account Profile Name:',

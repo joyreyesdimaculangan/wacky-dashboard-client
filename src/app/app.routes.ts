@@ -21,6 +21,9 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadChildren: () =>
       import('./core/auth/auth.routes').then((m) => m.AuthRoutes),
     title: 'Authentication',
@@ -39,6 +42,9 @@ export const routes: Routes = [
   },
   {
     path: 'customer',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadChildren: () => 
       import('./features/customer/customer-routes').then(m => m.CustomerRoutes),
     title: 'Wacky Customer Page',
@@ -54,6 +60,9 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadChildren: () =>
       import('./features/admin/admin-routes').then(m => m.AdminRoutes),
     title: 'Admin Page',
@@ -62,6 +71,9 @@ export const routes: Routes = [
   },
   {
     path: 'toast-notifications',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
     loadComponent: () =>
       import('./core/toastNotifications/toastNotifications.component').then((m) => m.ToastNotificationsComponent),
   }

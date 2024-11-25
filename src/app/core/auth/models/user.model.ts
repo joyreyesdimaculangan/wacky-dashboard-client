@@ -12,5 +12,6 @@ export interface User {
   password: string;
   account_type: string;
   accountProfileId: string;
-  account?: AccountProfile, // Optional to allow lazy loading or if the profile may not always be present
+  account?: AccountProfile,
+  isEmailVerified: boolean, // Optional to allow lazy loading or if the profile may not always be present
 }

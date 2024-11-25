@@ -1,35 +1,40 @@
 <div class="min-h-screen flex flex-col sticky top-0 z-50">
   <!-- Calling header -->
   <header class="sticky top-0 z-50">
-    <app-header />
+    <app-header></app-header>
   </header>
 
   <!-- Main Content -->
   <main class="flex-1 bg-green-50">
+    <div *ngIf="loading$ | async; else content">
+      <app-loading-function></app-loading-function>
+    </div>
+    <ng-template #content>
       <!-- Events Section -->
       <section id="home">
-        <app-offers />
+        <app-offers></app-offers>
       </section>
 
       <!-- Buffet Section -->
       <section id="menu">
-        <app-menu />
+        <app-menu></app-menu>
       </section>
 
       <!-- Packages -->
       <section id="services">
-        <app-services />
+        <app-services></app-services>
       </section>
 
       <!-- Reviews Section -->
       <section id="reviews">
-        <app-review-section />
+        <app-review-section></app-review-section>
       </section>
 
       <!-- Food House Section -->
       <section id="inquiry">
-        <app-inquiry-form />
+        <app-inquiry-form></app-inquiry-form>
       </section>
+    </ng-template>
   </main>
 
   <!-- Footer -->

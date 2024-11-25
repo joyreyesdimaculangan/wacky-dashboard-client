@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
 import { GetAccountIdService } from '../../../features/customer/reservation-form/getAccountId.service';
+import { ToastNotificationsComponent } from '../../toastNotifications/toastNotifications.component';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ import { GetAccountIdService } from '../../../features/customer/reservation-form
 export class AuthService {
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRoleSubject = new BehaviorSubject<string | null>(null);
+ 
   userRole$ = this.userRoleSubject.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<User | null>(null);
@@ -54,8 +56,19 @@ export class AuthService {
     return this.userInfo;
   }
 
+  public checkEmailVerified(): boolean {
+    return this.userInfo?.isEmailVerified ?? false;
+  }
+
   verifyEmail(token: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verify-email`, { token }).pipe(
+      tap((response: any) => {
+        if (response.success) {
+          this.userInfo = { ...this.userInfo, isEmailVerified: true } as User;
+          this.saveUserInfoToLocalStorage();
+          this.user.set(this.userInfo);
+        }
+      }),
       catchError((error) => {
         console.error('Email verification failed:', error);
         return throwError(error);
@@ -160,18 +173,22 @@ export class AuthService {
   }
 
   logout() {
-    const token = localStorage.getItem(environment.TOKEN_NAME);
-    if (token) {
+    try {
+      const token = localStorage.getItem(environment.TOKEN_NAME);
+      if (token) {
         localStorage.removeItem(environment.TOKEN_NAME);
+      }
+
+      this._isLoggedIn$.next(false);
+      this.userInfo = null;
+      this.user.set(null);
+      this.accountType.set(undefined);
+      this.accountProfileName = undefined;
+
+      this.router.navigate(['/home']);
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
-
-    this._isLoggedIn$.next(false);
-    this.userInfo = null;
-    this.user.set(null); 
-    this.accountType.set(undefined);
-    this.accountProfileName = undefined;
-
-    this.router.navigate(['/home']);
   }
 
 

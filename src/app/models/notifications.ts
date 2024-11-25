@@ -3,4 +3,6 @@ export interface Notifications {
     title: string;
     message: string;
     date: string;
+    isNew: boolean;
+    reservationId: string;
 }

@@ -4,6 +4,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { MatIcon } from '@angular/material/icon';
 import { GetAccountIdService } from '../reservation-form/getAccountId.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class HeaderComponent {
   currentFragment: string | null = null;
   isDropdownOpen = false;
 
+  toastNotifications = inject(ToastNotificationsComponent);
   accountProfileName: string | null = null;
   userName: string | null = null;
   userEmail: string | null = null;
@@ -61,7 +63,7 @@ export class HeaderComponent {
   }
 
   signIn() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   } 
 
   isLoggedIn(): boolean {
@@ -69,6 +71,12 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.auth.logout();
+    try {
+      this.auth.logout();
+      this.toastNotifications.showSuccess('Logged out successfully', 'Success');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      this.toastNotifications.showError('Logout failed. Please try again.', 'Error');
+    }
   }
 }

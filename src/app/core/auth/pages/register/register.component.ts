@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -19,17 +20,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
+import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
+import { LoadingFunctionComponent } from "../../../../features/loadingFunction/loadingFunction.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatInputModule, RouterModule, LoadingFunctionComponent],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -200,7 +197,7 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
         </div>
 
         <div *ngIf="currentSection === 2">
-          <form [formGroup]="registerForm">
+          <form #formContent [formGroup]="registerForm">
             <!-- Email Input -->
             <div class="mb-4">
               <label for="email" class="block text-green-900 font-semibold mb-1"
@@ -401,9 +398,12 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
 
             <button
               (click)="onRegister()"
-              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
+              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition" [disabled]="loading$ | async"
             >
-              Register
+            <ng-container *ngIf="loading$ | async; else registerText">
+        <app-loading-function [inline]="true"></app-loading-function>
+      </ng-container>
+      <ng-template #registerText>Register</ng-template>
             </button>
 
             <p class="text-center text-green-900 mt-4">
@@ -424,6 +424,7 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+  @Input() inline: boolean = false;
   currentSection = 1;
   registerForm!: FormGroup;
   registerError = '';
@@ -433,6 +434,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   router = inject(Router);
   registerFormSubscription = new Subscription();
   toastNotification = inject(ToastNotificationsComponent);
+  private loadingService = inject(LoadingSpinnerService);
+  loading$ = this.loadingService.loading$;
 
   fb = inject(FormBuilder);
   togglePasswordVisibility() {
@@ -499,7 +502,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   // Method to go to the next section
   nextSection() {
-    if (this.currentSection === 1 && this.registerForm.get('name')?.valid && this.registerForm.get('contactNo')?.valid && this.registerForm.get('address')?.valid) {
+    if (
+      this.currentSection === 1 &&
+      this.registerForm.get('name')?.valid &&
+      this.registerForm.get('contactNo')?.valid &&
+      this.registerForm.get('address')?.valid
+    ) {
       this.currentSection++;
     }
   }
@@ -507,14 +515,26 @@ export class RegisterComponent implements OnInit, OnDestroy {
   // Method to go back to the previous section
   prevSection() {
     if (this.currentSection > 1) {
+      this.loadingService.show();
+      setTimeout(() => {
+        this.loadingService.hide();
+      }, 2000);
       this.currentSection--;
     }
   }
 
   onRegister(): void {
     console.log('Register form:', this.registerForm.value);
+    this.loadingService.show();
+    setTimeout(() => {
+      this.loadingService.hide();
+    }, 2000);
 
     if (this.registerForm.valid) {
+      this.loadingService.show();
+      setTimeout(() => {
+        this.loadingService.hide();
+      }, 2000);
       const user = this.registerForm.value;
       this.registerFormSubscription.add(
         this.authService

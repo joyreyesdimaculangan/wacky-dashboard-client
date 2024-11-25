@@ -78,7 +78,7 @@
     <!-- Profile icon stays on the far right -->
     <div class="flex-none relative flex items-center" *ngIf="!isLoggedIn()">
       <button
-        [routerLink]="['/auth/login']"
+        (click)="signIn()"
         class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
       >
         Sign In
@@ -134,15 +134,6 @@
           <li *ngIf="auth.isAdmin()">
             <a
               [routerLink]="['/admin/notifications']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
-            >
-              <mat-icon class="mr-2">notifications</mat-icon>
-              Notifications
-            </a>
-          </li>
-          <li *ngIf="auth.isCustomer()">
-            <a
-              [routerLink]="['/customer/notifications']"
               class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">notifications</mat-icon>
