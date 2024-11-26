@@ -52,7 +52,7 @@
                 </div>
                 <div class="bg-red-100 p-4 rounded-lg shadow-md">
                   <h3 class="text-lg font-semibold text-red-800">Cancelled</h3>
-                  <div class="text-2xl font-bold text-green-600">
+                  <div class="text-2xl font-bold text-red-600">
                     {{ cancelled }}
                   </div>
                 </div>
@@ -99,19 +99,7 @@
               }"
               class="border hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
             >
-              All Sales
-            </button>
-
-            <button
-              (click)="setFilter('sales')"
-              [ngClass]="{
-                'bg-green-700 text-white': activeFilter === 'sales',
-                'text-gray-900 border-white hover:bg-gray-200':
-                  activeFilter !== 'sales'
-              }"
-              class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
-            >
-              Revenue
+              All
             </button>
 
             <button
@@ -127,92 +115,16 @@
             </button>
 
             <button
-              (click)="setFilter('customers')"
+              (click)="setFilter('event_packages')"
               [ngClass]="{
-                'bg-green-700 text-white': activeFilter === 'customers',
+                'bg-green-700 text-white': activeFilter === 'event_packages',
                 'text-gray-900 border-white hover:bg-gray-200':
-                  activeFilter !== 'customers'
+                  activeFilter !== 'event_packages'
               }"
               class="border focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition duration-200 ease-in-out"
             >
-              Customers
+              Packages
             </button>
-          </div>
-
-          <!-- Prescriptive Analytics Display -->
-          <div class="container mx-auto p-6">
-            <!-- Top and Bottom Favorite Packages Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <!-- Top Favorite Packages -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-green-600 mb-4">
-                  Top Favorite Packages
-                </h2>
-                <ul class="space-y-3">
-                  <li
-                    *ngFor="let package of topFavoritePackages"
-                    class="p-4 bg-green-50 rounded-lg flex items-center justify-between"
-                  >
-                    <span class="font-medium text-green-700">{{
-                      package.name
-                    }}</span>
-                    <span
-                      class="bg-green-600 text-white text-sm font-semibold py-1 px-2 rounded-full"
-                      >{{ package.count }} Favorites</span
-                    >
-                  </li>
-                </ul>
-              </div>
-
-              <!-- Least Favorite Packages -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-red-600 mb-4">
-                  Least Favorite Packages
-                </h2>
-                <ul class="space-y-3">
-                  <li
-                    *ngFor="let package of leastSoldPackages"
-                    class="p-4 bg-red-50 rounded-lg flex items-center justify-between"
-                  >
-                    <span class="font-medium text-red-700">{{
-                      package.name
-                    }}</span>
-                    <span
-                      class="bg-red-600 text-white text-sm font-semibold py-1 px-2 rounded-full"
-                      >{{ package.count }} Dislikes</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Prescriptive Analytics Insights Section -->
-            <div class="bg-white shadow-lg rounded-lg p-6">
-              <h2 class="text-xl font-semibold text-blue-600 mb-4">
-                Prescriptive Analytics Insights
-              </h2>
-              <div
-                *ngIf="
-                  analyticsData?.recommendations &&
-                    analyticsData?.recommendations.length > 0;
-                  else noRecommendations
-                "
-              >
-                <ul class="space-y-3">
-                  <li
-                    *ngFor="let insight of analyticsData.recommendations"
-                    class="p-4 bg-blue-50 rounded-lg"
-                  >
-                    <p class="text-blue-700 font-medium">{{ insight }}</p>
-                  </li>
-                </ul>
-              </div>
-              <ng-template #noRecommendations>
-                <p class="text-gray-500">
-                  No prescriptive insights available at the moment.
-                </p>
-              </ng-template>
-            </div>
           </div>
 
           <!-- Graph Cards (Filtered) -->
@@ -360,6 +272,75 @@
               </div>
             </div>
           </div>
+
+          <!-- Top Selling Packages -->
+          <section class="p-6 flex flex-col">
+            <h2 class="text-2xl font-semibold text-green-600 mb-4">
+              Top 3 Highest-Selling Packages
+            </h2>
+            <div
+              class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-6 rounded-lg shadow-md text-green-600 bg-white"
+            >
+              <div
+                *ngFor="let package of topFavoritePackages"
+                class="border p-6 rounded-lg shadow-md bg-white"
+              >
+                <h3 class="text-xl font-semibold">{{ package.name }}</h3>
+                <p>
+                  Total Annual Sales:
+                  <span class="font-bold text-green-600"
+                    >₱{{ package.salesData | number : "1.0-0" }}</span
+                  >
+                </p>
+                <p>{{ package.description }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bottom Selling Packages -->
+          <section class="p-6 flex flex-col">
+            <h2 class="text-2xl font-semibold text-red-600">
+              Bottom 3 Lowest-Selling Packages
+            </h2>
+            <div
+              class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md text-red-600 bg-white"
+            >
+              <div
+                *ngFor="let package of leastSoldPackages"
+                class="border p-4 rounded-lg shadow-md bg-white"
+              >
+                <h3 class="text-xl font-semibold">{{ package.name }}</h3>
+                <p>
+                  Total Annual Sales:
+                  <span class="font-bold text-red-600"
+                    >₱{{ package.salesData | number : "1.0-0" }}</span
+                  >
+                </p>
+                <p>{{ package.description }}</p>
+                <p class="mt-2 text-sm text-gray-600">
+                  Recommendation: {{ package.recommendation }}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Insights and Recommendations -->
+          <section class="p-6 flex flex-col">
+            <h2 class="text-2xl font-semibold text-blue-600">
+              Prescriptive Recommendations
+            </h2>
+            <ul
+              class="mt-4 space-y-2 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md bg-white"
+            >
+              <li
+                *ngFor="let insight of analyticsData.recommendations"
+                class="text-lg text-gray-700"
+              >
+                <i class="fas fa-check-circle text-green-500"></i>
+                {{ insight }}
+              </li>
+            </ul>
+          </section>
         </main>
       </div>
     </div>

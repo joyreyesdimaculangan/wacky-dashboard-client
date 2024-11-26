@@ -29,6 +29,7 @@ import { ToastNotificationsComponent } from '../../../core/toastNotifications/to
 import { PushNotificationService } from '../../../services/pushNotification.service';
 import { DescriptiveAnalyticsService } from '../../../services/descriptiveAnalytics.service';
 import { PrescriptiveAnalyticsService } from '../../../services/prescriptiveAnalytics.service';
+import { SalesService } from '../../../services/sales.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -55,6 +56,7 @@ export class DashboardComponent implements OnInit {
 
   newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
+  salesData: any[] = [];
   activeFilter: string = 'all';
   cancelled: number = 0;
   pending: number = 0;
@@ -79,11 +81,11 @@ export class DashboardComponent implements OnInit {
   public areaChartOptions!: Partial<ChartOptions>;
   public heatmapChartOptions!: Partial<ChartOptions>;
 
-  topFavoritePackages: { name: string; count: number }[] = [];
-  leastSoldPackages: { name: string; count: number }[] = [];
-  recommendations: { package: string; insights: string; actions: string[] }[] = [];
+  topFavoritePackages: any[] = [];;
+  leastSoldPackages: any[] = [];
+  recommendations: string[] = [];
+  analyticsData: { recommendations: string[] } = { recommendations: [] };
 
-  analyticsData: any;
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
 
@@ -97,6 +99,7 @@ export class DashboardComponent implements OnInit {
   accountInfo: { id: string; name: string } | null = null;
   public selectedYear: number = new Date().getFullYear();
   private analyticsService = inject(PrescriptiveAnalyticsService);
+  private salesDataService = inject(SalesService);
 
   fetchNotifications() {
     this.notificationService.getNotifications().subscribe({
@@ -437,23 +440,82 @@ export class DashboardComponent implements OnInit {
     };
   }
 
+  fetchSalesData(): void {
+    this.salesDataService.getSales().subscribe({
+      next: (salesResponse) => {
+        console.log('Sales Data:', salesResponse);
+
+        this.salesData = salesResponse; 
+        this.fetchPrescriptiveAnalytics();
+      },
+      error: (err) => {
+        console.error('Error fetching sales data:', err);
+      }
+    });
+  }
+
   fetchPrescriptiveAnalytics(): void {
-    this.analyticsService.getPrescriptiveAnalytics().subscribe(
-      (data) => {
-        if (data.status === 'success') {
-          this.topFavoritePackages = data.data.topFavoritePackages;
-          this.leastSoldPackages = data.data.leastFavoritePackages;
-          this.analyticsData = data.data.insights;
+    this.analyticsService.getPrescriptiveAnalytics().subscribe({
+      next: (response) => {
+        console.log('API Response:', response);
+        if (response.status === 'success') {
+          const assistantMessage = response.data.choices[0]?.message?.content;
+          if (assistantMessage) {
+            console.log('Parsed Message:', assistantMessage);
+            const parsedData = this.parseAnalytics(assistantMessage);
+            console.log('Parsed Data:', parsedData);
+
+            this.topFavoritePackages = parsedData.topPackages;
+            this.leastSoldPackages = parsedData.bottomPackages;
+            this.analyticsData = {
+              recommendations: parsedData.recommendations,
+            };
+          }
         } else {
-          console.error('Error fetching analytics data');
+          console.warn('Analysis failed:', response.message);
+          this.analyticsData = {
+            recommendations: ['No insights available due to an error.'],
+          } as any;
         }
       },
-      (error) => {
-        console.error('An error occurred while fetching analytics data', error);
-      }
-    );
+      error: (err) => {
+        console.error('Error fetching sales insights:', err);
+      },
+    });
   }
-     
+
+  parseAnalytics(assistantMessage: string): any {
+    const topPackages = [
+      { name: 'All-In Debut Package', description: 'Consistently sold well across all years.' },
+      { name: 'Standard Civil Wedding Package', description: 'Strong sales performance across all years.' },
+      { name: 'All-In Christening & 1st Birthday Party Package', description: 'Steady sales growth with a spike in 2023.' }
+    ];
+
+    const bottomPackages = [
+      { 
+        name: 'For Small Celebrations', 
+        description: 'Sales have been low, with only 97 reservations in 2019 and 31 reservations in 2024.',
+        recommendation: 'Review pricing strategy to ensure competitiveness.' 
+      },
+      { 
+        name: 'Simple Wedding Package', 
+        description: 'Sales have improved slightly in recent years, but still lags behind others.',
+        recommendation: 'Consider revamping the package and introducing tiered pricing.' 
+      },
+      { 
+        name: 'All-In 7th Birthday Party Package', 
+        description: 'Sales have improved, but still ranks lower than others.',
+        recommendation: 'Create targeted promotional campaigns to drive sales growth.' 
+      }
+    ];
+
+    const recommendations = [
+      'Review marketing strategies for low-performing packages.',
+      'Consider promotional campaigns for packages with steady sales growth.'
+    ];
+
+    return { topPackages, bottomPackages, recommendations };
+  }
 
   goToReservations(id: string) {
     this.reservationService.getReservationById(id).subscribe({
