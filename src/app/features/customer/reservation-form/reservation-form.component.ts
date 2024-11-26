@@ -67,6 +67,7 @@ export class ReservationFormComponent implements OnInit {
   private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
   toastNotifications = inject(ToastNotificationsComponent);
+  loading: boolean = false;
 
   packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
@@ -334,6 +335,7 @@ export class ReservationFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loading = true;
     if (this.reservationForm.valid) {
       const accountProfileId = this.authService.user()?.accountProfileId;
       // Ensure the status is properly set, defaulting to 'Pending' if undefined
@@ -348,6 +350,7 @@ export class ReservationFormComponent implements OnInit {
 
       if (!eventDateValue || !eventTimeValue) {
         console.error('Invalid date or time value');
+        this.loading = false;
         return;
       }
 
@@ -367,6 +370,7 @@ export class ReservationFormComponent implements OnInit {
       if (isNaN(eventDate.getTime())) {
         this.toastNotifications.showError('Invalid date or time value', 'Error');
         console.error('Invalid date or time value');
+        this.loading = false;
         return;
       }
 
@@ -395,19 +399,21 @@ export class ReservationFormComponent implements OnInit {
           console.log('Reservation created:', response);
           this.reservationSubmitted.emit(response);
           this.router.navigate(['/customer/confirmation']);
+          this.loading = false;
         },
         (error) => {
           console.error('Error creating reservation:', error);
+          this.loading = false;
         }
       );
-      this.resetAddOns();
     } else {
       this.toastNotifications.showWarning('Please fill out all required fields', 'Warning');
+      this.loading = false;
     }
   }
 
-  resetAddOns() {
-    this.addOnsId = [];
-    this.packageAddOnsService.setAddOnsId([]);
-  }
+  // resetAddOns() {
+  //   this.addOnsId = [];
+  //   this.packageAddOnsService.setAddOnsId([]);
+  // }
 }

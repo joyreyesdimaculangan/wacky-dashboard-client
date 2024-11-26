@@ -28,6 +28,7 @@ import { GetAccountIdService } from '../../customer/reservation-form/getAccountI
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 import { PushNotificationService } from '../../../services/pushNotification.service';
 import { DescriptiveAnalyticsService } from '../../../services/descriptiveAnalytics.service';
+import { PrescriptiveAnalyticsService } from '../../../services/prescriptiveAnalytics.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -38,6 +39,7 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
   fill?: ApexFill;
   plotOptions?: ApexPlotOptions;
+  tooltip?: ApexTooltip;
 };
 
 @Component({
@@ -54,27 +56,34 @@ export class DashboardComponent implements OnInit {
   newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
   activeFilter: string = 'all';
-  inquiries: number = 0;
+  cancelled: number = 0;
   pending: number = 0;
   approved: number = 0;
+  reservationsByTime: any[] = [];
 
   accountProfileName: string | null = null;
   userName: string | null = null;
   userEmail: string | null = null;
   auth = inject(AuthService);
   router = inject(Router);
-  
+
   location = inject(Location);
   loading = true;
   errorMessage: string | null = null;
 
   userRole: string | null = null;
 
+  chartSeries: ApexAxisChartSeries = [];
   public lineChartOptions!: Partial<ChartOptions>;
   public barChartOptions!: Partial<ChartOptions>;
   public areaChartOptions!: Partial<ChartOptions>;
   public heatmapChartOptions!: Partial<ChartOptions>;
 
+  topFavoritePackages: { name: string; count: number }[] = [];
+  leastSoldPackages: { name: string; count: number }[] = [];
+  recommendations: { package: string; insights: string; actions: string[] }[] = [];
+
+  analyticsData: any;
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
 
@@ -86,6 +95,8 @@ export class DashboardComponent implements OnInit {
   public authService = inject(AuthService);
   private descriptiveAnalyticsService = inject(DescriptiveAnalyticsService);
   accountInfo: { id: string; name: string } | null = null;
+  public selectedYear: number = new Date().getFullYear();
+  private analyticsService = inject(PrescriptiveAnalyticsService);
 
   fetchNotifications() {
     this.notificationService.getNotifications().subscribe({
@@ -118,7 +129,11 @@ export class DashboardComponent implements OnInit {
     this.setFilter('all');
     this.fetchNotifications();
     this.fetchNewNotifications();
-    this.fetchChartData();
+    this.fetchYearOverYearData();
+    this.fetchMonthlyTrends(this.selectedYear);
+    this.fetchMonthlyTrendsofPackages(this.selectedYear);
+    this.fetchReservationsByTime(this.selectedYear);
+    this.fetchPrescriptiveAnalytics();
 
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
@@ -135,219 +150,310 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  fetchChartData() {
-    this.descriptiveAnalyticsService.getMonthlyTrends(new Date().getFullYear()).subscribe({
-      next: (data: any) => {
+  fetchMonthlyTrends(year: number) {
+    this.descriptiveAnalyticsService.getMonthlyTrends(year).subscribe(
+      (data) => {
         this.lineChartOptions = {
           series: [
             {
               name: 'Reservations',
-              data: data.monthlyTrends, // Use the fetched data
-            }
+              data: data.monthlyTrends, // Array of reservation counts
+            },
           ],
           chart: {
-            type: 'line',
-            height: 350
-          },
-          xaxis: {
-            categories: data.months, // Use the fetched categories
+            type: 'line', // You can switch to 'bar' if needed
+            height: 350,
           },
           dataLabels: {
-            enabled: false,
+            enabled: true,
+          },
+          xaxis: {
+            categories: data.months, // Array of month names
+            title: {
+              text: 'Months',
+            },
+          },
+          yaxis: {
+            title: {
+              text: 'Number of Reservations',
+            },
+          },
+          title: {
+            text: `Monthly Reservation Trends - ${year}`,
+            align: 'center',
           },
         };
       },
-      error: (error) => {
-        console.error('Error fetching monthly trends data:', error);
+      (error) => {
+        console.error('Error fetching data:', error);
       }
-    });
-
-    this.descriptiveAnalyticsService.getAnalyticsYearOverYear().subscribe({
-      next: (data: any) => {
-        this.barChartOptions = {
-          series: data.yearOverYearSeries, // Use the fetched data
-          chart: {
-            type: 'bar',
-            height: 350
-          },
-          xaxis: {
-            categories: data.years, // Use the fetched categories
-          },
-          dataLabels: {
-            enabled: false,
-          },
-        };
-      },
-      error: (error) => {
-        console.error('Error fetching year-over-year data:', error);
-      }
-    });
+    );
   }
 
-  constructor() {
-    // this.lineChartOptions = {
-    //   series: [
-    //     {
-    //       name: 'Reservations',
-    //       data: [10, 41, 35, 51, 49, 62, 69, 91, 148], // Fake data
-    //     },
-    //   ],
-    //   chart: {
-    //     height: 350,
-    //     type: 'line',
-    //   },
-    //   title: {
-    //     text: 'Monthly Reservation Trends',
-    //   },
-    //   xaxis: {
-    //     categories: [
-    //       'Jan',
-    //       'Feb',
-    //       'Mar',
-    //       'Apr',
-    //       'May',
-    //       'Jun',
-    //       'Jul',
-    //       'Aug',
-    //       'Sep',
-    //     ], // Fake data
-    //   },
-    //   dataLabels: {
-    //     enabled: false,
-    //   },
-    // };
+  onYearChange(year: number): void {
+    this.selectedYear = year;
+    this.fetchMonthlyTrends(year);
+  }
 
-    // this.barChartOptions = {
-    //   series: [
-    //     {
-    //       name: '2021',
-    //       data: [30, 40, 45, 50, 49, 60, 70, 91, 125], // Fake data
-    //     },
-    //     {
-    //       name: '2022',
-    //       data: [20, 30, 35, 40, 39, 50, 60, 81, 105], // Fake data
-    //     },
-    //     {
-    //       name: '2023',
-    //       data: [25, 35, 40, 45, 44, 55, 65, 85, 110], // Fake data
-    //     },
-    //   ],
-    //   chart: {
-    //     height: 350,
-    //     type: 'bar',
-    //   },
-    //   title: {
-    //     text: 'Monthly Reservation Compared Year-over-Year',
-    //   },
-    //   xaxis: {
-    //     categories: [
-    //       'Jan',
-    //       'Feb',
-    //       'Mar',
-    //       'Apr',
-    //       'May',
-    //       'Jun',
-    //       'Jul',
-    //       'Aug',
-    //       'Sep',
-    //     ], // Fake data
-    //   },
-    //   dataLabels: {
-    //     enabled: false,
-    //   },
-    // };
+  fetchYearOverYearData() {
+    this.descriptiveAnalyticsService.getAnalyticsYearOverYear().subscribe(
+      (data) => {
+        console.log(data);
 
-    this.areaChartOptions = {
-      series: [
-        {
-          name: 'Package A',
-          data: [20, 30, 40, 50, 60, 70, 80, 90, 100], // Fake data
-        },
-        {
-          name: 'Package B',
-          data: [15, 25, 35, 45, 55, 65, 75, 85, 95], // Fake data
-        },
-        {
-          name: 'Package C',
-          data: [10, 20, 30, 40, 50, 60, 70, 80, 90], // Fake data
-        },
-        {
-          name: 'Package D',
-          data: [5, 15, 25, 35, 45, 55, 65, 75, 85], // Fake data
-        },
-      ],
+        const yearData = data.yearData;
+
+        // Extract series and categories
+        const series = yearData.map((year: any) => ({
+          name: year.year,
+          data: this.getMonthlyCounts(year.months),
+        }));
+
+        const categories = this.getMonthNames(); // Months for X-axis
+
+        // Configure chart options
+        this.barChartOptions = {
+          series: series,
+          chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true, // Enable stacked bars
+          },
+          xaxis: {
+            categories: categories,
+            title: {
+              text: 'Months',
+            },
+          },
+          title: {
+            text: 'Year-over-Year Reservations',
+            align: 'center',
+          },
+        };
+      },
+      (error) => {
+        console.error('Error fetching year-over-year data:', error);
+      }
+    );
+  }
+
+  getMonthlyCounts(months: any[]): number[] {
+    const allMonths = this.getMonthNames();
+    const counts = Array(12).fill(0); // Initialize counts for all 12 months
+
+    months.forEach((month: any) => {
+      const index = allMonths.indexOf(month.month); // Find month index
+      if (index !== -1) {
+        counts[index] = month.count; // Assign count to corresponding month
+      }
+    });
+
+    return counts;
+  }
+
+  getMonthNames(): string[] {
+    return [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+  }
+
+  fetchMonthlyTrendsofPackages(year: number) {
+    this.descriptiveAnalyticsService.getMonthlyTrendsOfPackages(year).subscribe(
+      (data) => {
+        const trends = data.monthlyTrends;
+        const series = this.formatSeries(trends);
+        const categories = trends.map((trend: any) => trend.month);
+
+        // Configure chart options
+        this.areaChartOptions = {
+          series: series,
+          chart: {
+            type: 'area',
+            height: 400,
+            stacked: true, // Stacked bars for package comparison
+          },
+          xaxis: {
+            categories: categories,
+            title: {
+              text: 'Months',
+            },
+          },
+          yaxis: {
+            title: {
+              text: 'Reservations',
+            },
+          },
+          title: {
+            text: 'Monthly Trends of Packages',
+            align: 'center',
+          },
+          dataLabels: {
+            enabled: true,
+          },
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.7,
+              opacityTo: 0.9,
+              stops: [0, 90, 100],
+            },
+          },
+        };
+      },
+      (error) => {
+        console.error('Error fetching monthly trends:', error);
+      }
+    );
+  }
+
+  formatSeries(trends: any[]): any[] {
+    const packageNames = new Set<string>();
+
+    // Collect unique package names
+    trends.forEach((trend) => {
+      trend.packages.forEach((pkg: any) => packageNames.add(pkg.packageName));
+    });
+
+    // Format series data for each package
+    return Array.from(packageNames).map((packageName) => ({
+      name: packageName,
+      data: trends.map((trend) => {
+        const pkg = trend.packages.find(
+          (p: any) => p.packageName === packageName
+        );
+        return pkg ? parseInt(pkg.reservations, 10) : 0; // Use 0 if no data
+      }),
+    }));
+  }
+
+  fetchReservationsByTime(year: number) {
+    this.descriptiveAnalyticsService.getReservationsByTime(year).subscribe(
+      (data) => {
+        console.log('API Response:', data);
+        this.reservationsByTime = data;
+        this.prepareHeatmapData();
+      },
+      (error) => {
+        console.error('Error fetching reservations by time:', error);
+      }
+    );
+  }
+
+  prepareHeatmapData(): void {
+    if (!Array.isArray(this.reservationsByTime)) {
+      console.error(
+        'Expected reservationsByTime to be an array, but got:',
+        this.reservationsByTime
+      );
+      this.chartSeries = [];
+      return;
+    }
+
+    // Prepare the series data for the heatmap
+    const lunchData: { x: string; y: string; value: number }[] = [];
+    const dinnerData: { x: string; y: string; value: number }[] = [];
+
+    // Map the data into two separate arrays: one for Lunch and one for Dinner
+    this.reservationsByTime.forEach((item) => {
+      lunchData.push({
+        x: item.month, // Month on the x-axis
+        y: 'Lunch', // Y-axis is "Lunch"
+        value: item.lunch || 0, // Reservation count for Lunch
+      });
+
+      dinnerData.push({
+        x: item.month, // Month on the x-axis
+        y: 'Dinner', // Y-axis is "Dinner"
+        value: item.dinner || 0, // Reservation count for Dinner
+      });
+    });
+
+    // The data needs to be structured into a series format as per ApexCharts
+    this.chartSeries = [
+      {
+        name: 'Lunch',
+        data: lunchData.map((item) => ({ x: item.x, y: item.value })), // x: month, y: value (reservations for Lunch)
+      },
+      {
+        name: 'Dinner',
+        data: dinnerData.map((item) => ({ x: item.x, y: item.value })), // x: month, y: value (reservations for Dinner)
+      },
+    ];
+
+    // Set up the chart options
+    this.heatmapChartOptions = {
       chart: {
-        height: 350,
-        type: 'area',
-        stacked: true,
+        type: 'heatmap',
+        height: 450,
       },
       title: {
-        text: 'Reservations of Event Packages by Month',
+        text: `Heatmap of Reservations by Time (${this.selectedYear})`,
+        align: 'center',
       },
       xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ], // Fake data
+        categories: this.reservationsByTime.map((item) => item.month), // Months as x-axis categories
+        title: { text: 'Month' },
+      },
+      yaxis: {
+        labels: {
+          formatter: (value) => ['Lunch', 'Dinner'][value - 1], // Lunch and Dinner on the y-axis
+        },
+        title: { text: 'Meal Time' },
       },
       dataLabels: {
-        enabled: false,
-      },
-      fill: {
-        opacity: 1,
-      },
-    };
-
-    this.heatmapChartOptions = {
-      series: [
-        {
-          name: 'Metric1',
-          data: this.generateHeatmapData(9, { min: 0, max: 90 }),
-        },
-        {
-          name: 'Metric2',
-          data: this.generateHeatmapData(9, { min: 0, max: 90 }),
-        },
-        {
-          name: 'Metric3',
-          data: this.generateHeatmapData(9, { min: 0, max: 90 }),
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'heatmap',
-      },
-      title: {
-        text: 'Reservation Density by Day and Hour',
+        enabled: true,
       },
       plotOptions: {
         heatmap: {
           shadeIntensity: 0.5,
           colorScale: {
             ranges: [
-              {
-                from: 0,
-                to: 50,
-                color: '#00A100',
-              },
-              {
-                from: 51,
-                to: 100,
-                color: '#128FD9',
-              },
+              { from: 0, to: 10, color: '#00A100', name: 'Low' },
+              { from: 11, to: 50, color: '#128FD9', name: 'Medium' },
+              { from: 51, to: 100, color: '#FFB200', name: 'High' },
+              { from: 101, to: 500, color: '#FF0000', name: 'Very High' },
             ],
           },
         },
       },
+      tooltip: {
+        enabled: true,
+        shared: true,
+        y: {
+          formatter: (value: number) => `${value} Reservations`,
+        },
+      },
     };
   }
+
+  fetchPrescriptiveAnalytics(): void {
+    this.analyticsService.getPrescriptiveAnalytics().subscribe(
+      (data) => {
+        if (data.status === 'success') {
+          this.topFavoritePackages = data.data.topFavoritePackages;
+          this.leastSoldPackages = data.data.leastFavoritePackages;
+          this.analyticsData = data.data.insights;
+        } else {
+          console.error('Error fetching analytics data');
+        }
+      },
+      (error) => {
+        console.error('An error occurred while fetching analytics data', error);
+      }
+    );
+  }
+     
 
   goToReservations(id: string) {
     this.reservationService.getReservationById(id).subscribe({
@@ -364,7 +470,7 @@ export class DashboardComponent implements OnInit {
   loadStatistics() {
     this.dashboardService.getStatistics().subscribe({
       next: (stats) => {
-        this.inquiries = stats.inquiries;
+        this.cancelled = stats.cancelled;
         this.pending = stats.pending;
         this.approved = stats.approved;
       },
@@ -373,18 +479,6 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
-
-  topFavoritePackages = [
-    { name: 'Package A', count: 120 },
-    { name: 'Package B', count: 95 },
-    { name: 'Package C', count: 80 },
-  ];
-
-  leastSoldPackages = [
-    { name: 'Package D', count: 10 },
-    { name: 'Package E', count: 15 },
-    { name: 'Package F', count: 20 },
-  ];
 
   cards = [
     {
@@ -403,7 +497,7 @@ export class DashboardComponent implements OnInit {
       category: 'event_packages',
     },
     {
-      title: 'Reservation Density by Day and Hour',
+      title: 'Reservation Density by Month and Hour',
       content: 'Graph for reservations',
       category: 'reservation_density',
     },
@@ -475,5 +569,3 @@ export class DashboardComponent implements OnInit {
     this.location.back();
   }
 }
-
-

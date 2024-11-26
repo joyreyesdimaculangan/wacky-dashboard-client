@@ -17,6 +17,7 @@ import { GetPackageNameService } from '../reservation-form/getPackageName.servic
 import { effect as angularEffect } from '@angular/core';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { LoadingFunctionComponent } from "../../loadingFunction/loadingFunction.component";
 declare const Flowbite: any;
 
 @Component({
@@ -28,7 +29,8 @@ declare const Flowbite: any;
     PackageDetailsComponent,
     MatSnackBarModule,
     MatIconModule,
-  ],
+    LoadingFunctionComponent
+],
   templateUrl: './services.component.html',
   styleUrl: './services.component.scss',
 })
@@ -42,6 +44,8 @@ export class ServicesComponent implements OnInit {
   public packages: Packages[] = [];
   userRole: string | null = null;
   toastNotifications = inject(ToastNotificationsComponent);
+ 
+  loading: boolean = false;
 
   @ViewChild('packageModal') packageModal!: PackageDetailsComponent;
 
@@ -63,7 +67,12 @@ export class ServicesComponent implements OnInit {
   }
 
   openPackageModal(offer: any) {
-    this.packageModal.openModal(offer);
+    offer.loading = true;
+    // Simulate an async operation
+    setTimeout(() => {
+      this.packageModal.openModal(offer);
+      offer.loading = false;
+    }, 2000); // Adjust the timeout as needed
   }
 
   closePackageModal() {

@@ -14,6 +14,7 @@ export interface Packages {
   inclusions: PackageInclusions[];
   addOns: PackageAddOns[];
   availableAddOns: PackageAddOns[];
+  loading: boolean;
 }
 
 export interface ViewPackages {

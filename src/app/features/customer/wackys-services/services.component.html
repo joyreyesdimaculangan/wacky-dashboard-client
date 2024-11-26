@@ -45,52 +45,70 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Loop through packages -->
       @for (offer of packages; track $index) {
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-          <div
-            class="relative shadow-lg flex flex-col justify-between h-full cursor-pointer"
-            [class.border-2]="isSelected(offer.packageID.toString())"
-            [class.border-red-500]="isSelected(offer.packageID.toString())"
-            (click)="authService.isAdmin() ?toggleSelection(offer.packageID.toString()) : null"
-          >
-            <!-- Image Section -->
-            <div class="w-full">
-              <img
-                [src]="offer.image_url"
-                alt="Package {{ $index + 1 }}"
-                class="w-full h-[32rem] object-cover"
-                loading="lazy"
-              />
-            </div>
-        
-            <!-- Content Section -->
-            <div class="p-6 flex-grow">
-              <h3 class="text-2xl font-serif font-bold text-green-700">
-                {{ offer.name }}
-              </h3>
-              <p class="mt-2 font-poppins text-green-900">
-                {{ offer.description }}
-              </p>
-            </div>
-        
-            <!-- Learn More Button -->
-            <button
-              (click)="openPackageModal(offer); $event.stopPropagation(); pushPackageName(offer.packageID, offer.name)"     
-              class="mt-4 inline-block bg-green-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto mb-6"
-            >
-              Learn More
-            </button>
-        
-            <!-- Action Buttons Section with Extra Margin and Padding -->
-            <div class="mt-6 flex justify-end space-x-4 mb-6 pr-4" *ngIf="authService.isAdmin()">
-              <button
-                class="flex items-center justify-center border border-red-500 text-red-500 font-medium py-2 px-6 rounded-lg hover:bg-red-50 hover:text-red-600 transition duration-200 ease-in-out"
-                (click)="deletePackage(offer.packageID.toString()); $event.stopPropagation()"
-              >
-                <span class="material-icons">delete</span>
-              </button>
-            </div>
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+        <div
+          class="relative shadow-lg flex flex-col justify-between h-full cursor-pointer"
+          [class.border-2]="isSelected(offer.packageID.toString())"
+          [class.border-red-500]="isSelected(offer.packageID.toString())"
+          (click)="
+            authService.isAdmin()
+              ? toggleSelection(offer.packageID.toString())
+              : null
+          "
+        >
+          <!-- Image Section -->
+          <div class="w-full">
+            <img
+              [src]="offer.image_url"
+              alt="Package {{ $index + 1 }}"
+              class="w-full h-[32rem] object-cover"
+              loading="lazy"
+            />
           </div>
-        </div>      
+
+          <!-- Content Section -->
+          <div class="p-6 flex-grow">
+            <h3 class="text-2xl font-serif font-bold text-green-700">
+              {{ offer.name }}
+            </h3>
+            <p class="mt-2 font-poppins text-green-900">
+              {{ offer.description }}
+            </p>
+          </div>
+
+          <!-- Learn More Button -->
+          <button
+            (click)="
+              openPackageModal(offer);
+              $event.stopPropagation();
+              pushPackageName(offer.packageID, offer.name)
+            "
+            class="mt-4 inline-block bg-green-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto mb-6"
+            [disabled]="offer.loading"
+          >
+            <ng-container *ngIf="offer.loading; else learnMoreText">
+              <app-loading-function [inline]="true"></app-loading-function>
+            </ng-container>
+            <ng-template #learnMoreText>Learn More</ng-template>
+          </button>
+
+          <!-- Action Buttons Section with Extra Margin and Padding -->
+          <div
+            class="mt-6 flex justify-end space-x-4 mb-6 pr-4"
+            *ngIf="authService.isAdmin()"
+          >
+            <button
+              class="flex items-center justify-center border border-red-500 text-red-500 font-medium py-2 px-6 rounded-lg hover:bg-red-50 hover:text-red-600 transition duration-200 ease-in-out"
+              (click)="
+                deletePackage(offer.packageID.toString());
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
       }
 
       <!-- Add Package Card -->
