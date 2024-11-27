@@ -243,9 +243,9 @@ export class LoginPageComponent {
   }
 
   ngOnInit() {
-    // add inspections to current query parameters
     this.route.queryParamMap.subscribe((params) => {
       const token = params.get('token');
+      console.log(token);
       if(token) {
         this.toastNotification.showSuccess(
           'Email Verified.',
@@ -254,10 +254,6 @@ export class LoginPageComponent {
       }
     });
 
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParams: queryParams,
-    // });
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: [
