@@ -524,7 +524,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onRegister(): void {
-    console.log('Register form:', this.registerForm.value);
     this.loadingService.show();
     setTimeout(() => {
       this.loadingService.hide();
@@ -596,6 +595,5 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.registerFormSubscription.unsubscribe();
-    console.log('Register form subscription unsubscribed');
   }
 }

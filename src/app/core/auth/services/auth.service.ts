@@ -15,14 +15,14 @@ import { ToastNotificationsComponent } from '../../toastNotifications/toastNotif
 export class AuthService {
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRoleSubject = new BehaviorSubject<string | null>(null);
- 
+
   userRole$ = this.userRoleSubject.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<User | null>(null);
   userInfo: User | null = null;
   accountType = signal<string | undefined>('');
   userName: string | undefined;
-  accountProfileName: string | undefined;
+  accountProfileName = signal<string | undefined>('');
   private apiUrl = environment.apiUrl + '/auth';
 
   private readonly auth = inject(LoginService);
@@ -36,8 +36,7 @@ export class AuthService {
       this.userInfo = this.getUser(token);
       this.user.set(this.userInfo);
       this.accountType.set(this.userInfo?.account_type);
-      this.accountProfileName = this.userInfo?.account?.accountProfileName; 
-      console.log('User Info:', this.userInfo);
+      this.accountProfileName.set(this.userInfo?.accountProfileName);
       this._isLoggedIn$.next(true);
     } else {
       this.loadUserInfoFromLocalStorage();
@@ -183,7 +182,7 @@ export class AuthService {
       this.userInfo = null;
       this.user.set(null);
       this.accountType.set(undefined);
-      this.accountProfileName = undefined;
+      this.accountProfileName.set(undefined);
 
       this.router.navigate(['/home']);
     } catch (error) {
@@ -220,7 +219,7 @@ export class AuthService {
       this.userInfo = JSON.parse(userInfo);
       this.user.set(this.userInfo);
       this.accountType.set(this.userInfo?.account_type);
-      this.accountProfileName = this.userInfo?.account?.accountProfileName;
+      this.accountProfileName.set(this.userInfo?.account?.accountProfileName);
       this._isLoggedIn$.next(true);
     }
   }

@@ -310,10 +310,6 @@ export class LoginPageComponent {
           .subscribe((response: any) => {
             this.loadingService.hide();
             if (response['status'] == 200) {
-              console.log(
-                'Account Profile Name:',
-                this.authService.accountProfileName
-              );
               this.toastNotification.showSuccess(
                 'Login successful.',
                 'Success'

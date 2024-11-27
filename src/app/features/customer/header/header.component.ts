@@ -18,10 +18,10 @@ export class HeaderComponent {
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
-  
+
 
   toastNotifications = inject(ToastNotificationsComponent);
-  accountProfileName: string | null = null;
+  accountProfileName: string | undefined = undefined;
   userName: string | null = null;
   userEmail: string | null = null;
   auth = inject(AuthService);
@@ -37,7 +37,7 @@ export class HeaderComponent {
   onClick(event: Event) {
     const target = event.target as HTMLElement;
     const dropdownButton = document.getElementById('user-menu-button');
-    
+
     // Close the dropdown if the click is outside the dropdown and the button
     if (!dropdownButton?.contains(target)) {
       this.isDropdownOpen = false;
@@ -47,13 +47,13 @@ export class HeaderComponent {
   ngOnInit() {
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
-    
+    this.accountProfileName = this.auth.accountProfileName();
     if (userInfo) {
       const accountProfileName = this.getAccountNameService.getAccountProfileName();
-      this.accountProfileName = accountProfileName?.accountProfileName ?? null;
+      this.accountProfileName = accountProfileName?.accountProfileName;
       this.userEmail = userInfo.email;
     }
-    
+
     this.route.fragment.subscribe((fragment) => {
       this.currentFragment = fragment;
     });
@@ -65,7 +65,7 @@ export class HeaderComponent {
 
   signIn() {
     this.router.navigate(['/auth/login']);
-  } 
+  }
 
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();

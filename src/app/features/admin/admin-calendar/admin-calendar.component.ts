@@ -87,9 +87,6 @@ export class AdminCalendarComponent implements OnInit {
         };
       });
 
-      console.log('Initializing calendar with events:', events); // Debugging
-      console.log('Initializing calendar with venues:', venues); // Debugging
-
       this.calendar = new Calendar(calendarEl, {
         schedulerLicenseKey: this.schedulerLicenseKey,
         plugins: [
