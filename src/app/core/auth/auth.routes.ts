@@ -5,19 +5,19 @@ import { ToastNotificationsComponent } from "../toastNotifications/toastNotifica
 
 export const AuthRoutes: Routes = [
   {
-    path: 'register', 
+    path: 'register',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
     ],
     loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent)
   },
   {
-    path: 'password-recovery', 
+    path: 'password-recovery',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
     ],
     loadComponent: () => import('./pages/password-recovery/password-recovery.component').then(m => m.PasswordRecoveryComponent)
-  }, 
+  },
   {
     path: 'email-verification',
     providers: [
@@ -26,14 +26,14 @@ export const AuthRoutes: Routes = [
     loadComponent: () => import('./pages/email-verification/email-verification.component').then(m => m.EmailVerificationComponent),
   },
   {
-    path: 'login', 
+    path: 'login',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent },
     ],
     loadComponent: () => import('./pages/login-page/login-page.component').then(m => m.LoginPageComponent),
   },
   {
-    path: 'verify-email', 
+    path: 'verify-email',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
     ],
@@ -47,8 +47,8 @@ export const AuthRoutes: Routes = [
     loadComponent: () => import('./pages/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
   },
   {
-    path: '', 
-    redirectTo: 'login', 
+    path: '',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
 ]

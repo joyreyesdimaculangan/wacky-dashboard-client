@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   Input,
+  OnInit,
   signal,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -24,7 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetAccountIdService } from '../../../../features/customer/reservation-form/getAccountId.service';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
-import { LoadingFunctionComponent } from "../../../../features/loadingFunction/loadingFunction.component";
+import { LoadingFunctionComponent } from '../../../../features/loadingFunction/loadingFunction.component';
 
 @Component({
   selector: 'app-login-page',
@@ -36,8 +37,8 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    LoadingFunctionComponent
-],
+    LoadingFunctionComponent,
+  ],
   template: `
     <div
       class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
@@ -183,7 +184,10 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
               />
               <span class="ml-2">Remember Me</span>
             </label>
-            <button (click)="goToPasswordReset()" class="text-green-700 hover:text-green-500 font-semibold">
+            <button
+              (click)="goToPasswordReset()"
+              class="text-green-700 hover:text-green-500 font-semibold"
+            >
               Forgot Password?
             </button>
           </div>
@@ -239,6 +243,21 @@ export class LoginPageComponent {
   }
 
   ngOnInit() {
+    // add inspections to current query parameters
+    this.route.queryParamMap.subscribe((params) => {
+      const token = params.get('token');
+      if(token) {
+        this.toastNotification.showSuccess(
+          'Email Verified.',
+          'Success'
+        );
+      }
+    });
+
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams: queryParams,
+    // });
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: [

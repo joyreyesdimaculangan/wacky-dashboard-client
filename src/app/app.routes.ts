@@ -45,7 +45,7 @@ export const routes: Routes = [
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
     ],
-    loadChildren: () => 
+    loadChildren: () =>
       import('./features/customer/customer-routes').then(m => m.CustomerRoutes),
     title: 'Wacky Customer Page',
   },
@@ -77,4 +77,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./core/toastNotifications/toastNotifications.component').then((m) => m.ToastNotificationsComponent),
   }
+  
 ];
