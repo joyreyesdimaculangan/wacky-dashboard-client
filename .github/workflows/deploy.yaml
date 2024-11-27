@@ -1,0 +1,45 @@
+name: Generate a build and deploy via FTP
+
+on:
+  push:
+    branches:
+      - main # The branch name you're committing the new changes to
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Deploy
+    steps:
+      - name: git-checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.11'
+
+      - name: Install all dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build:prod # The build command of your project
+
+      - name: Add .htaccess
+        run: |
+          echo "RewriteEngine On" >> dist/jlc-client/browser/.htaccess
+          echo "# If an existing asset or directory is requested go to it as it is" >> dist/jlc-client/browser/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]" >> dist/jlc-client/browser/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/jlc-client/browser/.htaccess
+          echo "RewriteRule ^ - [L]" >> dist/jlc-client/browser/.htaccess
+          echo "" >> dist/jlc-client/browser/.htaccess
+          echo "# If the requested resource doesn't exist, use index.html" >> dist/jlc-client/browser/.htaccess
+          echo "RewriteRule ^ /index.html" >> dist/jlc-client/browser/.htaccess
+
+      - name: 🎉 Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /
+          local-dir: dist/wacky-client/browser/ # The directory where your assets are generated
