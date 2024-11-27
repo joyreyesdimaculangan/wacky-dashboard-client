@@ -247,6 +247,24 @@ export class LoginPageComponent {
       const token = params.get('token');
       console.log(token);
       if(token) {
+        this.authService.verifyEmail(token).subscribe({
+          next: () => {
+            this.toastNotification.showSuccess(
+              'Email Verified.',
+              'Success'
+            );
+          },
+          complete: () => {
+            this.router.navigate(['/auth/login']);
+          },
+        })
+        catchError((error: HttpErrorResponse) => {
+          this.toastNotification.showError(
+            'Email Verification Failed.',
+            'Error'
+          );
+          return throwError(error);
+        });
         this.toastNotification.showSuccess(
           'Email Verified.',
           'Success'
