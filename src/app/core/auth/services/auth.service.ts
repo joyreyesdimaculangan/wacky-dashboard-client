@@ -182,7 +182,7 @@ export class AuthService {
       this.userInfo = null;
       this.user.set(null);
       this.accountType.set(undefined);
-      this.accountProfileName.set(undefined);
+      // this.accountProfileName.set(undefined);
 
       this.router.navigate(['/home']);
     } catch (error) {
