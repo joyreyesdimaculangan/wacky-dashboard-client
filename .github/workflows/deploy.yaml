@@ -26,14 +26,14 @@ jobs:
 
       - name: Add .htaccess
         run: |
-          echo "RewriteEngine On" >> dist/jlc-client/browser/.htaccess
-          echo "# If an existing asset or directory is requested go to it as it is" >> dist/jlc-client/browser/.htaccess
-          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]" >> dist/jlc-client/browser/.htaccess
-          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/jlc-client/browser/.htaccess
-          echo "RewriteRule ^ - [L]" >> dist/jlc-client/browser/.htaccess
-          echo "" >> dist/jlc-client/browser/.htaccess
-          echo "# If the requested resource doesn't exist, use index.html" >> dist/jlc-client/browser/.htaccess
-          echo "RewriteRule ^ /index.html" >> dist/jlc-client/browser/.htaccess
+          echo "RewriteEngine On" >> dist/wacky-client/browser/.htaccess
+          echo "# If an existing asset or directory is requested go to it as it is" >> dist/wacky-client/browser/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]" >> dist/wacky-client/browser/.htaccess
+          echo "RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d" >> dist/wacky-client/browser/.htaccess
+          echo "RewriteRule ^ - [L]" >> dist/wacky-client/browser/.htaccess
+          echo "" >> dist/wacky-client/browser/.htaccess
+          echo "# If the requested resource doesn't exist, use index.html" >> dist/wacky-client/browser/.htaccess
+          echo "RewriteRule ^ /index.html" >> dist/wacky-client/browser/.htaccess
 
       - name: 🎉 Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
