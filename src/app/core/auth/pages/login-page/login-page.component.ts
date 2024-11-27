@@ -107,7 +107,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
                 id="password"
                 formControlName="password"
                 class="w-full p-4 pr-12 border border-green-300 rounded-lg bg-white text-green-900 placeholder-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
-                placeholder="Create a password"
+                placeholder="Enter your password"
               />
               <button
                 type="button"

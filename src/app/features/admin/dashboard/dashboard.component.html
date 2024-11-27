@@ -69,8 +69,10 @@
                       let notification of notifications;
                       trackBy: trackById
                     "
-                    [ngClass]="{ 'bg-yellow-100': notification.isNew }"
+                    [ngClass]="{ 'bg-yellow-100': notification.isNew,
+                    'bg-white': !notification.isNew }"
                     class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out"
+                    (click)="markAsRead(notification.id)"
                   >
                     <i class="fas fa-bell text-green-500 mr-3"></i>
                     <div>
@@ -273,74 +275,85 @@
             </div>
           </div>
 
-          <!-- Top Selling Packages -->
-          <section class="p-6 flex flex-col">
-            <h2 class="text-2xl font-semibold text-green-600 mb-4">
-              Top 3 Highest-Selling Packages
-            </h2>
-            <div
-              class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-6 rounded-lg shadow-md text-green-600 bg-white"
-            >
-              <div
-                *ngFor="let package of topFavoritePackages"
-                class="border p-6 rounded-lg shadow-md bg-white"
-              >
-                <h3 class="text-xl font-semibold">{{ package.name }}</h3>
-                <p>
-                  Total Annual Sales:
-                  <span class="font-bold text-green-600"
-                    >₱{{ package.salesData | number : "1.0-0" }}</span
-                  >
-                </p>
-                <p>{{ package.description }}</p>
-              </div>
-            </div>
-          </section>
+          <!-- Button to Fetch Prescriptive Analytics -->
+    <div class="mb-8">
+      <button
+        (click)="fetchPrescriptiveAnalytics()"
+        class="bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
+      >
+        Fetch Prescriptive Analytics
+      </button>
+    </div>
 
-          <!-- Bottom Selling Packages -->
-          <section class="p-6 flex flex-col">
-            <h2 class="text-2xl font-semibold text-red-600">
-              Bottom 3 Lowest-Selling Packages
-            </h2>
-            <div
-              class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md text-red-600 bg-white"
-            >
-              <div
-                *ngFor="let package of leastSoldPackages"
-                class="border p-4 rounded-lg shadow-md bg-white"
-              >
-                <h3 class="text-xl font-semibold">{{ package.name }}</h3>
-                <p>
-                  Total Annual Sales:
-                  <span class="font-bold text-red-600"
-                    >₱{{ package.salesData | number : "1.0-0" }}</span
-                  >
-                </p>
-                <p>{{ package.description }}</p>
-                <p class="mt-2 text-sm text-gray-600">
-                  Recommendation: {{ package.recommendation }}
-                </p>
-              </div>
-            </div>
-          </section>
+    <!-- Display Prescriptive Analytics -->
+    <section *ngIf="showPrescriptiveSections" class="p-6 flex flex-col">
+      <h2 class="text-2xl font-semibold text-blue-600">
+        Prescriptive Recommendations
+      </h2>
+      <ul
+        class="mt-4 space-y-2 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md bg-white"
+      >
+        <li
+          *ngFor="let insight of analyticsData.recommendations"
+          class="text-lg text-gray-700"
+        >
+          <i class="fas fa-check-circle text-green-500"></i>
+          {{ insight }}
+        </li>
+      </ul>
+    </section>
 
-          <!-- Insights and Recommendations -->
-          <section class="p-6 flex flex-col">
-            <h2 class="text-2xl font-semibold text-blue-600">
-              Prescriptive Recommendations
-            </h2>
-            <ul
-              class="mt-4 space-y-2 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md bg-white"
+
+    <!-- Top Selling Packages -->
+    <section *ngIf="showPrescriptiveSections" class="p-6 flex flex-col">
+      <h2 class="text-2xl font-semibold text-green-600 mb-4">
+        Top 3 Highest-Selling Packages
+      </h2>
+      <div
+        class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-6 rounded-lg shadow-md text-green-600 bg-white"
+      >
+        <div
+          *ngFor="let package of topFavoritePackages"
+          class="border p-6 rounded-lg shadow-md bg-white"
+        >
+          <h3 class="text-xl font-semibold">{{ package.name }}</h3>
+          <p>
+            Total Annual Sales:
+            <span class="font-bold text-green-600"
+              >₱{{ package.salesData | number : "1.0-0" }}</span
             >
-              <li
-                *ngFor="let insight of analyticsData.recommendations"
-                class="text-lg text-gray-700"
-              >
-                <i class="fas fa-check-circle text-green-500"></i>
-                {{ insight }}
-              </li>
-            </ul>
-          </section>
+          </p>
+          <p>{{ package.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Selling Packages -->
+    <section *ngIf="showPrescriptiveSections" class="p-6 flex flex-col">
+      <h2 class="text-2xl font-semibold text-red-600">
+        Bottom 3 Lowest-Selling Packages
+      </h2>
+      <div
+        class="mt-4 space-y-4 max-h-64 overflow-y-auto border p-4 rounded-lg shadow-md text-red-600 bg-white"
+      >
+        <div
+          *ngFor="let package of leastSoldPackages"
+          class="border p-4 rounded-lg shadow-md bg-white"
+        >
+          <h3 class="text-xl font-semibold">{{ package.name }}</h3>
+          <p>
+            Total Annual Sales:
+            <span class="font-bold text-red-600"
+              >₱{{ package.salesData | number : "1.0-0" }}</span
+            >
+          </p>
+          <p>{{ package.description }}</p>
+          <p class="mt-2 text-sm text-gray-600">
+            Recommendation: {{ package.recommendation }}
+          </p>
+        </div>
+      </div>
+    </section>
         </main>
       </div>
     </div>

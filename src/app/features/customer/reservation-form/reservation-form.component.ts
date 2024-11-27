@@ -68,6 +68,8 @@ export class ReservationFormComponent implements OnInit {
   private packageNameService = inject(GetPackageNameService);
   toastNotifications = inject(ToastNotificationsComponent);
   loading: boolean = false;
+  termsAccepted: boolean = false;
+  privacyAccepted: boolean = false;
 
   packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
@@ -116,6 +118,7 @@ export class ReservationFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
   confirmReservationForm!: FormGroup; // Use definite assignment operator
+  terms!: FormGroup; // Declare the terms property
   reservationsMade: EditedReservationForm[] = [];
 
   @Input() item: any;
@@ -182,6 +185,12 @@ export class ReservationFormComponent implements OnInit {
       }),
     });
 
+    this.terms = this.fb.group({
+      termsAccepted: [false, Validators.requiredTrue],
+
+      privacyAccepted: [false, Validators.requiredTrue],
+    });
+
     this.fetchReservations();
     this.getFullyBookedDates(this.reservations);
     this.populateFullyBookedTimes(this.reservations);
@@ -204,32 +213,32 @@ export class ReservationFormComponent implements OnInit {
   getFullyBookedDates(reservations: EditedReservationForm[]): Date[] {
     // Map to count reservations per date
     const dateCounts: { [key: string]: number } = {};
-  
+
     reservations.forEach((reservation) => {
       const eventDate = new Date(reservation.eventDate);
       const [time, period] = reservation.eventTime.split(' ');
       const [hours, minutes] = time.split(':').map(Number);
-  
+
       let adjustedHours = hours;
       if (period === 'PM' && hours < 12) {
         adjustedHours += 12;
       } else if (period === 'AM' && hours === 12) {
         adjustedHours = 0;
       }
-  
+
       eventDate.setHours(adjustedHours, minutes);
-  
+
       const localDateISO = eventDate.toLocaleDateString('en-CA');
       dateCounts[localDateISO] = (dateCounts[localDateISO] || 0) + 1;
     });
 
     console.log('Date counts:', dateCounts);
-  
+
     // Return fully booked dates (more than 6 reservations)
     return Object.keys(dateCounts)
       .filter((date) => dateCounts[date] >= 6)
       .map((date) => new Date(date));
-    }
+  }
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) {
@@ -242,7 +251,7 @@ export class ReservationFormComponent implements OnInit {
     const isPastDate = date < today;
     const oneMonthFromToday = new Date();
     oneMonthFromToday.setMonth(today.getMonth() + 1);
-    
+
     const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
       (bookedDate) =>
@@ -258,22 +267,22 @@ export class ReservationFormComponent implements OnInit {
 
   populateFullyBookedTimes(reservations: EditedReservationForm[]): void {
     this.fullyBookedTimes = {}; // Reset before populating
-  
+
     reservations.forEach((reservation) => {
       const eventDate = new Date(reservation.eventDate);
       const [time, period] = reservation.eventTime.split(' ');
       const [hours, minutes] = time.split(':').map(Number);
-  
+
       let adjustedHours = hours;
       if (period === 'PM' && hours < 12) {
         adjustedHours += 12;
       } else if (period === 'AM' && hours === 12) {
         adjustedHours = 0;
       }
-  
+
       eventDate.setHours(adjustedHours, minutes);
-  
-      const localDateISO = eventDate.toLocaleDateString('en-CA')
+
+      const localDateISO = eventDate.toLocaleDateString('en-CA');
       if (!this.fullyBookedTimes[localDateISO]) {
         this.fullyBookedTimes[localDateISO] = [];
       }
@@ -368,7 +377,10 @@ export class ReservationFormComponent implements OnInit {
       eventDate.setHours(adjustedHours, minutes);
 
       if (isNaN(eventDate.getTime())) {
-        this.toastNotifications.showError('Invalid date or time value', 'Error');
+        this.toastNotifications.showError(
+          'Invalid date or time value',
+          'Error'
+        );
         console.error('Invalid date or time value');
         this.loading = false;
         return;
@@ -407,7 +419,10 @@ export class ReservationFormComponent implements OnInit {
         }
       );
     } else {
-      this.toastNotifications.showWarning('Please fill out all required fields', 'Warning');
+      this.toastNotifications.showWarning(
+        'Please fill out all required fields',
+        'Warning'
+      );
       this.loading = false;
     }
   }

@@ -30,6 +30,7 @@ import { PushNotificationService } from '../../../services/pushNotification.serv
 import { DescriptiveAnalyticsService } from '../../../services/descriptiveAnalytics.service';
 import { PrescriptiveAnalyticsService } from '../../../services/prescriptiveAnalytics.service';
 import { SalesService } from '../../../services/sales.service';
+import { User } from '../../../core/auth/models/user.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -63,6 +64,8 @@ export class DashboardComponent implements OnInit {
   approved: number = 0;
   reservationsByTime: any[] = [];
 
+  accountRole = 'Admin';
+  
   accountProfileName: string | null = null;
   userName: string | null = null;
   userEmail: string | null = null;
@@ -88,6 +91,7 @@ export class DashboardComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
+  user: User | null = null;
 
   private readonly toastNotifications = inject(ToastNotificationsComponent);
   private readonly getAccountNameService = inject(GetAccountIdService);
@@ -100,6 +104,9 @@ export class DashboardComponent implements OnInit {
   public selectedYear: number = new Date().getFullYear();
   private analyticsService = inject(PrescriptiveAnalyticsService);
   private salesDataService = inject(SalesService);
+  prescriptiveAnalytics: any[] = [];
+  showPrescriptiveSections: boolean = false;
+  reservationId: string = '';
 
   fetchNotifications() {
     this.notificationService.getNotifications().subscribe({
@@ -136,7 +143,7 @@ export class DashboardComponent implements OnInit {
     this.fetchMonthlyTrends(this.selectedYear);
     this.fetchMonthlyTrendsofPackages(this.selectedYear);
     this.fetchReservationsByTime(this.selectedYear);
-    this.fetchPrescriptiveAnalytics();
+    // this.fetchPrescriptiveAnalytics();
 
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
@@ -150,6 +157,35 @@ export class DashboardComponent implements OnInit {
 
     this.route.fragment.subscribe((fragment) => {
       this.currentFragment = fragment;
+    });
+  }
+
+  getNotificationById() {
+    const notificationId = this.route.snapshot.params['id'];
+    console.log('Notification ID:', notificationId);
+    this.notificationService.getNotificationById(notificationId).subscribe({
+      next: (notification) => {
+        this.reservationId = notification.reservationId;
+      },
+      error: (error) => {
+        console.error('Error fetching notification:', error);
+      },
+    });
+  }
+
+  markAsRead(notificationId: string): void {
+    this.notificationService.markAsRead(notificationId).subscribe({
+      next: () => {
+        this.notifications = this.notifications.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, isNew: false }
+            : notification
+        );
+        this.fetchNewNotifications(); // Update the list of new notifications
+      },
+      error: (error) => {
+        console.error('Error marking notification as read:', error);
+      },
     });
   }
 
@@ -470,6 +506,7 @@ export class DashboardComponent implements OnInit {
             this.analyticsData = {
               recommendations: parsedData.recommendations,
             };
+            this.showPrescriptiveSections = true;
           }
         } else {
           console.warn('Analysis failed:', response.message);
@@ -495,12 +532,12 @@ export class DashboardComponent implements OnInit {
       { 
         name: 'For Small Celebrations', 
         description: 'Sales have been low, with only 97 reservations in 2019 and 31 reservations in 2024.',
-        recommendation: 'Review pricing strategy to ensure competitiveness.' 
+        recommendation: 'Review pricing strategy to ensure competitiveness.', 
       },
       { 
         name: 'Simple Wedding Package', 
         description: 'Sales have improved slightly in recent years, but still lags behind others.',
-        recommendation: 'Consider revamping the package and introducing tiered pricing.' 
+        recommendation: 'Consider revamping the package and introducing tiered pricing.', 
       },
       { 
         name: 'All-In 7th Birthday Party Package', 

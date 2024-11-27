@@ -475,6 +475,45 @@
               </div>
             </div>
 
+            <form [formGroup]="terms" class="flex justify-between mt-6">
+              <div class="flex flex-col space-y-2">
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    formControlName="termsAccepted"
+                    class="mr-2"
+                  />
+                  <label for="terms" class="text-gray-700">
+                    I have read and agree to the
+                    <a
+                      href="/terms"
+                      target="_blank"
+                      class="text-blue-600 underline"
+                      >terms and conditions</a
+                    >.
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="privacy"
+                    formControlName="privacyAccepted"
+                    class="mr-2"
+                  />
+                  <label for="privacy" class="text-gray-700">
+                    I have read and understand the
+                    <a
+                      href="/privacy"
+                      target="_blank"
+                      class="text-blue-600 underline"
+                      >privacy policy</a
+                    >.
+                  </label>
+                </div>
+              </div>
+            </form>
+
             <!-- Action Buttons -->
             <div class="flex justify-between mt-6">
               <button

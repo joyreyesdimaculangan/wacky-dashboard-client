@@ -18,6 +18,7 @@ export class HeaderComponent {
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
+  
 
   toastNotifications = inject(ToastNotificationsComponent);
   accountProfileName: string | null = null;

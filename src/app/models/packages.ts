@@ -30,6 +30,7 @@ export interface AvailableAddOns {
   addOnID: string;
   name: string;
   packageID: string;
+  price: number;
 }
 
 export interface Inclusion {

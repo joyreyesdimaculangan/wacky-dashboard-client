@@ -61,15 +61,20 @@
           <ul class="text-base text-gray-700 space-y-1">
             <li
               *ngFor="let addOn of packageData?.availableAddOns || []"
-              class="flex items-center"
+              class="flex items-center justify-between"
             >
-              <input
-                type="checkbox"
-                [id]="addOn.addOnID"
-                (change)="onAddOnChange(addOn.addOnID, $event)"
-                class="mr-2"
-              />
-              <label [for]="addOn.addOnID">{{ addOn?.name }}</label>
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  [id]="addOn.addOnID"
+                  (change)="onAddOnChange(addOn.addOnID, $event)"
+                  class="mr-2"
+                />
+                <label [for]="addOn.addOnID">{{ addOn?.name }}</label>
+              </div>
+              <span class="text-gray-500"
+                >₱{{ addOn?.price | number : "1.0-0" }}</span
+              >
             </li>
           </ul>
         </div>

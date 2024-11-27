@@ -12,59 +12,72 @@ import { DrawerComponent } from '../drawer/drawer.component';
   standalone: true,
   imports: [CommonModule, DatePipe, MatIconModule, DrawerComponent],
   template: `
-  <div class="flex h-screen bg-gray-100">
-  <app-drawer></app-drawer>
-  <section class="dashboard-page flex-1 overflow-auto">
-    <div class="dashboard-content">
-      <header class="header">
-        <h1>Notifications</h1>
-        <button class="close-button" (click)="onClose()">&#10005;</button>
-      </header>
+    <div class="flex h-screen bg-gray-100">
+      <app-drawer></app-drawer>
+      <section class="dashboard-page flex-1 overflow-auto">
+        <div class="dashboard-content">
+          <header class="header">
+            <h1>Notifications</h1>
+            <button class="close-button" (click)="onClose()">&#10005;</button>
+          </header>
 
-      <div class="content">
-        <!-- Loading State -->
-        <div *ngIf="loading" class="spinner-container">
-          <div class="spinner"></div>
-          <p>Loading notifications...</p>
-        </div>
+          <div class="content">
+            <!-- Loading State -->
+            <div *ngIf="loading" class="spinner-container">
+              <div class="spinner"></div>
+              <p>Loading notifications...</p>
+            </div>
 
-        <!-- Error State -->
-        <div *ngIf="!loading && errorMessage" class="error-message">
-          <p>{{ errorMessage }}</p>
-        </div>
+            <!-- Error State -->
+            <div *ngIf="!loading && errorMessage" class="error-message">
+              <p>{{ errorMessage }}</p>
+            </div>
 
-        <!-- Notifications List -->
-        <div *ngIf="!loading && notifications.length > 0" class="notification-list flex-1 p-6 overflow-auto">
-          <div class="button-container">
-            <button (click)="markAllAsRead()" class="mark-all-button">
-              Mark All as Read
-            </button>
-          </div>
-          <ul class="space-y-3">
-            <li
-              *ngFor="let notification of notifications; trackBy: trackById"
-              [ngClass]="{ 'bg-yellow-100': notification.isNew, 'bg-white': !notification.isNew }"
-              class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out cursor-pointer"
-              (click)="navigateToReservation(notification)"
+            <!-- Notifications List -->
+            <div
+              *ngIf="!loading && notifications.length > 0"
+              class="notification-list flex-1 p-6 overflow-auto"
             >
-              <i class="fas fa-bell text-green-500 mr-3"></i>
-              <div>
-                <p class="font-semibold">{{ notification.title }}</p>
-                <p class="text-sm text-gray-500">{{ notification.message }}</p>
-                <span class="text-xs text-gray-400">{{ notification.date | date : 'short' }}</span>
+              <div class="button-container">
+                <button (click)="markAllAsRead()" class="mark-all-button">
+                  Mark All as Read
+                </button>
               </div>
-            </li>
-          </ul>
-        </div>
+              <ul class="space-y-3">
+                <li
+                  *ngFor="let notification of notifications; trackBy: trackById"
+                  [ngClass]="{
+                    'bg-yellow-100': notification.isNew,
+                    'bg-white': !notification.isNew
+                  }"
+                  class="flex items-start text-gray-700 mb-2 p-2 border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out cursor-pointer"
+                  (click)="navigateToReservation(notification)"
+                >
+                  <i class="fas fa-bell text-green-500 mr-3"></i>
+                  <div>
+                    <p class="font-semibold">{{ notification.title }}</p>
+                    <p class="text-sm text-gray-500">
+                      {{ notification.message }}
+                    </p>
+                    <span class="text-xs text-gray-400">{{
+                      notification.date | date : 'short'
+                    }}</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
 
-        <!-- Empty State -->
-        <div *ngIf="!loading && notifications.length === 0" class="empty-state">
-          <p>No notifications available.</p>
+            <!-- Empty State -->
+            <div
+              *ngIf="!loading && notifications.length === 0"
+              class="empty-state"
+            >
+              <p>No notifications available.</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
-  </section>
-</div>
   `,
   styleUrls: ['./notification-page.component.scss'],
 })
