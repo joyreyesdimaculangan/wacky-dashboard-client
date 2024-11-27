@@ -18,7 +18,6 @@ import { DrawerComponent } from '../drawer/drawer.component';
         <div class="dashboard-content">
           <header class="header">
             <h1>Notifications</h1>
-            <button class="close-button" (click)="onClose()">&#10005;</button>
           </header>
 
           <div class="content">

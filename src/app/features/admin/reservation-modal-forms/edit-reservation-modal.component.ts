@@ -227,22 +227,6 @@ import { Location } from '@angular/common';
               ></textarea>
             </div>
 
-            <!-- AddOns -->
-            <div>
-              <label
-                for="otherRequest"
-                class="block text-sm font-medium text-gray-700"
-              >
-                AddOns:
-              </label>
-              <textarea
-                id="addOns"
-                formControlName="addOns"
-                rows="4"
-                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              ></textarea>
-            </div>
-
             <!-- Status Dropdown -->
             <div>
               <label
@@ -352,6 +336,7 @@ export class EditReservationModalComponent implements OnInit {
       eventTheme: [this.item?.eventTheme || ''],
       cakeTheme: [this.item?.cakeTheme || ''],
       otherRequest: [this.item?.otherRequest || ''],
+      addOns: [this.item?.addOns || []],
       status: [this.item?.status || 'Pending', Validators.required],
       paymentStatus: [
         this.item?.paymentStatus || 'PENDING',
@@ -368,7 +353,7 @@ export class EditReservationModalComponent implements OnInit {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
         console.log('Fetched reservations:', data);
-        this.reservations = data;
+        this.reservations = data.reverse(); // Reverse to show latest reservations first
         this.fullyBookedDates = this.getFullyBookedDates(data);
         console.log('Fully booked dates:', this.fullyBookedDates);
       },
@@ -486,7 +471,6 @@ export class EditReservationModalComponent implements OnInit {
       reservationID,
       accountProfileId: this.accountProfileId,
       packageID: this.packageID,
-      addOnIds: this.addOnsId,
       ...this.adminEditReservationForm.value,
     };
 

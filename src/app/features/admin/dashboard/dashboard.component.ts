@@ -42,6 +42,7 @@ export type ChartOptions = {
   fill?: ApexFill;
   plotOptions?: ApexPlotOptions;
   tooltip?: ApexTooltip;
+  colors?: string[];
 };
 
 @Component({
@@ -58,7 +59,7 @@ export class DashboardComponent implements OnInit {
   newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
   salesData: any[] = [];
-  activeFilter: string = 'all';
+  activeFilter: string = 'reservations';
   cancelled: number = 0;
   pending: number = 0;
   approved: number = 0;
@@ -66,7 +67,7 @@ export class DashboardComponent implements OnInit {
 
   accountRole = 'Admin';
   
-  accountProfileName: string | null = null;
+  accountProfileName: string | undefined = undefined;
   userName: string | null = null;
   userEmail: string | null = null;
   auth = inject(AuthService);
@@ -151,7 +152,7 @@ export class DashboardComponent implements OnInit {
     if (userInfo) {
       const accountProfileName =
         this.getAccountNameService.getAccountProfileName();
-      this.accountProfileName = accountProfileName?.accountProfileName ?? null;
+      this.accountProfileName = accountProfileName?.accountProfileName ?? undefined;
       this.userEmail = userInfo.email;
     }
 
@@ -176,12 +177,16 @@ export class DashboardComponent implements OnInit {
   markAsRead(notificationId: string): void {
     this.notificationService.markAsRead(notificationId).subscribe({
       next: () => {
-        this.notifications = this.notifications.map((notification) =>
-          notification.id === notificationId
-            ? { ...notification, isNew: false }
-            : notification
+        // Navigate to the notification route with the specific notification ID
+        this.router.navigate(['/notifications', notificationId]);
+
+        // Remove the notification from the list
+        this.notifications = this.notifications.filter(
+          (notification) => notification.id !== notificationId
         );
-        this.fetchNewNotifications(); // Update the list of new notifications
+
+        // Fetch new notifications
+        this.fetchNewNotifications();
       },
       error: (error) => {
         console.error('Error marking notification as read:', error);
@@ -313,6 +318,11 @@ export class DashboardComponent implements OnInit {
         const series = this.formatSeries(trends);
         const categories = trends.map((trend: any) => trend.month);
 
+      // Define a color palette
+      const colorPalette = [
+        '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FF8C33', '#33FFF5', '#8C33FF', '#FF3333'
+      ];
+
         // Configure chart options
         this.areaChartOptions = {
           series: series,
@@ -348,6 +358,7 @@ export class DashboardComponent implements OnInit {
               stops: [0, 90, 100],
             },
           },
+          colors: colorPalette,
         };
       },
       (error) => {
@@ -612,6 +623,16 @@ export class DashboardComponent implements OnInit {
     this.activeFilter = filter;
     if (filter === 'all') {
       this.filteredCards = this.cards;
+    } else if (filter === 'reservations') {
+      this.filteredCards = this.cards.filter(
+        (card) =>
+          card.category === 'monthly_reservations' ||
+          card.category === 'monthly_reservations_per_year' ||
+          card.category === 'event_packages' ||
+          card.category === 'reservation_density'
+      );
+    } else if (filter === 'packages') {
+      this.filteredCards = []; // No cards to show, only the specific card for packages
     } else {
       this.filteredCards = this.cards.filter(
         (card) => card.category === filter

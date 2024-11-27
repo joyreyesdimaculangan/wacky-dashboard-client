@@ -157,21 +157,6 @@ import { Location } from '@angular/common';
               ></textarea>
             </div>
 
-            <div>
-              <label
-                for="addOns"
-                class="block text-sm font-medium text-gray-600"
-                >Add Ons</label
-              >
-              <textarea
-                id="addOns"
-                type="text"
-                class="mt-2 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-900"
-                [value]="item?.addOnIds?.join(', ') || ''"
-                readonly
-              ></textarea>
-            </div>
-
             <!-- Reservation Status -->
             <div>
               <label
