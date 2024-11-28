@@ -21,6 +21,11 @@ export class ReservationService {
     return this.http.get<any>(this.apiUrl); // GET request to the backend
   }
 
+  // Fetch by AccountProfileID
+  getReservationByAccountProfileId(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/customer/${id}`);
+  }
+
   // Fetch a specific reservation by ID
   getReservationById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`); // GET request for a specific reservation
