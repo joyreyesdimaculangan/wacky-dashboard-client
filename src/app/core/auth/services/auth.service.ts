@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   verifyEmail(token: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/verify-email`, { token }).pipe(
+    return this.http.post(`${this.apiUrl}/verify-email?token=`, { token }).pipe(
       tap((response: any) => {
         if (response.success) {
           this.userInfo = { ...this.userInfo, isEmailVerified: true } as User;
