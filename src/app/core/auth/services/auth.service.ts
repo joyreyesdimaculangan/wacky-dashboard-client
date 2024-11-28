@@ -23,6 +23,7 @@ export class AuthService {
   accountType = signal<string | undefined>('');
   userName: string | undefined;
   accountProfileName = signal<string | undefined>('');
+  private accountProfileId: string | null = null;
   private apiUrl = environment.apiUrl + '/auth';
 
   private readonly auth = inject(LoginService);
@@ -41,6 +42,16 @@ export class AuthService {
     } else {
       this.loadUserInfoFromLocalStorage();
     }
+  }
+
+  // Method to get the account profile ID
+  getAccountProfileID(): string | null {
+    return this.accountProfileId;
+  }
+
+  // Method to set the account profile ID
+  setAccountProfileID(id: string | null): void {
+    this.accountProfileId = id;
   }
 
   setUserRole(role: string): void {
@@ -87,6 +98,7 @@ export class AuthService {
         this.user.set(this.userInfo);
         this.accountType.set(this.userInfo?.account_type);
         this.accountProfileName = response.accountProfileName;
+        this.accountProfileId = response.accountProfileId;
         this.getAccountIdService.setAccountProfileName(
           response.accountProfileId,
           response.accountProfileName
@@ -182,7 +194,9 @@ export class AuthService {
       this.userInfo = null;
       this.user.set(null);
       this.accountType.set(undefined);
-      // this.accountProfileName.set(undefined);
+      this.accountProfileId = null;
+      //this.accountProfileName = null;
+      this.accountProfileName.set(undefined);
 
       this.router.navigate(['/home']);
     } catch (error) {

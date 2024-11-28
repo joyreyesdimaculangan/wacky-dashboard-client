@@ -40,6 +40,15 @@ export const CustomerRoutes: Routes = [
     data: { roles: ['customer'] }
   },
   {
+    path: 'confirmed-reservations',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
+    loadComponent: () => import('./confirmed-reservations/confirmed-reservations.component').then((m) => m.ConfirmedReservationsComponent),
+    canActivate: [hasRoleGuard],
+    data: { roles: ['customer'] }
+  },
+  {
     path: 'confirmation',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service

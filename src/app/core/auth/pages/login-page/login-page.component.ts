@@ -177,13 +177,6 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
 
           <!-- Remember Me and Forgot Password -->
           <div class="flex items-center justify-between mb-8">
-            <label class="inline-flex items-center text-green-900">
-              <input
-                type="checkbox"
-                class="form-checkbox text-green-600 focus:ring-green-500"
-              />
-              <span class="ml-2">Remember Me</span>
-            </label>
             <button
               (click)="goToPasswordReset()"
               class="text-green-700 hover:text-green-500 font-semibold"

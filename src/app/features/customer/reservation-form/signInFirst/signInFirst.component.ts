@@ -174,13 +174,6 @@ import { ToastNotificationsComponent } from '../../../../core/toastNotifications
 
           <!-- Remember Me and Forgot Password -->
           <div class="flex items-center justify-between mb-8">
-            <label class="inline-flex items-center text-green-900">
-              <input
-                type="checkbox"
-                class="form-checkbox text-green-600 focus:ring-green-500"
-              />
-              <span class="ml-2">Remember Me</span>
-            </label>
             <button
               class="text-green-700 hover:text-green-500 font-semibold"
               >Forgot Password?</button
@@ -194,31 +187,6 @@ import { ToastNotificationsComponent } from '../../../../core/toastNotifications
           >
             Log In
           </button>
-
-          <!-- Divider with "or" Text -->
-          <div class="flex items-center my-6">
-              <div class="flex-grow border-t border-gray-300"></div>
-              <span class="px-4 text-gray-500">or</span>
-              <div class="flex-grow border-t border-gray-300"></div>
-            </div>
-
-            <!-- Social Sign-in Options -->
-            <div class="flex justify-center gap-4 mb-6">
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #4285F4;"
-              >
-                <i class="fab fa-google text-2xl mr-2"></i>
-                Log in with Google
-              </button>
-              <button
-                class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-white hover:bg-gray-100 transition"
-                style="background-color: #1877F2;"
-              >
-                <i class="fab fa-facebook-square text-2xl mr-2"></i>
-                Log in with Facebook
-              </button>
-            </div>
 
           <!-- Sign Up Link -->
           <p class="text-center text-green-900 mt-8">

@@ -35,6 +35,8 @@ export interface EditedReservationForm {
     status: 'Pending' | 'Approved' | 'Cancelled' 
     paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'FULLY_PAID'
     addOnIds: string[],
+    addOns?: any[],
+    packageNames?: any,
     isNew: boolean
 }
   
