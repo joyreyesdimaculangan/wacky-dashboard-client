@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LoginService } from './login.service';
 import { GetAccountIdService } from '../../../features/customer/reservation-form/getAccountId.service';
-import { ToastNotificationsComponent } from '../../toastNotifications/toastNotifications.component';
 
 @Injectable({
   providedIn: 'root',

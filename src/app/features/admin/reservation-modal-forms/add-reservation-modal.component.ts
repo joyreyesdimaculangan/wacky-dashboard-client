@@ -257,7 +257,7 @@ import { ToastNotificationsComponent } from '../../../core/toastNotifications/to
               ></mat-datepicker-toggle>
               <mat-datepicker #datepicker></mat-datepicker>
             </mat-form-field>
-            
+
             <!-- Time Picker -->
             <div class="relative">
               <label class="block text-sm font-medium text-gray-700"
@@ -672,32 +672,29 @@ export class AddReservationModalComponent implements OnInit {
   }
 
   submitForm() {
-    const user = this.authService.getUser(
-      localStorage.getItem(environment.TOKEN_NAME) || ''
-    );
     const accountProfileId = this.authService.userInfo?.accountProfileId;
-    console.log('Account Profile ID:', accountProfileId);
     const reservationData = {
       ...this.adminReservationForm.value,
+      eventDate: new Date(this.adminReservationForm.value.eventDate).toLocaleDateString('en-CA'),
       accountProfileId,
     };
     console.log('Reservation Data:', reservationData);
-    this.reservationService.createReservation(reservationData).subscribe(
-      (response) => {
-        console.log('Reservation created:', response);
-        this.toastNotification.showSuccess(
-          'Reservation created successfully!',
-          'Success'
-        );
-        this.closeAddReservation();
-      },
-      (error) => {
-        this.toastNotification.showError(
-          'Error creating reservation. Please try again later.',
-          'Error'
-        );
-        console.error('Error creating reservation:', error);
-      }
-    );
+    // this.reservationService.createReservation(reservationData).subscribe(
+    //   (response) => {
+    //     console.log('Reservation created:', response);
+    //     this.toastNotification.showSuccess(
+    //       'Reservation created successfully!',
+    //       'Success'
+    //     );
+    //     this.closeAddReservation();
+    //   },
+    //   (error) => {
+    //     this.toastNotification.showError(
+    //       'Error creating reservation. Please try again later.',
+    //       'Error'
+    //     );
+    //     console.error('Error creating reservation:', error);
+    //   }
+    // );
   }
 }
