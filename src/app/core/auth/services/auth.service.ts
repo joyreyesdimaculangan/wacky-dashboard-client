@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   verifyEmail(token: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/verify-email`, { token }).pipe(
+    return this.http.post(`${this.apiUrl}/verify-email`, token).pipe(
       tap((response: any) => {
         if (response.success) {
           this.userInfo = { ...this.userInfo, isEmailVerified: true } as User;
@@ -189,7 +189,6 @@ export class AuthService {
       console.error('Logout failed:', error);
     }
   }
-
 
   public isAdmin(): boolean {
     return this.userInfo?.account_type === 'admin';
