@@ -679,22 +679,22 @@ export class AddReservationModalComponent implements OnInit {
       accountProfileId,
     };
     console.log('Reservation Data:', reservationData);
-    // this.reservationService.createReservation(reservationData).subscribe(
-    //   (response) => {
-    //     console.log('Reservation created:', response);
-    //     this.toastNotification.showSuccess(
-    //       'Reservation created successfully!',
-    //       'Success'
-    //     );
-    //     this.closeAddReservation();
-    //   },
-    //   (error) => {
-    //     this.toastNotification.showError(
-    //       'Error creating reservation. Please try again later.',
-    //       'Error'
-    //     );
-    //     console.error('Error creating reservation:', error);
-    //   }
-    // );
+    this.reservationService.createReservation(reservationData).subscribe(
+      (response) => {
+        console.log('Reservation created:', response);
+        this.toastNotification.showSuccess(
+          'Reservation created successfully!',
+          'Success'
+        );
+        this.closeAddReservation();
+      },
+      (error) => {
+        this.toastNotification.showError(
+          'Error creating reservation. Please try again later.',
+          'Error'
+        );
+        console.error('Error creating reservation:', error);
+      }
+    );
   }
 }
