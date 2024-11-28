@@ -116,7 +116,7 @@ export class AdminCalendarComponent implements OnInit {
         resources: venues,
         events: events,
         eventClick: this.handleEventClick.bind(this),
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Ensure consistent timezone handling
+        timeZone: 'local', // Ensure consistent timezone handling
         height: '100%', // Ensure the calendar fits the container
         contentHeight: 'auto', // Adjust the content height to fit the container
         slotMinTime: '08:00:00', // Adjust the start time of the grid
