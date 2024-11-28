@@ -101,6 +101,12 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                   >
                     Add Reservation
                   </button>
+                  <button
+                    class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    (click)="onClose()"
+                  >
+                    Back
+                  </button>
                 </div>
               </div>
 
