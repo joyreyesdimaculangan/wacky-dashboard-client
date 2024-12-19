@@ -19,7 +19,7 @@ export class HeaderComponent {
   currentFragment: string | null = null;
   isDropdownOpen = false;
   isMobileMenuOpen = false;
-
+  isSmallMenu = false;
 
   toastNotifications = inject(ToastNotificationsComponent);
   accountProfileName: string | undefined = undefined;
@@ -62,6 +62,14 @@ export class HeaderComponent {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  adjustMenuSize(option: string) {
+    if (option === 'home') {
+      this.isSmallMenu = true;
+    } else {
+      this.isSmallMenu = false;
+    }
   }
 
   isActive(fragment: string): boolean {

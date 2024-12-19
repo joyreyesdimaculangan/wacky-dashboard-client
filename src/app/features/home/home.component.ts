@@ -18,7 +18,6 @@ import { LoadingFunctionComponent } from "../loadingFunction/loadingFunction.com
   imports: [
     CommonModule,
     OffersComponent,
-    ReviewSectionComponent,
     HeaderComponent,
     FooterComponent,
     MenuComponent,

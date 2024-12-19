@@ -160,7 +160,8 @@
 <!-- Mobile Menu -->
 <div
   *ngIf="isMobileMenuOpen"
-  class="fixed inset-0 bg-green-600 z-50 p-6 transition duration-300 ease-in-out"
+  class="fixed inset-0 bg-green-600 z-50 p-6 transition-all duration-300 ease-in-out"
+  [ngClass]="{ 'small-menu': isSmallMenu }"
 >
   <button
     class="self-end text-green-100 focus:outline-none mb-6"
@@ -174,6 +175,7 @@
         [routerLink]="['/home']"
         fragment="home"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
+        (click)="adjustMenuSize('home')"
       >
         Home
       </a>
@@ -183,6 +185,7 @@
         [routerLink]="['/home']"
         fragment="menu"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
+        (click)="adjustMenuSize('menu')"
       >
         Menu
       </a>
@@ -192,6 +195,7 @@
         [routerLink]="['/home']"
         fragment="services"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
+        (click)="adjustMenuSize('services')"
       >
         Services
       </a>
@@ -201,17 +205,12 @@
         [routerLink]="['/home']"
         fragment="inquiry"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
+        (click)="adjustMenuSize('inquiry')"
       >
         Contact Us
       </a>
     </li>
     <li *ngIf="isLoggedIn()">
-      <button
-        class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded-md transition"
-        (click)="toggleDropdown()"
-      >
-        Profile
-      </button>
       <div *ngIf="isDropdownOpen" class="ml-4 mt-2 space-y-2">
         <a
           *ngIf="auth.isAdmin()"
@@ -244,3 +243,4 @@
     </li>
   </ul>
 </div>
+
