@@ -31,6 +31,7 @@ import { DescriptiveAnalyticsService } from '../../../services/descriptiveAnalyt
 import { PrescriptiveAnalyticsService } from '../../../services/prescriptiveAnalytics.service';
 import { SalesService } from '../../../services/sales.service';
 import { User } from '../../../core/auth/models/user.model';
+import { InsightsService } from '../../../services/insights.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -55,7 +56,10 @@ export type ChartOptions = {
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
-
+  year: number = new Date().getFullYear(); 
+  trendsData: any = null;
+  error: string = '';
+  isLoading: boolean = false;
   newNotifications: Notifications[] = [];
   notifications: Notifications[] = [];
   salesData: any[] = [];
@@ -64,9 +68,10 @@ export class DashboardComponent implements OnInit {
   pending: number = 0;
   approved: number = 0;
   reservationsByTime: any[] = [];
+  insightsText: string = '';
 
   accountRole = 'Admin';
-  
+
   accountProfileName: string | undefined = undefined;
   userName: string | null = null;
   userEmail: string | null = null;
@@ -85,7 +90,7 @@ export class DashboardComponent implements OnInit {
   public areaChartOptions!: Partial<ChartOptions>;
   public heatmapChartOptions!: Partial<ChartOptions>;
 
-  topFavoritePackages: any[] = [];;
+  topFavoritePackages: any[] = [];
   leastSoldPackages: any[] = [];
   recommendations: string[] = [];
   analyticsData: { recommendations: string[] } = { recommendations: [] };
@@ -99,6 +104,7 @@ export class DashboardComponent implements OnInit {
   private readonly notificationService = inject(NotificationsService);
   private readonly reservationService = inject(ReservationService);
   private readonly dashboardService = inject(DashboardService);
+  private readonly insightsService = inject(InsightsService);
   public authService = inject(AuthService);
   private descriptiveAnalyticsService = inject(DescriptiveAnalyticsService);
   accountInfo: { id: string; name: string } | null = null;
@@ -152,7 +158,8 @@ export class DashboardComponent implements OnInit {
     if (userInfo) {
       const accountProfileName =
         this.getAccountNameService.getAccountProfileName();
-      this.accountProfileName = accountProfileName?.accountProfileName ?? undefined;
+      this.accountProfileName =
+        accountProfileName?.accountProfileName ?? undefined;
       this.userEmail = userInfo.email;
     }
 
@@ -194,7 +201,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  fetchMonthlyTrends(year: number) {
+  fetchMonthlyTrends(year: number): void {
     this.descriptiveAnalyticsService.getMonthlyTrends(year).subscribe(
       (data) => {
         this.lineChartOptions = {
@@ -229,10 +236,48 @@ export class DashboardComponent implements OnInit {
         };
       },
       (error) => {
-        console.error('Error fetching data:', error);
+        // Handle errors for trends data fetching
+        console.error('Error fetching trends data:', error);
       }
     );
   }
+
+  getMonthlyTrends(): void {
+    this.isLoading = true;
+    this.error = '';
+
+    this.insightsService.analyzeMonthlyTrends(this.year).subscribe({
+      next: (response) => {
+        console.log('API Response:', response); // Log the response for inspection
+        if (response?.data?.months && response.data.months.length > 0) {
+          this.trendsData = response.data;
+        } else {
+          console.error('Invalid or empty data:', response);
+          this.trendsData = { months: [], monthlyTrends: [] }; // Fallback
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching trends:', err);
+      }
+    });
+  }
+  
+  generateInsights(year: number): void {
+    // Reset insights text before fetching new data
+    this.insightsText = 'Generating insights...';
+  
+    this.insightsService.analyzeMonthlyTrends(year).subscribe(
+      (insights) => {
+        this.insightsText =
+          insights?.choices[0]?.message?.content || 'No insights available.';
+      },
+      (error) => {
+        console.error('Error fetching insights:', error);
+        this.insightsText = 'Failed to fetch insights.';
+      }
+    );
+  }
+  
 
   onYearChange(year: number): void {
     this.selectedYear = year;
@@ -318,10 +363,17 @@ export class DashboardComponent implements OnInit {
         const series = this.formatSeries(trends);
         const categories = trends.map((trend: any) => trend.month);
 
-      // Define a color palette
-      const colorPalette = [
-        '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FF8C33', '#33FFF5', '#8C33FF', '#FF3333'
-      ];
+        // Define a color palette
+        const colorPalette = [
+          '#FF5733',
+          '#33FF57',
+          '#3357FF',
+          '#FF33A1',
+          '#FF8C33',
+          '#33FFF5',
+          '#8C33FF',
+          '#FF3333',
+        ];
 
         // Configure chart options
         this.areaChartOptions = {
@@ -492,12 +544,12 @@ export class DashboardComponent implements OnInit {
       next: (salesResponse) => {
         console.log('Sales Data:', salesResponse);
 
-        this.salesData = salesResponse; 
+        this.salesData = salesResponse;
         this.fetchPrescriptiveAnalytics();
       },
       error: (err) => {
         console.error('Error fetching sales data:', err);
-      }
+      },
     });
   }
 
@@ -534,32 +586,45 @@ export class DashboardComponent implements OnInit {
 
   parseAnalytics(assistantMessage: string): any {
     const topPackages = [
-      { name: 'All-In Debut Package', description: 'Consistently sold well across all years.' },
-      { name: 'Standard Civil Wedding Package', description: 'Strong sales performance across all years.' },
-      { name: 'All-In Christening & 1st Birthday Party Package', description: 'Steady sales growth with a spike in 2023.' }
+      {
+        name: 'All-In Debut Package',
+        description: 'Consistently sold well across all years.',
+      },
+      {
+        name: 'Standard Civil Wedding Package',
+        description: 'Strong sales performance across all years.',
+      },
+      {
+        name: 'All-In Christening & 1st Birthday Party Package',
+        description: 'Steady sales growth with a spike in 2023.',
+      },
     ];
 
     const bottomPackages = [
-      { 
-        name: 'For Small Celebrations', 
-        description: 'Sales have been low, with only 97 reservations in 2019 and 31 reservations in 2024.',
-        recommendation: 'Review pricing strategy to ensure competitiveness.', 
+      {
+        name: 'For Small Celebrations',
+        description:
+          'Sales have been low, with only 97 reservations in 2019 and 31 reservations in 2024.',
+        recommendation: 'Review pricing strategy to ensure competitiveness.',
       },
-      { 
-        name: 'Simple Wedding Package', 
-        description: 'Sales have improved slightly in recent years, but still lags behind others.',
-        recommendation: 'Consider revamping the package and introducing tiered pricing.', 
+      {
+        name: 'Simple Wedding Package',
+        description:
+          'Sales have improved slightly in recent years, but still lags behind others.',
+        recommendation:
+          'Consider revamping the package and introducing tiered pricing.',
       },
-      { 
-        name: 'All-In 7th Birthday Party Package', 
+      {
+        name: 'All-In 7th Birthday Party Package',
         description: 'Sales have improved, but still ranks lower than others.',
-        recommendation: 'Create targeted promotional campaigns to drive sales growth.' 
-      }
+        recommendation:
+          'Create targeted promotional campaigns to drive sales growth.',
+      },
     ];
 
     const recommendations = [
       'Review marketing strategies for low-performing packages.',
-      'Consider promotional campaigns for packages with steady sales growth.'
+      'Consider promotional campaigns for packages with steady sales growth.',
     ];
 
     return { topPackages, bottomPackages, recommendations };

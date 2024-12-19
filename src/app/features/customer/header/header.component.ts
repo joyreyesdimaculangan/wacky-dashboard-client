@@ -18,6 +18,7 @@ export class HeaderComponent {
   private route = inject(ActivatedRoute);
   currentFragment: string | null = null;
   isDropdownOpen = false;
+  isMobileMenuOpen = false;
 
 
   toastNotifications = inject(ToastNotificationsComponent);
@@ -57,6 +58,10 @@ export class HeaderComponent {
     this.route.fragment.subscribe((fragment) => {
       this.currentFragment = fragment;
     });
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   isActive(fragment: string): boolean {

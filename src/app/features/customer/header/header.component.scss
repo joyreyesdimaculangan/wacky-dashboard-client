@@ -19,3 +19,19 @@ button:hover {
   background-color: #dbf3d8; /* Softer hover effect */
 }
 
+/* Mobile Menu Overlay */
+.mobile-menu {
+  background: rgba(34, 139, 34, 0.9); // Slightly transparent green
+  transition: transform 0.3s ease-in-out;
+}
+.mobile-menu ul {
+  li {
+    a {
+      &:hover {
+        background: #fff;
+        color: #226622;
+      }
+    }
+  }
+}
+
