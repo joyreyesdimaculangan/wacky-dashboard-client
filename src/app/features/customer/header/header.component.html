@@ -1,5 +1,5 @@
 <nav class="bg-green-600 border-b border-green-600 py-6 shadow-lg">
-  <div class="max-w-screen-xl mx-auto flex items-center justify-between">
+  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
     <!-- Logo stays on the left -->
     <div class="flex-none">
       <a
@@ -13,10 +13,10 @@
           alt="Wacky's Logo"
         />
         <h1
-          class="text-4xl font-bold font-serif text-green-100 leading-tight md:text-4xl sm:text-2xl"
+          class="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-green-100 leading-tight lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl"
         >
           WACKY'S<br />
-          <span class="tracking-wide">FOOD HOUSE</span>
+          <span class="tracking-wide text-lg sm:text-xl md:text-2xl lg:text-3xl">FOOD HOUSE</span>
         </h1>
       </a>
     </div>
@@ -29,7 +29,7 @@
             [routerLink]="['/home']"
             fragment="home"
             [ngClass]="{ 'bg-white-100': isActive('home') }"
-            class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
+            class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
           >
             Home
           </button>
@@ -39,7 +39,7 @@
             [routerLink]="['/home']"
             fragment="menu"
             [ngClass]="{ 'bg-white-100': isActive('menu') }"
-            class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
+            class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
           >
             Menu
           </button>
@@ -49,7 +49,7 @@
             [routerLink]="['/home']"
             fragment="services"
             [ngClass]="{ 'bg-white-100': isActive('services') }"
-            class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
+            class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
           >
             Services
           </button>
@@ -59,7 +59,7 @@
             [routerLink]="['/home']"
             fragment="inquiry"
             [ngClass]="{ 'bg-white-100': isActive('inquiry') }"
-            class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
+            class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
           >
             Contact Us
           </button>
@@ -79,11 +79,19 @@
     <div class="flex-none relative flex items-center" *ngIf="!isLoggedIn()">
       <button
         (click)="signIn()"
-        class="block py-3 px-5 text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins hidden sm:block"
+      >
+        Sign In
+      </button>
+      <!-- Responsive Sign In button for mobile -->
+      <button
+        (click)="signIn()"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded font-poppins sm:hidden"
       >
         Sign In
       </button>
     </div>
+
     <div class="flex-none relative flex items-center" *ngIf="isLoggedIn()">
       <button
         type="button"
@@ -94,9 +102,7 @@
         style="height: 48px; width: 48px; padding: 0"
       >
         <span class="sr-only">Open user menu</span>
-        <mat-icon class="text-green-600" style="font-size: 24px"
-          >account_circle</mat-icon
-        >
+        <mat-icon class="text-green-600" style="font-size: 24px">account_circle</mat-icon>
       </button>
       <!-- User dropdown menu -->
       <div
@@ -105,18 +111,14 @@
         [ngClass]="{ 'scale-100': isDropdownOpen }"
       >
         <div class="px-6 py-4">
-          <span class="block text-lg text-green-600">
-            {{ auth.accountProfileName() }}
-          </span>
-          <span class="block text-sm text-gray-500 truncate">{{
-            userEmail
-          }}</span>
+          <span class="block text-lg sm:text-xl text-green-600">{{ auth.accountProfileName() }}</span>
+          <span class="block text-sm text-gray-500 truncate">{{ userEmail }}</span>
         </div>
         <ul class="py-3" aria-labelledby="user-menu-button">
           <li *ngIf="auth.isAdmin()">
             <a
               [routerLink]="['/admin/dashboard']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+              class="flex items-center px-6 py-3 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">dashboard</mat-icon>
               Dashboard
@@ -125,7 +127,7 @@
           <li *ngIf="auth.isCustomer()">
             <a
               [routerLink]="['/customer/confirmed-reservations']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+              class="flex items-center px-6 py-3 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">event</mat-icon>
               Reservations
@@ -134,7 +136,7 @@
           <li *ngIf="auth.isAdmin()">
             <a
               [routerLink]="['/admin/notifications']"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+              class="flex items-center px-6 py-3 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">notifications</mat-icon>
               Notifications
@@ -143,7 +145,7 @@
           <li>
             <a
               (click)="logout()"
-              class="flex items-center px-6 py-3 text-lg text-green-600 hover:bg-green-100 font-poppins"
+              class="flex items-center px-6 py-3 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
             >
               <mat-icon class="mr-2">logout</mat-icon>
               Logout
@@ -171,7 +173,7 @@
       <a
         [routerLink]="['/home']"
         fragment="home"
-        class="block py-3 px-5 hover:bg-white hover:text-green-700 rounded-md transition"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
       >
         Home
       </a>
@@ -180,7 +182,7 @@
       <a
         [routerLink]="['/home']"
         fragment="menu"
-        class="block py-3 px-5 hover:bg-white hover:text-green-700 rounded-md transition"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
       >
         Menu
       </a>
@@ -189,7 +191,7 @@
       <a
         [routerLink]="['/home']"
         fragment="services"
-        class="block py-3 px-5 hover:bg-white hover:text-green-700 rounded-md transition"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
       >
         Services
       </a>
@@ -198,10 +200,47 @@
       <a
         [routerLink]="['/home']"
         fragment="inquiry"
-        class="block py-3 px-5 hover:bg-white hover:text-green-700 rounded-md transition"
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
       >
         Contact Us
       </a>
+    </li>
+    <li *ngIf="isLoggedIn()">
+      <button
+        class="block py-3 px-5 text-lg sm:text-base md:text-lg text-green-100 hover:bg-white hover:text-green-700 rounded-md transition"
+        (click)="toggleDropdown()"
+      >
+        Profile
+      </button>
+      <div *ngIf="isDropdownOpen" class="ml-4 mt-2 space-y-2">
+        <a
+          *ngIf="auth.isAdmin()"
+          [routerLink]="['/admin/dashboard']"
+          class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+        >
+          Dashboard
+        </a>
+        <a
+          *ngIf="auth.isCustomer()"
+          [routerLink]="['/customer/confirmed-reservations']"
+          class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+        >
+          Reservations
+        </a>
+        <a
+          *ngIf="auth.isAdmin()"
+          [routerLink]="['/admin/notifications']"
+          class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+        >
+          Notifications
+        </a>
+        <a
+          (click)="logout()"
+          class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+        >
+          Logout
+        </a>
+      </div>
     </li>
   </ul>
 </div>
