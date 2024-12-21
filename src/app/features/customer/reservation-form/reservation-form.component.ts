@@ -39,6 +39,7 @@ import { PackageName, Packages } from '../../../models/packages';
 import { GetAccountIdService } from './getAccountId.service';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 import { toZonedTime } from 'date-fns-tz';
+import { UserService } from '../../../core/auth/services/user.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -62,6 +63,7 @@ export class ReservationFormComponent implements OnInit {
   private readonly router = inject(Router);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
 
   private getAccountProfileIDService = inject(GetAccountIdService);
@@ -193,6 +195,29 @@ export class ReservationFormComponent implements OnInit {
     this.fetchReservations();
     this.getFullyBookedDates(this.reservations);
     this.populateFullyBookedTimes(this.reservations);
+    this.loadUserData();  
+  }
+
+  private async loadUserData(): Promise<void> {
+    try {
+      // Get current user's email from AuthService
+      const userId = this.authService.getAccountProfileID();
+      
+      if (userId) {
+        // Fetch user data from UserService
+        const userData = await this.userService.getUserProfile(userId).toPromise();
+        
+        if (userData) {
+          // Auto-fill the form
+          this.step1.patchValue({
+            name: userData.name,
+            contactNumber: userData.contactNumber
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
   }
 
   fetchReservations(): void {

@@ -41,25 +41,25 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
   ],
   template: `
     <div
-      class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
+      class="min-h-[100dvh] relative flex items-center justify-center bg-cover bg-center p-[clamp(1rem,3vw,2rem)]"
       style="background-image: url('assets/images/Food House.jpg')"
     >
-      <!-- Overlay with Green Opacity -->
       <div class="absolute inset-0 bg-green-200 opacity-50"></div>
 
-      <!-- Login Card -->
-      <div class="relative bg-white shadow-xl rounded-lg p-8 w-full max-w-lg">
-        <!-- Logo -->
-        <div class="absolute top-[-3.5rem] left-1/2 transform -translate-x-1/2">
+      <div
+        class="relative bg-white shadow-xl rounded-lg p-[clamp(1rem,5vw,2rem)] w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] max-w-lg mx-auto"
+      >
+        <div
+          class="absolute top-[-2rem] sm:top-[-2.5rem] md:top-[-3rem] left-1/2 transform -translate-x-1/2"
+        >
           <img
             src="assets/images/Wacky's Logo.png"
             alt="Logo"
-            class="h-28 w-28"
+            class="h-[clamp(4rem,8vw,7rem)] w-[clamp(4rem,8vw,7rem)]"
           />
         </div>
-
         <h2
-          class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8"
+          class="text-[clamp(1.5rem,5vw,2.5rem)] font-extrabold text-green-700 text-center mt-[clamp(2rem,6vw,4rem)] mb-[clamp(1rem,3vw,2rem)]"
         >
           Welcome Back
         </h2>
@@ -67,7 +67,9 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
         <form [formGroup]="loginForm">
           <!-- Email Input -->
           <div class="mb-6">
-            <label for="email" class="block text-green-900 font-semibold mb-2"
+            <label
+              for="email"
+              class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
               >Email Address</label
             >
             <input
@@ -99,7 +101,7 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
           <div class="relative mb-6">
             <label
               for="password"
-              class="block text-green-900 font-semibold mb-2"
+              class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
               >Password</label
             >
             <div class="relative">
@@ -176,10 +178,12 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
           </div>
 
           <!-- Remember Me and Forgot Password -->
-          <div class="flex items-center justify-between mb-8">
+          <div
+            class="flex items-center justify-between mb-[clamp(1rem,4vw,2rem)]"
+          >
             <button
               (click)="goToPasswordReset()"
-              class="text-green-700 hover:text-green-500 font-semibold"
+              class="text-[clamp(0.875rem,2vw,1rem)] text-green-700 hover:text-green-500 font-semibold transition-colors duration-200"
             >
               Forgot Password?
             </button>
@@ -198,11 +202,13 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
           </button>
 
           <!-- Sign Up Link -->
-          <p class="text-center text-green-900 mt-8">
+          <p
+            class="text-center text-green-900 text-[clamp(0.875rem,2vw,1rem)] mt-[clamp(1.5rem,4vw,2rem)]"
+          >
             Don't have an account?
             <button
               [routerLink]="['/auth/register']"
-              class="text-green-700 hover:text-green-500 font-bold"
+              class="text-green-700 hover:text-green-500 font-bold text-[clamp(0.875rem,2vw,1rem)] ml-[clamp(0.5rem,1vw,0.75rem)] transition-colors duration-200"
             >
               Sign Up
             </button>
@@ -239,18 +245,15 @@ export class LoginPageComponent {
     this.route.queryParamMap.subscribe((params) => {
       const token = params.get('token');
       console.log(token);
-      if(token) {
+      if (token) {
         this.authService.verifyEmail(token).subscribe({
           next: () => {
-            this.toastNotification.showSuccess(
-              'Email Verified.',
-              'Success'
-            );
+            this.toastNotification.showSuccess('Email Verified.', 'Success');
           },
           complete: () => {
             this.router.navigate(['/auth/login']);
           },
-        })
+        });
         catchError((error: HttpErrorResponse) => {
           this.toastNotification.showError(
             'Email Verification Failed.',
@@ -258,10 +261,7 @@ export class LoginPageComponent {
           );
           return throwError(error);
         });
-        this.toastNotification.showSuccess(
-          'Email Verified.',
-          'Success'
-        );
+        this.toastNotification.showSuccess('Email Verified.', 'Success');
       }
     });
 

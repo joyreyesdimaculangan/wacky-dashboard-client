@@ -1,31 +1,38 @@
-.content-container {
-    @apply text-right max-w-lg mr-6; /* Align text to the right, reduce max width, and add right margin */
+// Responsive mixins
+@mixin responsive-text($min, $max) {
+  font-size: clamp(#{$min}rem, #{($max - $min) * 100}vw, #{$max}rem);
 }
 
-/* Heading styling */
+@mixin responsive-margin($min, $max) {
+  margin: clamp(#{$min}rem, #{($max - $min) * 100}vw, #{$max}rem);
+}
+
 .content-container h2 {
-    @apply text-7xl font-bold mb-4 text-green-100 font-serif; /* Large font size and lightest green color */
-    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.6); /* Shadow for better contrast */
+  @apply font-bold text-green-100 font-serif;
+  @include responsive-text(1, 3.5);
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.8), 0 0 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
+  line-height: clamp(1.1, 1.15, 1.3);
 }
 
-/* Paragraph styling */
 .content-container p {
-    @apply text-2xl mb-6 text-green-100 font-poppins; /* Adjusted font size and lightest green color */
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle text shadow for readability */
+  @apply text-green-100 font-poppins;
+  @include responsive-text(0.65, 1);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7), 0 0 3px rgba(0, 0, 0, 0.4);
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  max-width: clamp(260px, 50ch, 700px);
 }
 
-/* Adjust vertical spacing */
 .overlay {
-    @apply flex items-center; /* Center content vertically */
+  @apply flex items-center;
+  padding: clamp(0.75rem, 4vw, 4rem);
 }
 
-/* Font-family imports */
-
-/* Font styles */
+// Keep existing font families
 .font-serif {
-    font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
 }
 
 .font-poppins {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }

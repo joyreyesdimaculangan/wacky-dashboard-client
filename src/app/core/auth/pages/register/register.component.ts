@@ -21,33 +21,42 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
-import { LoadingFunctionComponent } from "../../../../features/loadingFunction/loadingFunction.component";
+import { LoadingFunctionComponent } from '../../../../features/loadingFunction/loadingFunction.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatInputModule, RouterModule, LoadingFunctionComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatInputModule,
+    RouterModule,
+    LoadingFunctionComponent,
+  ],
   template: `
     <div
-      class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
+      class="min-h-[100dvh] relative flex items-center justify-center bg-cover bg-center p-[clamp(1rem,3vw,2rem)]"
       style="background-image: url('assets/images/Food House.jpg')"
     >
-      <!-- Overlay with Green Opacity -->
       <div class="absolute inset-0 bg-green-200 opacity-50"></div>
 
-      <!-- Login Card -->
-      <div class="relative bg-white shadow-xl rounded-lg p-8 w-full max-w-lg">
-        <!-- Logo -->
-        <div class="absolute top-[-3.5rem] left-1/2 transform -translate-x-1/2">
+      <div
+        class="relative bg-white shadow-xl rounded-lg p-[clamp(1rem,5vw,2rem)] w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] max-w-lg mx-auto"
+      >
+        <div
+          class="absolute top-[-2rem] sm:top-[-2.5rem] md:top-[-3rem] left-1/2 transform -translate-x-1/2"
+        >
           <img
             src="assets/images/Wacky's Logo.png"
             alt="Logo"
-            class="h-28 w-28"
+            class="h-[clamp(4rem,8vw,7rem)] w-[clamp(4rem,8vw,7rem)]"
           />
         </div>
 
-        <div class="flex justify-between mb-4">
-          <!-- Back Button on the Left -->
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between mb-[clamp(0.5rem,2vw,1rem)]">
+          <!-- Back/Next buttons with responsive sizing -->
           <button
             *ngIf="currentSection === 2"
             (click)="prevSection()"
@@ -94,7 +103,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
           </button>
         </div>
         <h2
-          class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8"
+          class="text-[clamp(1.5rem,5vw,2.5rem)] font-extrabold text-green-700 text-center mt-[clamp(2rem,6vw,4rem)] mb-[clamp(1rem,3vw,2rem)]"
         >
           Create Your Account
         </h2>
@@ -103,7 +112,10 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
           <form [formGroup]="registerForm">
             <!-- Full Name Input -->
             <div class="mb-4">
-              <label for="name" class="block text-green-900 font-semibold mb-1">
+              <label
+                for="name"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
+              >
                 Full Name
               </label>
               <input
@@ -127,7 +139,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
             <div class="mb-4">
               <label
                 for="contactNo"
-                class="block text-green-900 font-semibold mb-1"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
                 >Contact Number</label
               >
               <input
@@ -158,7 +170,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
             <div class="mb-4">
               <label
                 for="address"
-                class="block text-green-900 font-semibold mb-1"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
                 >Address</label
               >
               <input
@@ -200,7 +212,9 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
           <form #formContent [formGroup]="registerForm">
             <!-- Email Input -->
             <div class="mb-4">
-              <label for="email" class="block text-green-900 font-semibold mb-1"
+              <label
+                for="email"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
                 >Email Address</label
               >
               <input
@@ -232,7 +246,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
             <div class="relative mb-6">
               <label
                 for="password"
-                class="block text-green-900 font-semibold mb-2"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
                 >Password</label
               >
               <div class="relative">
@@ -313,7 +327,7 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
             <div class="relative mb-6">
               <label
                 for="confirmPassword"
-                class="block text-green-900 font-semibold mb-2"
+                class="block text-[clamp(0.875rem,2vw,1rem)] text-green-900 font-semibold mb-[clamp(0.25rem,1vw,0.5rem)]"
                 >Confirm Password</label
               >
               <div class="relative">
@@ -398,19 +412,22 @@ import { LoadingFunctionComponent } from "../../../../features/loadingFunction/l
 
             <button
               (click)="onRegister()"
-              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition" [disabled]="loading$ | async"
+              class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
+              [disabled]="loading$ | async"
             >
-            <ng-container *ngIf="loading$ | async; else registerText">
-        <app-loading-function [inline]="true"></app-loading-function>
-      </ng-container>
-      <ng-template #registerText>Register</ng-template>
+              <ng-container *ngIf="loading$ | async; else registerText">
+                <app-loading-function [inline]="true"></app-loading-function>
+              </ng-container>
+              <ng-template #registerText>Register</ng-template>
             </button>
 
-            <p class="text-center text-green-900 mt-4">
+            <p
+              class="text-center text-green-900 text-[clamp(0.875rem,2vw,1rem)] mt-[clamp(1rem,4vw,2rem)]"
+            >
               Already have an account?
               <button
                 [routerLink]="['/auth/login']"
-                class="text-green-700 font-bold hover:text-green-500"
+                class="text-green-700 font-bold hover:text-green-500 text-[clamp(0.875rem,2vw,1rem)] ml-[clamp(0.5rem,1vw,1rem)]"
               >
                 Log In
               </button>
@@ -595,6 +612,5 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.registerFormSubscription.unsubscribe();
-
   }
 }

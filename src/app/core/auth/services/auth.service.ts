@@ -203,6 +203,14 @@ export class AuthService {
     }
   }
 
+  getUserEmail(): string | null {
+    const userInfo = this.userInfo;
+    if (!userInfo) {
+      return null;
+    }
+    return userInfo.email || null;
+  }
+
   public isAdmin(): boolean {
     return this.userInfo?.account_type === 'admin';
   }
