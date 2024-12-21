@@ -18,3 +18,23 @@ mat-error {
   margin-top: 0.25rem; // Add some spacing above the error message
   font-style: italic;
 }
+
+.terms-container {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #555;
+    }
+  }
+}

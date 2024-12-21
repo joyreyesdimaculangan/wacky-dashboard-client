@@ -118,7 +118,7 @@ export class ReservationFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
   reservationForm!: FormGroup; // Use definite assignment operator
   confirmReservationForm!: FormGroup; // Use definite assignment operator
-  terms!: FormGroup; // Declare the terms property
+  termsForm!: FormGroup; // Declare the terms property
   reservationsMade: EditedReservationForm[] = [];
 
   @Input() item: any;
@@ -127,6 +127,7 @@ export class ReservationFormComponent implements OnInit {
 
   ngOnInit() {
     this.confirmReservationForm = this.fb.group({
+      agreedToTerms: [false, Validators.requiredTrue],
       name: ['', Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
       contactNumber: [
         '',
@@ -167,13 +168,13 @@ export class ReservationFormComponent implements OnInit {
           Validators.required,
           Validators.pattern('^[0-9]+$'),
         ]), // Ensure only numbers
-        numberOfPax: new FormControl(50, [
-          Validators.required,
-          Validators.min(50),
-        ]), // Minimum number of pax
       }),
 
       eventDetailsForm: new FormGroup({
+        numberOfPax: new FormControl(50, [
+          Validators.required,
+          Validators.min(50),
+        ]), 
         eventDate: new FormControl('', [Validators.required]),
         eventTime: new FormControl('', [Validators.required]),
       }),
@@ -185,10 +186,8 @@ export class ReservationFormComponent implements OnInit {
       }),
     });
 
-    this.terms = this.fb.group({
-      termsAccepted: [false, Validators.requiredTrue],
-
-      privacyAccepted: [false, Validators.requiredTrue],
+    this.termsForm = this.fb.group({
+      agreedToTerms: [false, Validators.requiredTrue]
     });
 
     this.fetchReservations();
@@ -311,15 +310,14 @@ export class ReservationFormComponent implements OnInit {
   goToNextStep() {
     console.log(this.stepper);
     console.log('Current step index:', this.stepper.selectedIndex);
-    if (this.stepper.selectedIndex === 0 && this.step1.valid) {
-      console.log('It works', this.step1.valid);
-      this.stepper.selectedIndex = 1; // Move to Event Details
-    } else if (this.stepper.selectedIndex === 1 && this.step2.valid) {
-      console.log('It works', this.step2.valid);
-      this.stepper.selectedIndex = 2; // Move to Event Preferences
-    } else if (this.stepper.selectedIndex === 2) {
-      console.log(this.stepper.selectedIndex);
-      this.stepper.selectedIndex = 3; // Move to Confirmation
+    if (this.stepper.selectedIndex === 0 && this.termsForm.valid) {
+      this.stepper.selectedIndex = 1; // Move to Personal Details
+    } else if (this.stepper.selectedIndex === 1 && this.step1.valid) {
+      this.stepper.selectedIndex = 2; // Move to Event Details
+    } else if (this.stepper.selectedIndex === 2 && this.step2.valid) {
+      this.stepper.selectedIndex = 3; // Move to Event Preferences
+    } else if (this.stepper.selectedIndex === 3 && this.step3.valid) {
+      this.stepper.selectedIndex = 4; // Move to Confirmation
     }
   }
 
@@ -388,7 +386,7 @@ export class ReservationFormComponent implements OnInit {
 
       // Map form values to the ReservationForm interface
       const reservationData: ReservationForm = {
-        numberOfPax: this.step1.get('numberOfPax')?.value,
+        numberOfPax: this.step2.get('numberOfPax')?.value,
         name: this.step1.get('name')?.value || this.accountProfileName,
         contactNumber: this.step1.get('contactNumber')?.value,
         eventDate: eventDate.toISOString(), // Ensure the date is in ISO format

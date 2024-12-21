@@ -22,11 +22,90 @@
         />
       </div>
 
-      <h2 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
-        Reservation Form
-      </h2>
+      <h4 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
+        {{ packageName }}
+      </h4>
       <div class="space-y-6" [formGroup]="reservationForm">
         <mat-stepper #stepper linear>
+          <!-- Step 1: Terms & Conditions -->
+          <mat-step [stepControl]="termsForm">
+            <form [formGroup]="termsForm">
+              <ng-template matStepLabel>Terms & Conditions</ng-template>
+
+              <h2 class="text-2xl font-bold text-green-700 mb-4">
+                Terms and Conditions
+              </h2>
+
+              <div
+                class="h-64 overflow-y-auto mb-6 p-4 border border-gray-200 rounded-lg"
+              >
+                <h3 class="font-semibold mb-2 text-green-600">
+                  1. Reservation and Payment Policy
+                </h3>
+                <ul
+                  class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
+                >
+                  <li>
+                    A 50% down payment is required to confirm your reservation.
+                  </li>
+                  <li>
+                    Full payment must be settled 3 days before the event date.
+                  </li>
+                  <li>Reservation dates are subject to availability.</li>
+                  <li>Payment methods accepted: Bank transfer, GCash, Maya</li>
+                </ul>
+
+                <h3 class="font-semibold mb-2 text-green-600">
+                  2. Cancellation Policy
+                </h3>
+                <ul
+                  class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
+                >
+                  <li>
+                    Cancellations made 7 days before the event: 100% refund
+                  </li>
+                  <li>Cancellations made 3-6 days before: 50% refund</li>
+                  <li>Cancellations made less than 3 days: No refund</li>
+                </ul>
+
+                <h3 class="font-semibold mb-2 text-green-600">
+                  3. Event Rules
+                </h3>
+                <ul
+                  class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
+                >
+                  <li>Maximum event duration: 4 hours</li>
+                  <li>Additional charges apply for extended hours</li>
+                  <li>Decorations must be approved by management</li>
+                  <li>No smoking inside the venue</li>
+                </ul>
+              </div>
+
+              <div class="flex items-start mb-6">
+                <input
+                  type="checkbox"
+                  formControlName="agreedToTerms"
+                  id="terms"
+                  class="mt-1 mr-2"
+                />
+                <label for="terms" class="text-base text-gray-800">
+                  I have read and agree to the terms and conditions
+                </label>
+              </div>
+
+              <div class="flex justify-end">
+                <button
+                  mat-button
+                  matStepperNext
+                  [disabled]="!termsForm.valid"
+                  class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
           <!-- Personal Details Step -->
           <mat-step [stepControl]="step1">
             <form [formGroup]="step1">
@@ -94,6 +173,22 @@
                 >
               </div>
 
+              <div class="flex justify-end">
+                <button
+                  mat-button
+                  (click)="goToNextStep()"
+                  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Event Details Step -->
+          <mat-step [stepControl]="step2">
+            <form [formGroup]="step2">
+              <ng-template matStepLabel>Event Details</ng-template>
               <!-- Number of Guests Input -->
               <div class="form-group mb-6">
                 <label
@@ -112,50 +207,33 @@
                 />
                 <mat-error
                   *ngIf="
-                    step1.get('numberOfPax')?.hasError('required') &&
-                    step1.get('numberOfPax')?.touched
+                    step2.get('numberOfPax')?.hasError('required') &&
+                    step2.get('numberOfPax')?.touched
                   "
                   >Number of guests is required</mat-error
                 >
                 <mat-error
                   *ngIf="
-                    step1.get('numberOfPax')?.hasError('min') &&
-                    step1.get('numberOfPax')?.touched
+                    step2.get('numberOfPax')?.hasError('min') &&
+                    step2.get('numberOfPax')?.touched
                   "
                   >Minimum of 50 guests required</mat-error
                 >
                 <mat-error
                   *ngIf="
-                    step1.get('numberOfPax')?.hasError('max') &&
-                    step1.get('numberOfPax')?.touched
+                    step2.get('numberOfPax')?.hasError('max') &&
+                    step2.get('numberOfPax')?.touched
                   "
                   >Maximum of 200 guests only</mat-error
                 >
                 <mat-error
                   *ngIf="
-                    step1.get('numberOfPax')?.hasError('pattern') &&
-                    step1.get('numberOfPax')?.touched
+                    step2.get('numberOfPax')?.hasError('pattern') &&
+                    step2.get('numberOfPax')?.touched
                   "
                   >Invalid number of guests</mat-error
                 >
               </div>
-
-              <div class="flex justify-end">
-                <button
-                  mat-button
-                  (click)="goToNextStep()"
-                  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
-                >
-                  Next
-                </button>
-              </div>
-            </form>
-          </mat-step>
-
-          <!-- Event Details Step -->
-          <mat-step [stepControl]="step2">
-            <form [formGroup]="step2">
-              <ng-template matStepLabel>Event Details</ng-template>
               <!-- Date Picker -->
               <div class="form-group relative mb-6">
                 <label
@@ -410,7 +488,7 @@
                   <p class="text-base font-medium text-gray-700">
                     <strong>Number of Guests: </strong>
                     <span class="text-gray-900">{{
-                      this.step1.get("numberOfPax")?.value
+                      this.step2.get("numberOfPax")?.value
                     }}</span>
                   </p>
                 </div>
@@ -469,50 +547,13 @@
                 <div class="border-gray-300 py-2 col-span-2">
                   <p class="text-base font-medium text-gray-700">
                     <strong>AddOns: </strong>
-                    <span class="text-gray-900"> Additional One Layer for the Cake </span>
+                    <span class="text-gray-900">
+                      Additional One Layer for the Cake
+                    </span>
                   </p>
                 </div>
               </div>
             </div>
-
-            <form [formGroup]="terms" class="flex justify-between mt-6">
-              <div class="flex flex-col space-y-2">
-                <div class="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    formControlName="termsAccepted"
-                    class="mr-2"
-                  />
-                  <label for="terms" class="text-gray-700">
-                    I have read and agree to the
-                    <a
-                      href="/terms"
-                      target="_blank"
-                      class="text-blue-600 underline"
-                      >terms and conditions</a
-                    >.
-                  </label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="privacy"
-                    formControlName="privacyAccepted"
-                    class="mr-2"
-                  />
-                  <label for="privacy" class="text-gray-700">
-                    I have read and understand the
-                    <a
-                      href="/privacy"
-                      target="_blank"
-                      class="text-blue-600 underline"
-                      >privacy policy</a
-                    >.
-                  </label>
-                </div>
-              </div>
-            </form>
 
             <!-- Action Buttons -->
             <div class="flex justify-between mt-6">

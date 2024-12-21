@@ -175,7 +175,7 @@
         [routerLink]="['/home']"
         fragment="home"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
-        (click)="adjustMenuSize('home')"
+        (click)="adjustMenuSize('home'); toggleMobileMenu()"
       >
         Home
       </a>
@@ -185,7 +185,7 @@
         [routerLink]="['/home']"
         fragment="menu"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
-        (click)="adjustMenuSize('menu')"
+        (click)="adjustMenuSize('menu'); toggleMobileMenu()"
       >
         Menu
       </a>
@@ -195,7 +195,7 @@
         [routerLink]="['/home']"
         fragment="services"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
-        (click)="adjustMenuSize('services')"
+        (click)="adjustMenuSize('services'); toggleMobileMenu()"
       >
         Services
       </a>
@@ -205,7 +205,7 @@
         [routerLink]="['/home']"
         fragment="inquiry"
         class="block py-3 px-5 text-lg sm:text-base md:text-lg hover:bg-white hover:text-green-700 rounded-md transition"
-        (click)="adjustMenuSize('inquiry')"
+        (click)="adjustMenuSize('inquiry'); toggleMobileMenu()"
       >
         Contact Us
       </a>
@@ -216,6 +216,7 @@
           *ngIf="auth.isAdmin()"
           [routerLink]="['/admin/dashboard']"
           class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+          (click)="toggleMobileMenu()"
         >
           Dashboard
         </a>
@@ -223,6 +224,7 @@
           *ngIf="auth.isCustomer()"
           [routerLink]="['/customer/confirmed-reservations']"
           class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+          (click)="toggleMobileMenu()"
         >
           Reservations
         </a>
@@ -230,11 +232,12 @@
           *ngIf="auth.isAdmin()"
           [routerLink]="['/admin/notifications']"
           class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
+          (click)="toggleMobileMenu()"
         >
           Notifications
         </a>
         <a
-          (click)="logout()"
+          (click)="logout(); toggleMobileMenu()"
           class="block py-2 px-5 text-lg sm:text-base md:text-lg text-green-600 hover:bg-green-100 font-poppins"
         >
           Logout
@@ -243,4 +246,5 @@
     </li>
   </ul>
 </div>
+
 
