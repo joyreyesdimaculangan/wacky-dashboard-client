@@ -28,7 +28,7 @@ export class OffersComponent implements OnInit, OnDestroy {
     },
     {
       images: 'assets/images/Event 6.jpg',
-      title: 'RECEPTIONS',
+      title: 'VENUE HALLS',
       description: 'Host your special events with us!',
     },
   ];

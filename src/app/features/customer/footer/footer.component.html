@@ -1,47 +1,102 @@
-<footer class="bg-gray-100 p-8 shadow-inner">
+<footer class="bg-gray-100 p-[clamp(1rem,4vw,2rem)] shadow-inner">
   <div class="container mx-auto text-center">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-left">
-
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,2rem)] text-left"
+    >
       <!-- Contact Info -->
-      <div class="footer-item">
-        <h4 class="font-bold text-lg text-green-700 mb-3">Contact Info</h4>
-        <p class="flex items-center">
-          <svg class="w-5 h-5 mr-2 text-green-700" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M2 6.5A4.5 4.5 0 016.5 2h11A4.5 4.5 0 0122 6.5v11a4.5 4.5 0 01-4.5 4.5h-11A4.5 4.5 0 012 17.5v-11zM6.5 4A2.5 2.5 0 004 6.5v11A2.5 2.5 0 006.5 20h11a2.5 2.5 0 002.5-2.5v-11A2.5 2.5 0 0017.5 4h-11zM16 8a1 1 0 110 2h-4a1 1 0 110-2h4zm0 4a1 1 0 110 2h-6a1 1 0 110-2h6zm-6 4a1 1 0 110 2h-2a1 1 0 110-2h2z" />
+      <div class="footer-item mb-[clamp(1rem,3vw,1.5rem)]">
+        <h4
+          class="font-bold text-[clamp(1.125rem,2.5vw,1.5rem)] text-green-700 mb-[clamp(0.75rem,2vw,1rem)]"
+        >
+          Contact Info
+        </h4>
+        <p
+          class="flex items-center text-[clamp(0.875rem,1.5vw,1rem)] mb-[clamp(0.5rem,1.5vw,0.75rem)]"
+        >
+          <svg
+            class="w-[clamp(1.25rem,2vw,1.5rem)] h-[clamp(1.25rem,2vw,1.5rem)] mr-[clamp(0.5rem,1.5vw,0.75rem)] text-green-700"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M2 6.5A4.5 4.5 0 016.5 2h11A4.5 4.5 0 0122 6.5v11a4.5 4.5 0 01-4.5 4.5h-11A4.5 4.5 0 012 17.5v-11zM6.5 4A2.5 2.5 0 004 6.5v11A2.5 2.5 0 006.5 20h11a2.5 2.5 0 002.5-2.5v-11A2.5 2.5 0 0017.5 4h-11zM16 8a1 1 0 110 2h-4a1 1 0 110-2h4zm0 4a1 1 0 110 2h-6a1 1 0 110-2h6zm-6 4a1 1 0 110 2h-2a1 1 0 110-2h2z"
+            />
           </svg>
           {{ info.contactNumber }}
         </p>
       </div>
 
       <!-- Business Hours -->
-      <div class="footer-item">
-        <h4 class="font-bold text-lg text-green-700 mb-3">Business Hours</h4>
-        <p class="flex items-center">
-          <svg class="w-5 h-5 mr-2 text-green-700" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 4a8 8 0 110 16 8 8 0 010-16zm0 2a6 6 0 100 12A6 6 0 0012 6zm0 1a1 1 0 011 1v4h3a1 1 0 110 2h-4a1 1 0 01-1-1V8a1 1 0 011-1z"/>
+      <div class="footer-item mb-[clamp(1rem,3vw,1.5rem)]">
+        <h4
+          class="font-bold text-[clamp(1.125rem,2.5vw,1.5rem)] text-green-700 mb-[clamp(0.75rem,2vw,1rem)]"
+        >
+          Business Hours
+        </h4>
+        <p
+          class="flex items-center text-[clamp(0.875rem,1.5vw,1rem)] mb-[clamp(0.5rem,1.5vw,0.75rem)]"
+        >
+          <svg
+            class="w-[clamp(1.25rem,2vw,1.5rem)] h-[clamp(1.25rem,2vw,1.5rem)] mr-[clamp(0.5rem,1.5vw,0.75rem)] text-green-700"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 4a8 8 0 110 16 8 8 0 010-16zm0 2a6 6 0 100 12A6 6 0 0012 6zm0 1a1 1 0 011 1v4h3a1 1 0 110 2h-4a1 1 0 01-1-1V8a1 1 0 011-1z"
+            />
           </svg>
           {{ info.businessDays }}
         </p>
-        <p class="pl-7 text-gray-600">{{ info.businessHours }}</p>
+        <p
+          class="pl-[clamp(1.75rem,4vw,2rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-600"
+        >
+          {{ info.businessHours }}
+        </p>
       </div>
 
       <!-- Address -->
-      <div class="footer-item">
-        <h4 class="font-bold text-lg text-green-700 mb-3">Address</h4>
-        <p class="flex items-center">
-          <svg class="w-5 h-5 mr-2 text-green-700" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2a7 7 0 00-7 7c0 4.73 7 13 7 13s7-8.27 7-13a7 7 0 00-7-7zm0 9a2 2 0 110-4 2 2 0 010 4z"/>
+      <div class="footer-item mb-[clamp(1rem,3vw,1.5rem)]">
+        <h4
+          class="font-bold text-[clamp(1.125rem,2.5vw,1.5rem)] text-green-700 mb-[clamp(0.75rem,2vw,1rem)]"
+        >
+          Address
+        </h4>
+        <p
+          class="flex items-center text-[clamp(0.875rem,1.5vw,1rem)] mb-[clamp(0.5rem,1.5vw,0.75rem)]"
+        >
+          <svg
+            class="w-[clamp(1.25rem,2vw,1.5rem)] h-[clamp(1.25rem,2vw,1.5rem)] mr-[clamp(0.5rem,1.5vw,0.75rem)] text-green-700"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2a7 7 0 00-7 7c0 4.73 7 13 7 13s7-8.27 7-13a7 7 0 00-7-7zm0 9a2 2 0 110-4 2 2 0 010 4z"
+            />
           </svg>
           {{ info.address }}
         </p>
       </div>
 
       <!-- Follow Us -->
-      <div class="footer-item">
-        <h4 class="font-bold text-lg text-green-700 mb-3">Follow Us</h4>
-        <a href="https://www.facebook.com/WackysFoodHouse" target="_blank" class="flex items-center hover:text-green-700 transition-colors duration-300">
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M22 12.073c0-5.523-4.477-10-10-10s-10 4.477-10 10c0 4.991 3.656 9.128 8.438 9.878v-6.99h-2.54v-2.888h2.54v-2.204c0-2.508 1.492-3.889 3.774-3.889 1.094 0 2.239.195 2.239.195v2.46h-1.262c-1.243 0-1.631.771-1.631 1.563v1.875h2.773l-.443 2.888h-2.33v6.99C18.344 21.201 22 16.864 22 12.073z"/>
+      <div class="footer-item mb-[clamp(1rem,3vw,1.5rem)]">
+        <h4
+          class="font-bold text-[clamp(1.125rem,2.5vw,1.5rem)] text-green-700 mb-[clamp(0.75rem,2vw,1rem)]"
+        >
+          Follow Us
+        </h4>
+        <a
+          href="https://www.facebook.com/WackysFoodHouse"
+          target="_blank"
+          class="flex items-center text-[clamp(0.875rem,1.5vw,1rem)] hover:text-green-700 transition-colors duration-300"
+        >
+          <svg
+            class="w-[clamp(1.25rem,2vw,1.5rem)] h-[clamp(1.25rem,2vw,1.5rem)] mr-[clamp(0.5rem,1.5vw,0.75rem)]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M22 12.073c0-5.523-4.477-10-10-10s-10 4.477-10 10c0 4.991 3.656 9.128 8.438 9.878v-6.99h-2.54v-2.888h2.54v-2.204c0-2.508 1.492-3.889 3.774-3.889 1.094 0 2.239.195 2.239.195v2.46h-1.262c-1.243 0-1.631.771-1.631 1.563v1.875h2.773l-.443 2.888h-2.33v6.99C18.344 21.201 22 16.864 22 12.073z"
+            />
           </svg>
           Facebook
         </a>
@@ -49,8 +104,12 @@
     </div>
 
     <!-- Footer Bottom -->
-    <div class="mt-8 text-gray-600">
-      <p class="border-t border-gray-300 pt-4">&copy; 2024 Wacky's Food House. All Rights Reserved.</p>
+    <div class="mt-[clamp(1.5rem,4vw,2rem)] text-gray-600">
+      <p
+        class="border-t border-gray-300 pt-[clamp(1rem,3vw,1.5rem)] text-[clamp(0.875rem,1.5vw,1rem)]"
+      >
+        &copy; 2024 Wacky's Food House. All Rights Reserved.
+      </p>
     </div>
   </div>
 </footer>

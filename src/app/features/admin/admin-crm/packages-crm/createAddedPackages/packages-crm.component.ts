@@ -47,23 +47,32 @@ import { Location } from '@angular/common';
   ],
   template: `
     <div
-      class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
+      class="flex-1 bg-green-100 min-h-[100dvh] flex flex-col sticky top-0 z-50"
     >
-      <div
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    <div
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-[clamp(1rem,3vw,2rem)]"
       >
-        <div
-          class="relative bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+      <div
+          class="relative bg-white rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] max-w-3xl max-h-[90vh] overflow-y-auto"
         >
           <button
             (click)="closeAddPackages()"
-            class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none"
+            class="absolute top-[clamp(0.75rem,2vw,1rem)] right-[clamp(0.75rem,2vw,1rem)] 
+                       text-gray-500 hover:text-gray-800 
+                       text-[clamp(1.5rem,4vw,2rem)] 
+                       p-[clamp(0.5rem,1.5vw,0.75rem)] 
+                       rounded-full focus:outline-none 
+                       transition-colors duration-200"
           >
             &times;
           </button>
-          <h2 class="text-2xl font-bold mb-6 text-green-700">Add Content</h2>
-          <form [formGroup]="addPackagesForm" class="p-4 md:p-5">
-            <div class="grid gap-4 mb-4 grid-cols-2">
+          <h2
+            class="text-[clamp(1.25rem,3vw,2rem)] font-bold mb-[clamp(1rem,3vw,1.5rem)] text-green-700 p-[clamp(1.5rem,4vw,2rem)] pb-0"
+          >Add Content</h2>
+          <form [formGroup]="addPackagesForm" class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
+          <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-x-[clamp(1.5rem,4vw,2rem)] gap-y-[clamp(1rem,3vw,1.5rem)] mb-[clamp(1rem,4vw,1.5rem)] px-[clamp(0.5rem,2vw,1rem)]"
+            >
               <div class="col-span-2">
                 <label
                   for="name"
@@ -175,7 +184,8 @@ import { Location } from '@angular/common';
             </div>
 
             <!-- Additional Inclusions Section -->
-            <div formArrayName="additionalInclusions">
+            <div formArrayName="additionalInclusions"
+            class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
               <h3 class="text-xl font-bold mb-4 text-gray-800">
                 Additional Inclusions
               </h3>
@@ -215,7 +225,7 @@ import { Location } from '@angular/common';
             </div>
 
             <!-- Add-Ons Section -->
-            <div formArrayName="addOns" class="mt-4">
+            <div formArrayName="addOns" class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
               <h3 class="text-xl font-bold mb-4 text-gray-800">Add-Ons</h3>
               <div
                 *ngFor="let addOn of addOns.controls; let i = index"

@@ -36,32 +36,48 @@ import { AuthService } from '../../../core/auth/services/auth.service';
   ],
   providers: [ReservationService, DatePipe],
   template: `
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex min-h-screen bg-gray-100">
       <section class="dashboard-page flex-1 overflow-auto">
-        <div class="dashboard-content">
-          <header class="header">
-            <h1>Reservations</h1>
+        <div class="dashboard-content p-[clamp(1rem,3vw,2rem)]">
+          <!-- Header -->
+          <header class="mb-[clamp(1.5rem,4vw,2rem)]">
+            <h1
+              class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-green-700"
+            >
+              Reservations
+            </h1>
           </header>
 
           <div class="content">
             <!-- Loading State -->
-            <div *ngIf="loading()" class="spinner-container">
-              <div class="spinner"></div>
-              <p>Loading reservations...</p>
+            <div
+              *ngIf="loading()"
+              class="flex flex-col items-center justify-center p-[clamp(1rem,3vw,2rem)]"
+            >
+              <div
+                class="spinner w-[clamp(2rem,6vw,3rem)] h-[clamp(2rem,6vw,3rem)]"
+              ></div>
+              <p
+                class="mt-[clamp(0.75rem,2vw,1rem)] text-[clamp(0.875rem,1.5vw,1rem)]"
+              >
+                Loading reservations...
+              </p>
             </div>
 
-            <!-- Error State -->
-            <div *ngIf="!loading() && errorMessage" class="error-message">
-              <p>{{ errorMessage }}</p>
-            </div>
-
-            <main *ngIf="!loading()" class="flex-1 p-6 overflow-auto">
-              <!-- Search and Items per Page Panel -->
-              <div class="mb-6 flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                  <div class="relative">
+            <main *ngIf="!loading()" class="flex-1 overflow-auto">
+              <!-- Search and Controls Panel -->
+              <div
+                class="flex flex-col lg:flex-row justify-between gap-[clamp(1rem,3vw,1.5rem)] mb-[clamp(1.5rem,4vw,2rem)]"
+              >
+                <!-- Search Area -->
+                <div
+                  class="flex flex-col sm:flex-row gap-[clamp(0.75rem,2vw,1rem)]"
+                >
+                  <div
+                    class="relative flex-1 sm:max-w-[clamp(250px,40vw,400px)]"
+                  >
                     <svg
-                      class="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500"
+                      class="absolute left-3 top-1/2 -translate-y-1/2 w-[clamp(1.25rem,2vw,1.5rem)] h-[clamp(1.25rem,2vw,1.5rem)] text-gray-500"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -78,32 +94,43 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                       type="text"
                       [(ngModel)]="searchText"
                       placeholder="Search..."
-                      class="pl-12 py-3 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 w-96 shadow-sm transition duration-200"
+                      class="w-full pl-[clamp(2.5rem,5vw,3rem)] py-[clamp(0.5rem,1.5vw,0.75rem)] pr-[clamp(0.75rem,2vw,1rem)]
+                              text-[clamp(0.875rem,1.5vw,1rem)] border border-gray-300 rounded-lg
+                              focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
                     />
                   </div>
                   <button
                     (click)="resetSearch()"
-                    class="py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   >
                     Reset
                   </button>
                 </div>
-                <div class="flex items-center space-x-4">
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-[clamp(0.5rem,2vw,1rem)]">
                   <button
                     (click)="markAllAsRead()"
-                    class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   >
                     Mark All as Read
                   </button>
                   <button
                     (click)="openAdd()"
-                    class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   >
                     Add Reservation
                   </button>
                   <button
-                    class="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                     (click)="onClose()"
+                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
                   >
                     Back
                   </button>
@@ -111,10 +138,10 @@ import { AuthService } from '../../../core/auth/services/auth.service';
               </div>
 
               <!-- Reservation Data Table -->
-              <div class="overflow-x-auto mb-6">
-                <table
-                  class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-left"
-                >
+              <div
+                class="overflow-x-auto mb-[clamp(1.5rem,4vw,2rem)] rounded-lg shadow"
+              >
+                <table class="min-w-full bg-white">
                   <thead class="bg-green-500 text-white">
                     <tr>
                       <th class="p-4 text-sm font-medium relative">
@@ -294,14 +321,22 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                 ></app-delete-reservation-modal>
               </div>
 
-              <div class="flex justify-between items-center mt-4">
-                <div>
-                  <label for="itemsPerPage" class="mr-2">Items per page:</label>
+              <div
+                class="flex flex-col sm:flex-row justify-between items-center gap-[clamp(1rem,3vw,1.5rem)]"
+              >
+                <div class="flex items-center gap-[clamp(0.5rem,2vw,1rem)]">
+                  <label
+                    for="itemsPerPage"
+                    class="text-[clamp(0.875rem,1.5vw,1rem)]"
+                    >Items per page:</label
+                  >
                   <select
                     id="itemsPerPage"
                     [(ngModel)]="itemsPerPage"
                     (change)="changeItemsPerPage($event)"
-                    class="py-2 px-3 border border-gray-300 rounded-lg"
+                    class="text-[clamp(0.875rem,1.5vw,1rem)] 
+                             py-[clamp(0.375rem,1vw,0.5rem)] px-[clamp(0.75rem,2vw,1rem)]
+                             border border-gray-300 rounded-lg"
                   >
                     <option
                       *ngFor="let option of itemsPerPageOptions"
@@ -311,28 +346,43 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                     </option>
                   </select>
                 </div>
-                <div class="flex items-center">
+
+                <div class="flex items-center gap-[clamp(0.75rem,2vw,1rem)]">
                   <button
                     (click)="prevPage()"
                     [disabled]="currentPage === 1"
-                    class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    class="px-[clamp(0.75rem,2vw,1rem)] py-[clamp(0.375rem,1vw,0.5rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 
+                             disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     Previous
                   </button>
-                  <span class="text-sm mx-4"
-                    >Page {{ currentPage }} of {{ totalPages() }}</span
-                  >
+                  <span class="text-[clamp(0.875rem,1.5vw,1rem)]">
+                    Page {{ currentPage }} of {{ totalPages() }}
+                  </span>
                   <button
                     (click)="nextPage()"
                     [disabled]="currentPage === totalPages()"
-                    class="py-2 px-3 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    class="px-[clamp(0.75rem,2vw,1rem)] py-[clamp(0.375rem,1vw,0.5rem)]
+                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
+                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 
+                             disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     Next
                   </button>
                 </div>
               </div>
 
+              <!-- Modals -->
               <div class="modal-container overflow-auto max-h-screen z-50">
+                <app-delete-reservation-modal
+                  *ngIf="deletingItem"
+                  [item]="deletingItem"
+                  (cancelDelete)="closeDelete()"
+                >
+                </app-delete-reservation-modal>
+
                 <app-add-reservation-modal
                   *ngIf="addingItem"
                   (close)="closeAdd()"

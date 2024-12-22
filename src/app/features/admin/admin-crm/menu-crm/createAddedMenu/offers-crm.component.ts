@@ -39,24 +39,46 @@ import { ToastNotificationsComponent } from '../../../../../core/toastNotificati
   ],
   template: `
     <div
-      class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
+      class="flex-1 bg-green-100 min-h-[100dvh] flex flex-col sticky top-0 z-50"
       *ngIf="authService.isAdmin()"
     >
+      <!-- Overlay -->
       <div
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-[clamp(1rem,3vw,2rem)]"
       >
+        <!-- Modal Container -->
         <div
-          class="relative bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+          class="relative bg-white rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] max-w-3xl max-h-[90vh] overflow-y-auto"
         >
+          <!-- Close Button -->
           <button
             (click)="closeAddContent()"
-            class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none"
+            class="absolute top-[clamp(0.75rem,2vw,1rem)] right-[clamp(0.75rem,2vw,1rem)] 
+                       text-gray-500 hover:text-gray-800 
+                       text-[clamp(1.5rem,4vw,2rem)] 
+                       p-[clamp(0.5rem,1.5vw,0.75rem)] 
+                       rounded-full focus:outline-none 
+                       transition-colors duration-200"
           >
             &times;
           </button>
-          <h2 class="text-2xl font-bold mb-6 text-green-700">Add Content</h2>
-          <form [formGroup]="addContentForm" class="p-4 md:p-5">
-            <div class="grid gap-6 mb-4 grid-cols-2">
+
+          <!-- Title -->
+          <h2
+            class="text-[clamp(1.25rem,3vw,2rem)] font-bold mb-[clamp(1rem,3vw,1.5rem)] text-green-700 p-[clamp(1.5rem,4vw,2rem)] pb-0"
+          >
+            Add Content
+          </h2>
+
+          <!-- Form -->
+          <form
+            [formGroup]="addContentForm"
+            class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]"
+          >
+            <!-- Form content here -->
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-x-[clamp(1.5rem,4vw,2rem)] gap-y-[clamp(1rem,3vw,1.5rem)] mb-[clamp(1rem,4vw,1.5rem)] px-[clamp(0.5rem,2vw,1rem)]"
+            >
               <!-- Increased gap to 6 for more space -->
 
               <!-- Name input -->
@@ -242,12 +264,12 @@ export class OffersCrmComponent {
         console.log(this.previewUrl);
       };
       reader.readAsDataURL(this.selectedFile);
-    } 
+    }
   }
 
   onSubmit() {
     if (this.authService.isAdmin()) {
-      if(this.addContentForm.valid && this.selectedFile) {
+      if (this.addContentForm.valid && this.selectedFile) {
         const formData = new FormData();
         formData.append('image', this.selectedFile, this.selectedFile.name);
         formData.append('name', this.addContentForm.controls['name'].value);
@@ -258,20 +280,32 @@ export class OffersCrmComponent {
 
         this.menuService.createMenu(formData).subscribe({
           next: () => {
-            this.toastNotification.showSuccess('Content added successfully', 'Success');
+            this.toastNotification.showSuccess(
+              'Content added successfully',
+              'Success'
+            );
             this.addContentForm.reset();
             this.router.navigate(['/admin/home']);
           },
           error: (err) => {
             console.error('Error saving content:', err);
-            this.toastNotification.showError('Failed to add content. Please try again.', 'Error');
-          }
+            this.toastNotification.showError(
+              'Failed to add content. Please try again.',
+              'Error'
+            );
+          },
         });
       } else {
-        this.toastNotification.showError('Please fill all required fields and upload an image', 'Error');
+        this.toastNotification.showError(
+          'Please fill all required fields and upload an image',
+          'Error'
+        );
       }
     } else {
-      this.toastNotification.showError('You do not have permission to add content', 'Error');
+      this.toastNotification.showError(
+        'You do not have permission to add content',
+        'Error'
+      );
     }
   }
 }

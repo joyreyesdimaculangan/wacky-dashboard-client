@@ -23,28 +23,45 @@ import { ToastNotificationsComponent } from '../../../../../core/toastNotificati
   selector: 'app-edit-offers',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: ` 
-  <div
-    class="flex-1 bg-green-100 min-h-screen flex flex-col sticky top-0 z-50"
+  template: ` <div
+    class="flex-1 bg-green-100 min-h-[100dvh] flex flex-col sticky top-0 z-50"
   >
+    <!-- Overlay -->
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-[clamp(1rem,3vw,2rem)]"
     >
+      <!-- Modal Container -->
       <div
-        class="relative bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+        class="relative bg-white rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] max-w-3xl max-h-[90vh] overflow-y-auto"
       >
+        <!-- Close Button -->
         <button
           (click)="closeEditContent()"
-          class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl p-2 rounded-full focus:outline-none"
+          class="absolute top-[clamp(0.75rem,2vw,1rem)] right-[clamp(0.75rem,2vw,1rem)] 
+                       text-gray-500 hover:text-gray-800 
+                       text-[clamp(1.5rem,4vw,2rem)] 
+                       p-[clamp(0.5rem,1.5vw,0.75rem)] 
+                       rounded-full focus:outline-none 
+                       transition-colors duration-200"
         >
           &times;
         </button>
-        <h2 class="text-2xl font-bold mb-6 text-green-700">Edit Content</h2>
+
+        <!-- Title -->
+        <h2
+          class="text-[clamp(1.25rem,3vw,2rem)] font-bold mb-[clamp(1rem,3vw,1.5rem)] text-green-700 p-[clamp(1.5rem,4vw,2rem)] pb-0"
+        >
+          Edit Content
+        </h2>
+
+        <!-- Form -->
         <form
           [formGroup]="editMenuForm"
-          class="p-4 md:p-5"
+          class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]"
         >
-          <div class="grid gap-4 mb-4 grid-cols-2">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-x-[clamp(1.5rem,4vw,2rem)] gap-y-[clamp(1rem,3vw,1.5rem)] mb-[clamp(1rem,4vw,1.5rem)] px-[clamp(0.5rem,2vw,1rem)]"
+          >
             <div class="col-span-2">
               <label
                 for="name"
@@ -145,7 +162,10 @@ export class EditOffersComponent {
         next: () => {
           console.log('Menu updated successfully');
           this.editMenuForm.reset();
-          this.toastNotification.showSuccess('Menu updated successfully', 'Success');
+          this.toastNotification.showSuccess(
+            'Menu updated successfully',
+            'Success'
+          );
           this.router.navigate(['/admin/home']);
         },
         error: (err) => {
