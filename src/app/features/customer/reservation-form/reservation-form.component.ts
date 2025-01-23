@@ -97,6 +97,7 @@ export class ReservationFormComponent implements OnInit {
   isFirstStepComplete = false;
   isSecondStepComplete = false;
   isReservationOpen = false;
+  isEditing = false;
 
   constructor() {
     effect(() => {

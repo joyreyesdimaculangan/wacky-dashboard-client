@@ -14,14 +14,17 @@ import { GetAccountIdService } from '../../../features/customer/reservation-form
 export class AuthService {
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRoleSubject = new BehaviorSubject<string | null>(null);
+  private accountProfileNameSubject = new BehaviorSubject<string>('');
 
   userRole$ = this.userRoleSubject.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
+  accountProfileName$ = this.accountProfileNameSubject.asObservable();
+  
   user = signal<User | null>(null);
   userInfo: User | null = null;
   accountType = signal<string | undefined>('');
   userName: string | undefined;
-  accountProfileName = signal<string | undefined>('');
+
   private accountProfileId: string | null = null;
   private apiUrl = environment.apiUrl + '/auth';
 
@@ -36,11 +39,18 @@ export class AuthService {
       this.userInfo = this.getUser(token);
       this.user.set(this.userInfo);
       this.accountType.set(this.userInfo?.account_type);
-      this.accountProfileName.set(this.userInfo?.accountProfileName);
       this._isLoggedIn$.next(true);
     } else {
       this.loadUserInfoFromLocalStorage();
     }
+  }
+
+  get accountProfileName(): string {
+    return this.accountProfileNameSubject.value;
+  }
+
+  set accountProfileName(value: string) {
+    this.accountProfileNameSubject.next(value);
   }
 
   // Method to get the account profile ID
@@ -195,7 +205,6 @@ export class AuthService {
       this.accountType.set(undefined);
       this.accountProfileId = null;
       //this.accountProfileName = null;
-      this.accountProfileName.set(undefined);
 
       this.router.navigate(['/home']);
     } catch (error) {
@@ -239,7 +248,6 @@ export class AuthService {
       this.userInfo = JSON.parse(userInfo);
       this.user.set(this.userInfo);
       this.accountType.set(this.userInfo?.account_type);
-      this.accountProfileName.set(this.userInfo?.account?.accountProfileName);
       this._isLoggedIn$.next(true);
     }
   }

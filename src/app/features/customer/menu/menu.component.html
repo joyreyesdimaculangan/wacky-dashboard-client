@@ -1,27 +1,18 @@
-<section class="my-[clamp(1.25rem,4vw,3rem)] p-[clamp(1rem,5vw,2rem)] max-w-screen-xl mx-auto">
+<section
+  class="my-[clamp(1.25rem,4vw,3rem)] p-[clamp(1rem,5vw,2rem)] max-w-screen-xl mx-auto"
+>
   <!-- Title -->
-  <h3 class="text-[clamp(1.5rem,4vw,2.5rem)] 
-             font-bold 
-             font-serif 
-             text-center 
-             mb-[clamp(1rem,3vw,1.5rem)] 
-             mt-[clamp(1rem,4vw,2rem)] 
-             text-green-700 
-             relative 
-             elegant-underline">
+  <h3
+    class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold font-serif text-center mb-[clamp(1rem,3vw,1.5rem)] mt-[clamp(1.5rem,4vw,2rem)] text-green-700 relative elegant-underline"
+  >
     Our Menu
   </h3>
-
   <!-- Description -->
-  <p class="text-[clamp(1rem,2vw,1.25rem)] 
-            text-center 
-            text-gray-700 
-            mb-[clamp(1rem,3vw,1.5rem)] 
-            font-semibold 
-            max-w-[clamp(300px,65ch,800px)] 
-            mx-auto">
-    Explore our wide range of delicious dishes that cater to every taste. 
-    From hearty meals to light bites, our menu offers something for everyone.
+  <p
+    class="text-[clamp(1rem,2vw,1.25rem)] text-center text-gray-700 mb-[clamp(1rem,3vw,1.5rem)] font-semibold max-w-[clamp(300px,65ch,800px)] mx-auto"
+  >
+    Explore our wide range of delicious dishes that cater to every taste. From
+    hearty meals to light bites, our menu offers something for everyone.
     Discover your new favorite dish today!
   </p>
 
@@ -59,7 +50,9 @@
     </div>
 
     <!-- Products Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(1rem,3vw,2rem)]">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[clamp(1rem,3vw,2rem)]"
+    >
       @for (dishes of menu; track $index) {
       <div
         class="relative bg-white shadow-lg rounded-lg overflow-hidden flex flex-col justify-between p-4 h-full cursor-pointer"
