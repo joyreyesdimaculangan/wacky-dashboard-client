@@ -48,7 +48,7 @@ export class HeaderComponent {
   ngOnInit() {
     this.userRole = this.auth.getUserRole();
     const userInfo = this.auth.getUserInfo();
-    this.accountProfileName = this.auth.accountProfileName();
+    this.accountProfileName = this.auth.accountProfileName;
     if (userInfo) {
       const accountProfileName = this.getAccountNameService.getAccountProfileName();
       this.accountProfileName = accountProfileName?.accountProfileName;
