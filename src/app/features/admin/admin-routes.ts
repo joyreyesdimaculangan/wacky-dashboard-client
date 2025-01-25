@@ -92,5 +92,12 @@ export const AdminRoutes: Routes = [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
     ],
     loadComponent: () => import('./notification-page/notification-page.component').then((m) => m.NotificationPageComponent),
+  },
+  {
+    path: 'terms-and-conditions',
+    providers: [
+      { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
+    ],
+    loadComponent: () => import('./terms-and-conditions/terms-and-conditions.component').then((m) => m.TermsAndConditionsComponent),
   }
 ];
