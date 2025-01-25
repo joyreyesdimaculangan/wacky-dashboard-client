@@ -49,7 +49,7 @@ import { QuillModule } from 'ngx-quill';
       </div>
     </form>
   </div>`,
-  styleUrl: './terms-and-conditions.component.css',
+  styleUrl: './terms-and-conditions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TermsAndConditionsComponent implements OnInit {
