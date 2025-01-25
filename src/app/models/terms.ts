@@ -1,6 +1,9 @@
-export interface Terms { 
-    id?: string;
+export interface TermsSection { 
+    title: string;
     content: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+}
+
+export interface Terms {
+    id?: string;
+    sections: TermsSection[];
 }
