@@ -37,6 +37,15 @@ import { Location } from '@angular/common';
           </h3>
 
           <!-- Reservation Details (Pre-filled Input Fields) -->
+          <div
+            *ngIf="venue"
+            class="mb-6 px-4 py-3 bg-green-50 rounded-lg border border-green-200"
+          >
+            <p class="text-lg font-medium text-green-800">
+              Venue: {{ venue }}
+            </p>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label
@@ -186,7 +195,8 @@ import { Location } from '@angular/common';
               <span
                 class="inline-block px-3 py-1 font-semibold text-sm rounded-full"
                 [ngClass]="{
-                  'bg-green-200 text-green-800': item?.paymentStatus === 'FULLY_PAID',
+                  'bg-green-200 text-green-800':
+                    item?.paymentStatus === 'FULLY_PAID',
                   'bg-yellow-200 text-yellow-800':
                     item?.paymentStatus === 'PENDING',
                   'bg-blue-200 text-blue-800':
@@ -215,11 +225,23 @@ import { Location } from '@angular/common';
 })
 export class ViewReservationModalComponent {
   item: EditedReservationForm | null = null;
+  venue: string = '';
+  referenceNumber: string = '';
+  showReferenceInput: boolean = false;
 
   private readonly reservationService = inject(ReservationService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private getVenueBasedOnPax(pax: number): string {
+    if (pax >= 100 && pax <= 200) {
+      return 'Venue A (100-200 Pax)';
+    } else if (pax >= 50 && pax < 100) {
+      return 'Venue B (50-99 Pax)';
+    } else {
+      return 'Venue C (less than 50 Pax)';
+    }
+  }
 
   ngOnInit() {
     this.getReservationById();
@@ -231,6 +253,9 @@ export class ViewReservationModalComponent {
       .getReservationById(reservationID)
       .subscribe((reservation) => {
         this.item = reservation;
+        if (reservation.numberOfPax) {
+          this.venue = this.getVenueBasedOnPax(reservation.numberOfPax);
+        }
       });
   }
 

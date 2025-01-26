@@ -48,61 +48,35 @@
                 <form [formGroup]="termsForm">
                   <ng-template matStepLabel>Terms & Conditions</ng-template>
 
-                  <h2
-                    class="text-[clamp(1rem,3vw,2rem)] font-bold text-green-700 mb-[clamp(0.5rem,2vw,1rem)]"
-                  >
+                  <h2 class="text-[clamp(1.125rem,2.5vw,1.5rem)] font-bold text-green-700 mb-[clamp(1rem,2vw,1.5rem)]">
                     Terms and Conditions
                   </h2>
-
-                  <div
-                    class="h-[clamp(16rem,50vh,24rem)] overflow-y-auto mb-4 sm:mb-6 p-3 sm:p-4 border border-gray-200 rounded-lg"
-                  >
-                    <h3
-                      class="text-[clamp(0.875rem,2.5vw,1.25rem)] font-semibold mb-2 text-green-600"
-                    >
+                  
+                  <div class="h-[clamp(16rem,50vh,24rem)] overflow-y-auto mb-4 sm:mb-6 p-3 sm:p-4 border border-gray-200 rounded-lg">
+                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
                       1. Reservation and Payment Policy
                     </h3>
-                    <ul
-                      class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
-                    >
-                      <li>
-                        A 50% down payment is required to confirm your
-                        reservation.
-                      </li>
-                      <li>
-                        Full payment must be settled 3 days before the event
-                        date.
-                      </li>
-                      <li>Reservation dates are subject to availability.</li>
-                      <li>
-                        Payment methods accepted: Bank transfer, GCash, Maya
-                      </li>
+                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
+                      <li>A 50% down payment is required to confirm your reservation</li>
+                      <li>Full payment must be settled 3 days before the event date</li>
+                      <li>Reservation dates are subject to availability</li>
+                      <li>Only walk-in payments are allowed</li>
                     </ul>
-
-                    <h3
-                      class="text-[clamp(0.875rem,2.5vw,1.25rem)] font-semibold mb-2 text-green-600"
-                    >
+                  
+                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
                       2. Cancellation Policy
                     </h3>
-                    <ul
-                      class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
-                    >
-                      <li>
-                        Cancellations made 7 days before the event: 100% refund
-                      </li>
-                      <li>Cancellations made 3-6 days before: 50% refund</li>
-                      <li>Cancellations made less than 3 days: No refund</li>
+                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
+                      <li>Cancelled reservations are non-refundable</li>
                     </ul>
-
-                    <h3 class="font-semibold mb-2 text-green-600">
+                  
+                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
                       3. Event Rules
                     </h3>
-                    <ul
-                      class="list-disc pl-5 mb-4 text-base space-y-2 text-gray-800"
-                    >
+                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
                       <li>Maximum event duration: 4 hours</li>
                       <li>Additional charges apply for extended hours</li>
-                      <li>Decorations must be approved by management</li>
+                      <li>The available food options are based on the ingredients stocked for that specific date</li>
                       <li>No smoking inside the venue</li>
                     </ul>
                   </div>
@@ -142,7 +116,7 @@
                     <label
                       for="name"
                       class="block text-base font-semibold text-gray-800 mb-2 text-left"
-                      >Name</label
+                      >Celebrant's Name</label
                     >
                     <input
                       matInput

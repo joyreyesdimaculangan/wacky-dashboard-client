@@ -136,25 +136,19 @@
                     else otherCharts
                   "
                 >
-                  <div class="year-selector">
-                    <label for="year">Select Year:</label>
-                    <select
-                      id="year"
-                      [(ngModel)]="selectedYear"
-                      (change)="onYearChange(selectedYear)"
-                      class="border border-gray-300 rounded px-2 py-1 ml-2"
-                    >
-                      <!-- Populate with past years dynamically -->
-                      <option
-                        *ngFor="
-                          let year of [2019, 2020, 2021, 2022, 2023, 2024]
-                        "
-                        [value]="year"
-                      >
-                        {{ year }}
-                      </option>
-                    </select>
-                  </div>
+                <div class="year-selector mb-4">
+                  <label for="year">Select Year:</label>
+                  <select
+                    id="year"
+                    [(ngModel)]="selectedYear"
+                    (change)="onYearSelectionChange()"
+                    class="form-select px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                  <option *ngFor="let year of availableYears" [value]="year">
+                    {{year}}
+                  </option>
+                  </select>
+                </div>
                   <apx-chart
                     [series]="lineChartOptions.series || []"
                     [chart]="lineChartOptions.chart || { type: 'line' }"
@@ -206,26 +200,19 @@
                           else reservationDensity
                         "
                       >
-                        <div class="mb-4">
-                          <label for="year">Select Year:</label>
-                          <select
-                            id="year"
-                            [(ngModel)]="selectedYear"
-                            (change)="
-                              fetchMonthlyTrendsofPackages(selectedYear)
-                            "
-                          >
-                            <!-- Populate with past years dynamically -->
-                            <option
-                              *ngFor="
-                                let year of [2019, 2020, 2021, 2022, 2023, 2024]
-                              "
-                              [value]="year"
-                            >
-                              {{ year }}
-                            </option>
-                          </select>
-                        </div>
+                      <div class="year-selector mb-4">
+                        <label for="year">Select Year:</label>
+                        <select
+                          id="year"
+                          [(ngModel)]="selectedYear"
+                          (change)="onYearSelectionChange()"
+                          class="form-select px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
+                        <option *ngFor="let year of availableYears" [value]="year">
+                          {{year}}
+                        </option>
+                        </select>
+                      </div>
 
                         <apx-chart
                           [series]="areaChartOptions.series || []"
@@ -243,21 +230,17 @@
                       <ng-container
                         *ngIf="card.category === 'reservation_density'"
                       >
-                        <div class="year-selector">
+                        <div class="year-selector mb-4">
                           <label for="year">Select Year:</label>
                           <select
                             id="year"
                             [(ngModel)]="selectedYear"
-                            (change)="fetchReservationsByTime(selectedYear)"
+                            (change)="onYearSelectionChange()"
+                            class="form-select px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                           >
-                            <option
-                              *ngFor="
-                                let year of [2019, 2020, 2021, 2022, 2023, 2024]
-                              "
-                              [value]="year"
-                            >
-                              {{ year }}
-                            </option>
+                          <option *ngFor="let year of availableYears" [value]="year">
+                            {{year}}
+                          </option>
                           </select>
                         </div>
 

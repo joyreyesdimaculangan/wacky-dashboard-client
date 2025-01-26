@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Calendar } from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -62,7 +63,7 @@ export class AdminCalendarComponent implements OnInit {
       const venues = [
         { id: 'venueA', title: 'Venue A (100-200 Pax)' },
         { id: 'venueB', title: 'Venue B (50-99 Pax)' },
-        { id: 'venueC', title: 'Venue C (<=50 Pax)' },
+        { id: 'venueC', title: 'Venue C (less than 50 Pax)' },
       ];
 
       const events = this.reservations.map((reservation) => {
@@ -74,33 +75,38 @@ export class AdminCalendarComponent implements OnInit {
           reservation.numberOfPax < 100
         ) {
           resourceId = 'venueB';
-        } else if (reservation.numberOfPax <= 50) {
+        } else if (reservation.numberOfPax < 50) {
           resourceId = 'venueC';
         }
 
         return {
           id: reservation.reservationID,
-          title: reservation.package?.name,
+          resourceId: resourceId,
+          title: `${reservation.package?.name} (${reservation.numberOfPax} pax)`,
           start: reservation.eventDate,
-          end: reservation.eventDate, // Assuming eventDate is the same for start and end
-          resourceId: resourceId, // Assign the appropriate venue based on number of pax
+          end: reservation.eventDate,
+          extendedProps: {
+            venue: resourceId,
+            pax: reservation.numberOfPax
+          }
         };
       });
 
       this.calendar = new Calendar(calendarEl, {
         schedulerLicenseKey: this.schedulerLicenseKey,
         plugins: [
+          resourceTimeGridPlugin,
           resourceTimelinePlugin,
           dayGridPlugin,
           timeGridPlugin,
           interactionPlugin,
         ],
-        initialView: 'dayGridMonth',
-        resourceAreaHeaderContent: 'Venue',
+        initialView: 'resourceTimeGridDay',
+        resourceAreaHeaderContent: 'Venues',
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          right: 'resourceTimeGridDay,resourceTimeGridWeek,dayGridMonth'
         },
         views: {
           dayGridMonth: {
@@ -115,6 +121,18 @@ export class AdminCalendarComponent implements OnInit {
         },
         resources: venues,
         events: events,
+        eventContent: function(arg) {
+          return {
+            html: `
+              <div class="fc-event-title">
+                ${arg.event.title}
+                <div class="text-xs opacity-75">
+                  ${arg.event.extendedProps['venue'].replace('venue', 'Venue ')}
+                </div>
+              </div>
+            `
+          };
+        },
         eventClick: this.handleEventClick.bind(this),
         timeZone: 'local', // Ensure consistent timezone handling
         height: '100%', // Ensure the calendar fits the container
@@ -122,11 +140,6 @@ export class AdminCalendarComponent implements OnInit {
         slotMinTime: '08:00:00', // Adjust the start time of the grid
         slotMaxTime: '20:00:00', // Adjust the end time of the grid
         slotDuration: '00:30:00', // Adjust the duration of each slot
-        eventContent: function (arg) {
-          return {
-            html: `<div class="fc-event-title">${arg.event.title}</div>`,
-          };
-        },
         aspectRatio: 1.5, // Adjust aspect ratio for better layout
         eventColor: '#378006', // Set a default event color
         eventTextColor: '#ffffff', // Set a default event text color

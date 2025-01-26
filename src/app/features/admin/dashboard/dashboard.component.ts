@@ -69,6 +69,7 @@ export class DashboardComponent implements OnInit {
   approved: number = 0;
   reservationsByTime: any[] = [];
   insightsText: string = '';
+  availableYears: number[] = [];
 
   accountRole = 'Admin';
 
@@ -142,6 +143,7 @@ export class DashboardComponent implements OnInit {
   dropdownOpen: boolean = false; // For the dropdown visibility
 
   ngOnInit() {
+    this.generateYearOptions();
     this.loadStatistics();
     this.setFilter('all');
     this.fetchNotifications();
@@ -277,8 +279,23 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  
 
+  generateYearOptions(): void {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020; // Or any starting year you prefer
+    this.availableYears = Array.from(
+      { length: currentYear - startYear + 1 },
+      (_, i) => startYear + i
+    );
+  }
+
+  onYearSelectionChange(): void {
+    this.fetchMonthlyTrends(this.selectedYear);
+    this.fetchMonthlyTrendsofPackages(this.selectedYear);
+    this.fetchReservationsByTime(this.selectedYear);
+    this.generateInsights(this.selectedYear);
+  }
+  
   onYearChange(year: number): void {
     this.selectedYear = year;
     this.fetchMonthlyTrends(year);

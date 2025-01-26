@@ -70,6 +70,15 @@ import { Location } from '@angular/common';
             {{ packageName }}
           </h3>
 
+          <div
+            *ngIf="venue"
+            class="mb-6 px-4 py-3 bg-green-50 rounded-lg border border-green-200"
+          >
+            <p class="text-lg font-medium text-green-800">
+              Assigned Venue: {{ venue }}
+            </p>
+          </div>
+
           <!-- Edit Reservation Form -->
           <form [formGroup]="adminEditReservationForm" class="space-y-6">
             <!-- Input Field Group -->
@@ -246,6 +255,29 @@ import { Location } from '@angular/common';
               </select>
             </div>
 
+            <div
+              *ngIf="
+                adminEditReservationForm.get('paymentStatus')?.value ===
+                  'FULLY_PAID' ||
+                adminEditReservationForm.get('paymentStatus')?.value ===
+                  'PARTIALLY_PAID'
+              "
+            >
+              <label
+                for="referenceNumber"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Payment Reference Number (Optional)
+              </label>
+              <input
+                id="referenceNumber"
+                formControlName="referenceNumber"
+                type="text"
+                placeholder="Enter payment reference number"
+                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
+
             <!-- Payment Status Dropdown -->
             <div>
               <label
@@ -304,6 +336,7 @@ export class EditReservationModalComponent implements OnInit {
   accountProfileId!: null | string | undefined;
   addOnsId: string[] = [];
 
+  venue: string = '';
   location = inject(Location);
   packages: any[] = [];
   accountProfileName: any[] = [];
@@ -342,11 +375,40 @@ export class EditReservationModalComponent implements OnInit {
         this.item?.paymentStatus || 'PENDING',
         Validators.required,
       ],
+      referenceNumber: [''],
     });
+
+    this.adminEditReservationForm
+      .get('numberOfPax')
+      ?.valueChanges.subscribe((pax) => {
+        if (pax) {
+          this.venue = this.getVenueBasedOnPax(pax);
+        }
+      });
+
+    this.adminEditReservationForm
+      .get('paymentStatus')
+      ?.valueChanges.subscribe((status) => {
+        if (status === 'FULLY_PAID' || status === 'PARTIALLY_PAID') {
+          this.adminEditReservationForm.get('referenceNumber')?.enable();
+        } else {
+          this.adminEditReservationForm.get('referenceNumber')?.disable();
+        }
+      });
 
     this.getReservationById();
     this.fetchReservations();
     this.getFullyBookedDates(this.reservations);
+  }
+
+  getVenueBasedOnPax(pax: number): string {
+    if (pax >= 100 && pax <= 200) {
+      return 'Venue A (100-200 Pax)';
+    } else if (pax >= 50 && pax < 100) {
+      return 'Venue B (50-99 Pax)';
+    } else {
+      return 'Venue C (less than 50 Pax)';
+    }
   }
 
   fetchReservations(): void {
@@ -479,13 +541,19 @@ export class EditReservationModalComponent implements OnInit {
       .subscribe(
         () => {
           console.log('Reservation updated successfully', reservationID);
-          this.toastNotifications.showSuccess('Reservation updated successfully', 'Success');
+          this.toastNotifications.showSuccess(
+            'Reservation updated successfully',
+            'Success'
+          );
           this.save.emit(this.adminEditReservationForm.value);
           this.router.navigate(['/admin/reservations']); // Navigate back to reservations list
         },
         (error: any) => {
           console.error('Error updating reservation:', reservationID, error);
-          this.toastNotifications.showError('Error updating reservation', 'Error');
+          this.toastNotifications.showError(
+            'Error updating reservation',
+            'Error'
+          );
         }
       );
   }
