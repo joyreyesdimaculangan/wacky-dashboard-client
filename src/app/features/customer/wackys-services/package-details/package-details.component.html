@@ -3,9 +3,7 @@
   *ngIf="isOpen"
   class="fixed inset-0 z-50 bg-gray-900/50 flex items-center justify-center p-[clamp(1rem,3vw,2rem)]"
 >
-  <div
-    class="bg-white rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] max-h-[90vh] overflow-hidden flex flex-col relative p-[clamp(1rem,3vw,2rem)]"
-  >
+<div class="bg-white rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] h-[90vh] overflow-hidden flex flex-col relative p-[clamp(1rem,3vw,2rem)]">
     <!-- Close Button -->
     <button
       class="absolute top-[clamp(0.75rem,2vw,1rem)] right-[clamp(0.75rem,2vw,1rem)] text-gray-500 hover:text-gray-700 text-[clamp(1.5rem,4vw,2rem)] transition-colors duration-200"
@@ -15,21 +13,18 @@
     </button>
 
     <!-- Content Container -->
-    <div
-      class="flex flex-col lg:flex-row h-full overflow-y-auto p-[clamp(0.75rem,2vw,1rem)] gap-[clamp(1rem,3vw,2rem)]"
-    >
-      <!-- Image Container -->
-      <div class="lg:w-1/2 w-full">
-        <img
-          *ngIf="packageData?.image_url"
-          [src]="packageData?.image_url"
-          alt="Package Image"
-          class="w-full h-[clamp(200px,40vh,400px)] object-cover rounded-lg shadow-md"
-        />
-      </div>
+  <div class="flex flex-col lg:flex-row h-full gap-[clamp(1rem,3vw,2rem)]">
+    <!-- Image Container -->
+    <div class="lg:w-1/2 w-full h-full relative rounded-lg overflow-hidden">
+      <img
+        *ngIf="packageData?.image_url"
+        [src]="packageData?.image_url"
+        alt="Package Image"
+        class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md"
+      />
+    </div>
 
-      <div
-        class="lg:w-1/2 w-full lg:pl-6 flex flex-col overflow-y-auto max-h-[70vh]"
+    <div class="lg:w-1/2 w-full lg:pl-6 flex flex-col overflow-y-auto"
       >
         <!-- Package Title -->
         <h2

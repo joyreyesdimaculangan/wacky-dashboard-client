@@ -111,14 +111,6 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                 <!-- Action Buttons -->
                 <div class="flex flex-wrap gap-[clamp(0.5rem,2vw,1rem)]">
                   <button
-                    (click)="markAllAsRead()"
-                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
-                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
-                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
-                  >
-                    Mark All as Read
-                  </button>
-                  <button
                     (click)="openAdd()"
                     class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
                              text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
@@ -261,12 +253,7 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                         let reservation of pagedData();
                         trackBy: trackById
                       "
-                      [ngClass]="{
-                        'bg-yellow-100': reservation.isNew,
-                        'bg-white': !reservation.isNew
-                      }"
-                      class="hover:bg-gray-50 transition duration-200"
-                      (click)="markAsRead(reservation.reservationID)"
+                      (click)="viewReservation(reservation.reservationID)"
                     >
                       <td class="p-4">{{ reservation.package?.name }}</td>
                       <td class="p-4">{{ reservation.numberOfPax }}</td>
