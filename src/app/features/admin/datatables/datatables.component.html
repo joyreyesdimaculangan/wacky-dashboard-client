@@ -92,42 +92,7 @@
                       class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
                     />
                   </th>
-                  <th class="p-4 text-sm font-medium relative">
-                    <div class="flex items-center justify-between">
-                      <span>Customer Name</span>
-                      <button
-                        class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
-                        (click)="toggleFilter('name')"
-                      >
-                        <i class="material-icons text-sm">filter_list</i>
-                      </button>
-                    </div>
-                    <input
-                      *ngIf="showFilters.name"
-                      type="text"
-                      [(ngModel)]="filters.name"
-                      placeholder="Filter by Name"
-                      class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
-                    />
-                  </th>
-                  <th class="p-4 text-sm font-medium relative">
-                    <div class="flex items-center justify-between">
-                      <span>Contact No.</span>
-                      <button
-                        class="ml-2 p-1 bg-white text-green-500 rounded-full hover:bg-green-100 focus:outline-none"
-                        (click)="toggleFilter('contactNumber')"
-                      >
-                        <i class="material-icons text-sm">filter_list</i>
-                      </button>
-                    </div>
-                    <input
-                      *ngIf="showFilters.contactNumber"
-                      type="text"
-                      [(ngModel)]="filters.contactNumber"
-                      placeholder="Filter by Contact No."
-                      class="absolute top-full left-0 mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 text-gray-700"
-                    />
-                  </th>
+                
                   <th class="p-4 text-sm font-medium relative">
                     <div class="flex items-center justify-between">
                       <span>No. of Guests</span>
@@ -229,8 +194,6 @@
                   (click)="markAsRead(reservation.reservationID)"
                 >
                   <td class="p-4">{{ reservation.package?.name }}</td>
-                  <td class="p-4">{{ reservation.name }}</td>
-                  <td class="p-4">{{ reservation.contactNumber }}</td>
                   <td class="p-4">{{ reservation.numberOfPax }}</td>
                   <td class="p-4">{{ reservation.eventDate | date }}</td>
                   <td class="p-4">{{ reservation.eventTime }}</td>
