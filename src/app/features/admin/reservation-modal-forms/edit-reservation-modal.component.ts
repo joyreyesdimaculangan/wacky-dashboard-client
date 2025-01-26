@@ -60,16 +60,10 @@ import { Location } from '@angular/common';
           <!-- Page Header -->
           <h2
             id="edit-reservation-title"
-            class="text-2xl font-semibold mb-6 text-green-700"
+            class="text-2xl font-semibold mb-6 text-green-700 border-b pb-4"
           >
             Edit Reservation
           </h2>
-
-          <!-- Subheader for Package Name -->
-          <h3 class="text-xl font-semibold mb-6 text-gray-700 border-b pb-4">
-            {{ packageName }}
-          </h3>
-
           <div
             *ngIf="venue"
             class="mb-6 px-4 py-3 bg-green-50 rounded-lg border border-green-200"
@@ -237,24 +231,39 @@ import { Location } from '@angular/common';
             </div>
 
             <!-- Status Dropdown -->
-            <div>
+            <div class="mb-6">
               <label
                 for="status"
-                class="block text-sm font-medium text-gray-700"
+                class="block text-base font-semibold text-gray-700 mb-2"
               >
-                Status:
+                Reservation Status
               </label>
               <select
                 id="status"
                 formControlName="status"
-                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full py-3 px-4 text-base bg-white border-2 border-gray-300 rounded-lg shadow-sm 
+           hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 
+           transition-all duration-200 cursor-pointer appearance-none"
               >
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Cancelled">Cancelled</option>
+                <option
+                  value="Pending"
+                  class="py-2 text-yellow-600 font-medium"
+                >
+                  Pending
+                </option>
+                <option
+                  value="Approved"
+                  class="py-2 text-green-600 font-medium"
+                >
+                  Approved
+                </option>
+                <option value="Cancelled" class="py-2 text-red-600 font-medium">
+                  Cancelled
+                </option>
               </select>
             </div>
 
+            <!-- Reference Number Input (if applicable) -->
             <div
               *ngIf="
                 adminEditReservationForm.get('paymentStatus')?.value ===
@@ -262,10 +271,11 @@ import { Location } from '@angular/common';
                 adminEditReservationForm.get('paymentStatus')?.value ===
                   'PARTIALLY_PAID'
               "
+              class="mb-6"
             >
               <label
                 for="referenceNumber"
-                class="block text-sm font-medium text-gray-700"
+                class="block text-base font-semibold text-gray-700 mb-2"
               >
                 Payment Reference Number (Optional)
               </label>
@@ -274,26 +284,45 @@ import { Location } from '@angular/common';
                 formControlName="referenceNumber"
                 type="text"
                 placeholder="Enter payment reference number"
-                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                class="w-full py-3 px-4 text-base bg-white border-2 border-gray-300 rounded-lg shadow-sm 
+           hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 
+           transition-all duration-200"
               />
             </div>
 
             <!-- Payment Status Dropdown -->
-            <div>
+            <div class="mb-6">
               <label
                 for="paymentStatus"
-                class="block text-sm font-medium text-gray-700"
+                class="block text-base font-semibold text-gray-700 mb-2"
               >
-                Payment Status:
+                Payment Status
               </label>
               <select
                 id="paymentStatus"
                 formControlName="paymentStatus"
-                class="mt-2 w-full bg-gray-100 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full py-3 px-4 text-base bg-white border-2 border-gray-300 rounded-lg shadow-sm 
+           hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 
+           transition-all duration-200 cursor-pointer appearance-none"
               >
-                <option value="PENDING">PENDING</option>
-                <option value="PARTIALLY_PAID">PARTIALLY_PAID</option>
-                <option value="FULLY_PAID">FULLY_PAID</option>
+                <option
+                  value="PENDING"
+                  class="py-2 text-yellow-600 font-medium"
+                >
+                  PENDING
+                </option>
+                <option
+                  value="PARTIALLY_PAID"
+                  class="py-2 text-blue-600 font-medium"
+                >
+                  PARTIALLY PAID
+                </option>
+                <option
+                  value="FULLY_PAID"
+                  class="py-2 text-green-600 font-medium"
+                >
+                  FULLY PAID
+                </option>
               </select>
             </div>
 

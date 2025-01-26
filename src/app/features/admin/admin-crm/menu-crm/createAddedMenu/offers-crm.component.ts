@@ -290,7 +290,7 @@ export class OffersCrmComponent {
           error: (err) => {
             console.error('Error saving content:', err);
             this.toastNotification.showError(
-              'Failed to add content. Please try again.',
+              'The uploaded photo exceeds the maximum allowed size. Please upload a smaller photo.',
               'Error'
             );
           },

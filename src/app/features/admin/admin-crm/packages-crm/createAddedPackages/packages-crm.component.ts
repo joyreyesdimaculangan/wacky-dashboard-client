@@ -377,7 +377,7 @@ export class PackagesCrmComponent {
           },
           error: (err) => {
             console.error('Error adding package:', err);
-            this.toastNotification.showError('Failed to add package. Please try again.', 'Error');
+            this.toastNotification.showError('The uploaded photo exceeds the maximum allowed size. Please upload a smaller photo.', 'Error');
           }
         });
       }
