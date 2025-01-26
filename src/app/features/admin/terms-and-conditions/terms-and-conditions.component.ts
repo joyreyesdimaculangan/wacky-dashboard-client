@@ -170,7 +170,7 @@ export class TermsAndConditionsComponent implements OnInit {
   private async loadTerms() {
     try {
       const terms = await firstValueFrom(
-        this.termsService.createTerms(this.termsForm.value)
+        this.termsService.getTerms()
       );
       if (terms?.sections?.length) {
         terms.sections.forEach((section: TermsSection) => {
@@ -195,7 +195,7 @@ export class TermsAndConditionsComponent implements OnInit {
 
     this.loading = true;
     try {
-      await this.termsService.updateTerms(this.termsForm.value);
+      await this.termsService.createTerms(this.termsForm.value);
       // Show success message
     } catch (error) {
       console.error('Failed to update terms:', error);

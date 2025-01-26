@@ -89,6 +89,7 @@ export class DatatablesComponent implements OnInit {
     this.getReservations();
   }
 
+
   getReservations() {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
@@ -211,11 +212,20 @@ export class DatatablesComponent implements OnInit {
     });
   }
 
+  sortReservationsByDate(data: ReservationForm[]): ReservationForm[] {
+    return data.sort((a, b) => {
+      const dateA = new Date(a.eventDate).getTime();
+      const dateB = new Date(b.eventDate).getTime();
+      return dateB - dateA; // Descending order (recent to old)
+    });
+  }
+
   filteredData() {
-    return this.reservationData.filter((item) => {
+    // First apply all filters
+    const filtered = this.reservationData.filter((item) => {
       const formattedEventDate = this.datePipe.transform(item.eventDate, 'MM/dd/yyyy');
       const packageName = item.package?.name || '';
-
+  
       return (
         (this.filters.packageType ? (item.package?.name && packageName.toLowerCase().includes(this.filters.packageType.toLowerCase())) : true) &&
         (this.filters.name ? item.name.toLowerCase().includes(this.filters.name.toLowerCase()) : true) &&
@@ -224,21 +234,15 @@ export class DatatablesComponent implements OnInit {
         (this.filters.eventDate ? (formattedEventDate && formattedEventDate.includes(this.filters.eventDate)) : true) &&
         (this.filters.eventTime ? item.eventTime.toString().includes(this.filters.eventTime) : true) &&
         (this.filters.status ? item.status.toLowerCase().includes(this.filters.status.toLowerCase()) : true) &&
-        (this.filters.paymentStatus ? item.paymentStatus.toLowerCase().includes(this.filters.paymentStatus.toLowerCase()) : true) &&
-        (this.searchText ? (
-          item.package?.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.contactNumber.toString().includes(this.searchText) ||
-          item.numberOfPax.toString().includes(this.searchText) ||
-          (formattedEventDate && formattedEventDate.includes(this.searchText)) ||
-          item.eventTime.toString().includes(this.searchText) ||
-          item.eventTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.cakeTheme.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.otherRequest.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.status.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.paymentStatus.toLowerCase().includes(this.searchText.toLowerCase())
-        ) : true)
+        (this.filters.paymentStatus ? item.paymentStatus.toLowerCase().includes(this.filters.paymentStatus.toLowerCase()) : true)
       );
+    });
+  
+    // Then sort by date (most recent first)
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.eventDate).getTime();
+      const dateB = new Date(b.eventDate).getTime();
+      return dateA - dateB;
     });
   }
 
