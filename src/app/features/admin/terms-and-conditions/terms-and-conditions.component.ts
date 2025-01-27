@@ -48,7 +48,6 @@ function firstValueFrom<T>(observable: Observable<T>): Promise<T> {
 
         <form
           [formGroup]="termsForm"
-          (ngSubmit)="onSubmit()"
           class="space-y-[clamp(1rem,3vw,1.5rem)]"
         >
           <!-- Sections Array -->
@@ -118,6 +117,8 @@ function firstValueFrom<T>(observable: Observable<T>): Promise<T> {
             <button
               type="submit"
               [disabled]="termsForm.invalid || loading"
+              (click)="onSubmit()"
+              (enterSubmit)="onSubmit()"
               class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
                          text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white 
                          rounded-lg hover:bg-green-600 transition-colors duration-200
@@ -149,7 +150,7 @@ export class TermsAndConditionsComponent implements OnInit {
     this.loadTerms();
   }
 
-  private initForm() {
+  initForm() {
     this.termsForm = this.fb.group({
       sections: this.fb.array([]),
     });
@@ -167,7 +168,7 @@ export class TermsAndConditionsComponent implements OnInit {
     this.sections.removeAt(index);
   }
 
-  private async loadTerms() {
+  async loadTerms() {
     try {
       const terms = await firstValueFrom(
         this.termsService.getTerms()

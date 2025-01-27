@@ -107,6 +107,7 @@ import { User } from '../../../core/auth/models/user.model';
             <!-- Save Button -->
             <button
               (click)="onSubmit()"
+              (enterSubmit)="onSubmit()"
               type="button"
               class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-400 font-semibold rounded-md text-sm px-6 py-2 transition duration-300 shadow-lg hover:shadow-xl"
             >

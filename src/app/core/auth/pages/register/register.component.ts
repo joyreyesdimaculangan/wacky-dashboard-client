@@ -412,6 +412,7 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
 
             <button
               (click)="onRegister()"
+              (enterSubmit)="onRegister()"
               class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition"
               [disabled]="loading$ | async"
             >

@@ -55,6 +55,7 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
       <!-- Recovery Button -->
       <button
         (click)="onSubmit()"
+        (enterSubmit)="onSubmit()"
         class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
         type="submit"
       >
@@ -65,7 +66,8 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
       <p class="text-center text-green-900 text-[clamp(0.875rem,2vw,1rem)] mt-[clamp(1rem,4vw,2rem)]">
         Remember your password?
         <button
-          (click) = "goToLogin()"
+          (click)="goToLogin()"
+          (enterSubmit)="goToLogin()"
           class="text-green-700 font-bold hover:text-green-500 text-[clamp(0.875rem,2vw,1rem)] ml-[clamp(0.5rem,1vw,1rem)]"
           >Log In</button
         >

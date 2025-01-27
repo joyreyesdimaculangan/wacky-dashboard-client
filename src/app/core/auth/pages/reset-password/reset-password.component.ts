@@ -37,7 +37,7 @@ import { MatInputModule } from '@angular/material/input';
       <h2 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
         Password Reset
       </h2>
-      <form [formGroup]="resetPasswordForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="resetPasswordForm">
         <div class="relative mb-6">
           <label
             for="newPassword"
@@ -119,6 +119,8 @@ import { MatInputModule } from '@angular/material/input';
 
         <button
           type="submit"
+          (click)="onSubmit()"
+          (enterSubmit)="onSubmit()"
           class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition"
         >
           Reset Password

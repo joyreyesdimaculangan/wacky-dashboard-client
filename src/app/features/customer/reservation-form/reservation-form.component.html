@@ -98,6 +98,8 @@
                       mat-button
                       matStepperNext
                       [disabled]="!termsForm.valid"
+                      (click)="goToNextStep()"
+                      (enterClick)="goToNextStep()"
                       class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
                     >
                       Next
@@ -179,6 +181,7 @@
                     <button
                       mat-button
                       (click)="goToNextStep()"
+                      (enterClick)="goToNextStep()"
                       class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
                     >
                       Next
@@ -336,6 +339,7 @@
                       mat-button
                       matStepperNext
                       (click)="goToNextStep()"
+                      (enterClick)="goToNextStep()"
                       class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
                     >
                       Next
@@ -448,6 +452,7 @@
                     </button>
                     <button
                       (click)="goToNextStep()"
+                      (enterClick)="goToNextStep()"
                       class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
                     >
                       Next
@@ -579,6 +584,7 @@
                   <button
                     mat-button
                     (click)="onSubmit()"
+                    (enterClick)="onSubmit()"
                     class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
                     [disabled]="loading"
                   >

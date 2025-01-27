@@ -269,6 +269,7 @@ import { Location } from '@angular/common';
               <button
                 type="button"
                 (click)="submitForm()"
+                (enterSubmit)="submitForm()"
                 class="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Save Content
