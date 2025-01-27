@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NotificationsService } from '../../../services/notifications.service';
 import { Notifications } from '../../../models/notifications';
@@ -6,6 +6,8 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DrawerComponent } from '../drawer/drawer.component';
+import { PackageName } from '../../../models/packages';
+import { GetPackageNameService } from '../../customer/reservation-form/getPackageName.service';
 
 @Component({
   selector: 'app-notification-page',
@@ -54,7 +56,7 @@ import { DrawerComponent } from '../drawer/drawer.component';
                 >
                   <i class="fas fa-bell text-green-500 mr-3"></i>
                   <div>
-                    <p class="font-semibold">{{ notification.title }}</p>
+                    <p class="font-semibold">{{ notification.title }} for {{ getPackageName(notification) }} </p>
                     <p class="text-sm text-gray-500">
                       {{ notification.message }}
                     </p>
@@ -87,7 +89,9 @@ export class NotificationPageComponent implements OnInit {
   errorMessage: string | null = null;
   location = inject(Location);
   reservationId: string = '';
-
+  private readonly packageService = inject(GetPackageNameService);
+  packageNames: { [key: string]: string } = {};
+ 
   private readonly notificationService = inject(NotificationsService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -99,9 +103,10 @@ export class NotificationPageComponent implements OnInit {
 
   fetchNotifications() {
     this.notificationService.getNotifications().subscribe({
-      next: (data: any[]) => {
+      next: (data: Notifications[]) => {
         this.notifications = data;
         this.loading = false;
+        console.log('Notifications:', this.notifications);
       },
       error: (error) => {
         console.error('Error fetching notifications:', error);
@@ -147,6 +152,10 @@ export class NotificationPageComponent implements OnInit {
         console.error('Error fetching notification:', error);
       },
     });
+  }
+
+  getPackageName(notification: Notifications): string {
+    return notification.reservation?.package?.name || 'Package not found';
   }
 
   markAsRead(notificationId: string): void {

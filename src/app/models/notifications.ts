@@ -5,4 +5,10 @@ export interface Notifications {
     date: string;
     isNew: boolean;
     reservationId: string;
+    reservation: {
+        packageID: string;
+        package: {
+            name: string;
+        };
+    };
 }

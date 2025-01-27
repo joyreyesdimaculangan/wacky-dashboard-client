@@ -183,6 +183,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getPackageName(notification: Notifications): string {
+    return notification.reservation?.package?.name || 'Package not found';
+  }
+
   markAsRead(notificationId: string): void {
     this.notificationService.markAsRead(notificationId).subscribe({
       next: () => {
