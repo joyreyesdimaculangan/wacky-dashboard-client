@@ -56,7 +56,7 @@ import { GetPackageNameService } from '../../customer/reservation-form/getPackag
                 >
                   <i class="fas fa-bell text-green-500 mr-3"></i>
                   <div>
-                    <p class="font-semibold">{{ notification.title }} for {{ getPackageName(notification) }} </p>
+                    <p class="font-semibold">{{ notification.title }} </p>
                     <p class="text-sm text-gray-500">
                       {{ notification.message }}
                     </p>
