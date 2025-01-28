@@ -34,12 +34,6 @@ export const CustomerRoutes: Routes = [
     data: { roles: ['customer'] }
   },
   {
-    path: 'reviews',
-    loadComponent: () => import('./review-section/add-reviews/add-reviews.component').then((m) => m.AddReviewsComponent),
-    canActivate: [hasRoleGuard],
-    data: { roles: ['customer'] }
-  },
-  {
     path: 'confirmed-reservations',
     providers: [
       { provide: ToastNotificationsComponent, useClass: ToastNotificationsComponent } // Optional if using it as a service
