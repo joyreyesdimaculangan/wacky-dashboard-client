@@ -229,39 +229,6 @@ import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
               </button>
             </div>
 
-            <!-- Add-Ons Section -->
-            <div formArrayName="addOns" class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
-              <h3 class="text-xl font-bold mb-4 text-gray-800">Add-Ons</h3>
-              <div
-                *ngFor="let addOn of addOns.controls; let i = index"
-                class="flex items-center mb-4"
-              >
-                <label for="addOn-{{ i }}" class="sr-only">Add-On Name</label>
-                <input
-                  id="addOn-{{ i }}"
-                  [formControlName]="i"
-                  placeholder="Add-On Name"
-                  class="form-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 mr-2"
-                />
-                <button
-                  type="button"
-                  (click)="removeAddOn(i)"
-                  class="text-red-500 hover:text-red-700"
-                  aria-label="Delete add-on"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-              <button
-                type="button"
-                (click)="addAddOn()"
-                class="flex items-center text-white bg-green-500 hover:bg-green-600 rounded-lg px-4 py-2 transition-all duration-300"
-              >
-                <mat-icon class="mr-2">add_circle</mat-icon>
-                Add Add-On
-              </button>
-            </div>
-
             <!-- Buttons -->
             <div class="flex justify-end mt-4">
               <button

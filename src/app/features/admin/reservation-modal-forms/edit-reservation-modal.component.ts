@@ -500,14 +500,14 @@ export class EditReservationModalComponent implements OnInit {
     const oneMonthFromToday = new Date();
     oneMonthFromToday.setMonth(today.getMonth() + 1);
 
-    const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
+    // const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
       (bookedDate) =>
         bookedDate.toLocaleDateString('en-CA') ===
         date.toLocaleDateString('en-CA')
     );
 
-    const isAvailable = !isPastDate && !isWithinOneMonth && !isFullyBooked;
+    const isAvailable = !isPastDate && !isFullyBooked;
 
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;

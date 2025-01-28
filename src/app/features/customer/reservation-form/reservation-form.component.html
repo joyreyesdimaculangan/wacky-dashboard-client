@@ -196,7 +196,14 @@
                     >
                   </div>
 
-                  <div class="flex justify-end">
+                  <div class="flex justify-between">
+                    <button
+                      mat-button
+                      matStepperPrevious
+                      class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                    >
+                      Back
+                    </button>
                     <button
                       mat-button
                       (click)="goToNextStep()"
@@ -584,16 +591,6 @@
                         <span class="text-gray-900">{{
                           this.step3.get("otherRequest")?.value || "None"
                         }}</span>
-                      </p>
-                    </div>
-
-                    <!-- Add Ons -->
-                    <div class="border-gray-300 py-2 col-span-2">
-                      <p class="text-base font-medium text-gray-700">
-                        <strong>AddOns: </strong>
-                        <span class="text-gray-900">
-                          Additional One Layer for the Cake
-                        </span>
                       </p>
                     </div>
                   </div>

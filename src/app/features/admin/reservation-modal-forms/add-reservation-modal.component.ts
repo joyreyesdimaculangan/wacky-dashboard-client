@@ -398,37 +398,6 @@ import { EnterSubmitDirective } from '../../../enter-submit.directive';
                 Please enter a valid request
               </mat-error>
             </div>
-
-            <!-- AddOns -->
-            <div class="relative">
-              <label
-                for="addOns"
-                class="block text-sm font-medium text-gray-700"
-                >AddOns Included</label
-              >
-              <mat-select
-                id="addOns"
-                formControlName="addOns"
-                name="addOns"
-                multiple
-                class="mt-2 block w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-green focus:ring-green-500 focus:border-green-500 transition-all"
-              >
-                <mat-option
-                  *ngFor="let availableAddOns of addonsPackageSelected()"
-                  [value]="availableAddOns.addOnID"
-                >
-                  {{ availableAddOns.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error
-                *ngIf="
-                  adminReservationForm.get('addOns')?.hasError('required') &&
-                  adminReservationForm.get('addOns')?.touched
-                "
-              >
-                Please select at least one add-on
-              </mat-error>
-            </div>
           </div>
 
           <!-- Modal Footer -->
@@ -594,14 +563,14 @@ export class AddReservationModalComponent implements OnInit {
     const oneMonthFromToday = new Date();
     oneMonthFromToday.setMonth(today.getMonth() + 1);
 
-    const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
+    // const isWithinOneMonth = date >= today && date <= oneMonthFromToday;
     const isFullyBooked = this.fullyBookedDates.some(
       (bookedDate) =>
         bookedDate.toLocaleDateString('en-CA') ===
         date.toLocaleDateString('en-CA')
     );
 
-    const isAvailable = !isPastDate && !isWithinOneMonth && !isFullyBooked;
+    const isAvailable = !isPastDate && !isFullyBooked;
 
     console.log(`Date ${date.toDateString()} is available: ${isAvailable}`); // Debugging
     return isAvailable;

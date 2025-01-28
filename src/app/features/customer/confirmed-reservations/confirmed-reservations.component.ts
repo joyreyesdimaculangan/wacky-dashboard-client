@@ -37,14 +37,18 @@ import { AuthService } from '../../../core/auth/services/auth.service';
   providers: [ReservationService, DatePipe],
   template: `
     <div class="flex min-h-screen bg-gray-100">
-    <section class="dashboard-page flex-1 overflow-auto">
-      <div class="dashboard-content p-[clamp(1rem,3vw,2rem)]">
-        <!-- Header -->
-        <header class="mb-[clamp(2rem,5vw,3rem)] pb-4 border-b border-gray-200">
-          <h1 class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-green-700 ml-[clamp(1rem,2vw,2rem)]">
-            Reservations
-          </h1>
-        </header>
+      <section class="dashboard-page flex-1 overflow-auto">
+        <div class="dashboard-content p-[clamp(1rem,3vw,2rem)]">
+          <!-- Header -->
+          <header
+            class="mb-[clamp(2rem,5vw,3rem)] pb-4 border-b border-gray-200"
+          >
+            <h1
+              class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-green-700 ml-[clamp(1rem,2vw,2rem)]"
+            >
+              Reservations
+            </h1>
+          </header>
 
           <div class="content">
             <!-- Loading State -->
@@ -108,14 +112,6 @@ import { AuthService } from '../../../core/auth/services/auth.service';
                 </div>
                 <!-- Action Buttons -->
                 <div class="flex flex-wrap gap-[clamp(0.5rem,2vw,1rem)]">
-                  <button
-                    (click)="openAdd()"
-                    class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
-                             text-[clamp(0.875rem,1.5vw,1rem)] bg-green-500 text-white rounded-lg
-                             hover:bg-green-600 focus:ring-2 focus:ring-green-500 transition-all duration-200"
-                  >
-                    Add Reservation
-                  </button>
                   <button
                     (click)="onClose()"
                     class="px-[clamp(1rem,3vw,1.5rem)] py-[clamp(0.5rem,1.5vw,0.75rem)]
@@ -462,6 +458,7 @@ export class ConfirmedReservationsComponent implements OnInit {
         },
       });
   }
+
   getReservations() {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
