@@ -26,6 +26,7 @@ import { GetAccountIdService } from '../../../../features/customer/reservation-f
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
 import { LoadingFunctionComponent } from '../../../../features/loadingFunction/loadingFunction.component';
+import { EnterSubmitDirective } from '../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-login-page',
@@ -38,6 +39,7 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
     MatFormFieldModule,
     MatInputModule,
     LoadingFunctionComponent,
+    EnterSubmitDirective,
   ],
   template: `
     <div
@@ -64,7 +66,8 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
           Welcome Back
         </h2>
 
-        <form [formGroup]="loginForm">
+        <form [formGroup]="loginForm" (enterSubmit)="login()"
+        appEnterSubmit>
           <!-- Email Input -->
           <div class="mb-6">
             <label
@@ -193,6 +196,7 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
           <button
             (click)="login()"
             (enterSubmit)="login()"
+            enterSubmit
             class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition duration-300"
             [disabled]="loading$ | async"
           >

@@ -16,6 +16,7 @@ import { AccountProfileService } from '../../../services/account-profile.service
 import { AccountProfile } from '../../../models/accountProfile';
 import { environment } from '../../../../environments/environment.development';
 import { User } from '../../../core/auth/models/user.model';
+import { EnterSubmitDirective } from '../../../enter-submit.directive';
 
 @Component({
   selector: 'app-edit-profile',
@@ -26,6 +27,7 @@ import { User } from '../../../core/auth/models/user.model';
     MatInputModule,
     MatButtonModule,
     CommonModule,
+    EnterSubmitDirective
   ],
   template: `
     <div
@@ -52,7 +54,8 @@ import { User } from '../../../core/auth/models/user.model';
           Edit Profile
         </h2>
 
-        <form [formGroup]="editProfileForm">
+        <form [formGroup]="editProfileForm" (enterSubmit)="onSubmit()"
+        appEnterSubmit>
           <!-- Name Input -->
           <div class="mb-6">
             <label for="name" class="block text-green-900 font-semibold mb-2"

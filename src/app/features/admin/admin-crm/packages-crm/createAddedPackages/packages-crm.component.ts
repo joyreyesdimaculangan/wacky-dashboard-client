@@ -33,6 +33,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
 import { Location } from '@angular/common';
+import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-packages-crm',
@@ -44,6 +45,7 @@ import { Location } from '@angular/common';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    EnterSubmitDirective,
   ],
   template: `
     <div
@@ -69,7 +71,10 @@ import { Location } from '@angular/common';
           <h2
             class="text-[clamp(1.25rem,3vw,2rem)] font-bold mb-[clamp(1rem,3vw,1.5rem)] text-green-700 p-[clamp(1.5rem,4vw,2rem)] pb-0"
           >Add Content</h2>
-          <form [formGroup]="addPackagesForm" class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
+          <form [formGroup]="addPackagesForm" 
+          (enterSubmit)="submitForm()"
+          appEnterSubmit
+          class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]">
           <div
               class="grid grid-cols-1 sm:grid-cols-2 gap-x-[clamp(1.5rem,4vw,2rem)] gap-y-[clamp(1rem,3vw,1.5rem)] mb-[clamp(1rem,4vw,1.5rem)] px-[clamp(0.5rem,2vw,1rem)]"
             >

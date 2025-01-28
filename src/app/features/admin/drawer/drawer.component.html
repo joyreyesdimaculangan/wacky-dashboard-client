@@ -5,55 +5,120 @@
   </button>
   <aside class="w-80 bg-green-100 shadow-lg">
     <!-- Logo Section -->
-    <div class="flex items-center justify-center p-6 bg-green-200 text-white border-b border-gray-300">
-      <img src="assets/images/Wacky's Logo.png" alt="Logo" class="w-28 h-auto" />
+    <div
+      class="flex items-center justify-center p-6 bg-green-200 text-white border-b border-gray-300"
+    >
+      <img
+        src="assets/images/Wacky's Logo.png"
+        alt="Logo"
+        class="w-28 h-auto"
+      />
     </div>
     <!-- Navigation Menu -->
     <nav class="mt-6">
       <ul>
         <!-- Home -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-home mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/admin/home']" class="text-gray-800 font-medium text-lg">
+          <button
+            [routerLink]="['/admin/home']"
+            class="text-gray-800 font-medium text-lg"
+          >
             Home
           </button>
         </li>
         <!-- Dashboard -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-tachometer-alt mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/admin/dashboard']" class="text-gray-800 font-medium text-lg">
+          <button
+            [routerLink]="['/admin/dashboard']"
+            class="text-gray-800 font-medium text-lg"
+          >
             Dashboard
           </button>
         </li>
         <!-- Reservations -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-calendar-check mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/admin/reservations']" class="text-gray-800 font-medium text-lg">
+          <button
+            [routerLink]="['/admin/reservations']"
+            class="text-gray-800 font-medium text-lg"
+          >
             Reservations
           </button>
         </li>
         <!-- Calendar -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-calendar-alt mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/admin/calendar']" class="text-gray-800 font-medium text-lg">
+          <button
+            [routerLink]="['/admin/calendar']"
+            class="text-gray-800 font-medium text-lg"
+          >
             Calendar
           </button>
         </li>
         <!-- Notifications -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-bell mr-4 text-green-600 text-xl"></i>
-          <button [routerLink]="['/admin/notifications']" class="text-gray-800 font-medium text-lg">
+          <button
+            [routerLink]="['/admin/notifications']"
+            class="text-gray-800 font-medium text-lg"
+          >
             Notifications
           </button>
         </li>
+        <!-- Terms & Conditions -->
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-100"
+        >
+          <i class="fas fa-file-contract mr-4 text-green-600 text-xl"></i>
+          <button
+            [routerLink]="['/admin/terms-and-conditions']"
+            class="text-gray-800 font-medium text-lg"
+          >
+            Terms & Conditions
+          </button>
+        </li>
+        <!-- Reviews -->
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-100"
+        >
+          <i class="fas fa-star mr-4 text-green-600 text-xl"></i>
+          <button
+            [routerLink]="['/admin/customer_reviews']"
+            class="text-gray-800 font-medium text-lg"
+          >
+            Reviews
+          </button>
+        </li>
         <!-- Sign Out -->
-        <li class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg" 
-            routerLinkActive="bg-green-300 text-white" [routerLinkActiveOptions]="{ exact: true }">
+        <li
+          class="flex items-center p-4 cursor-pointer transition duration-150 ease-in-out rounded-lg"
+          routerLinkActive="bg-green-300 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <i class="fas fa-sign-out-alt mr-4 text-green-600 text-xl"></i>
           <button (click)="logout()" class="text-gray-800 font-medium text-lg">
             Sign Out

@@ -74,7 +74,10 @@ import { Location } from '@angular/common';
           </div>
 
           <!-- Edit Reservation Form -->
-          <form [formGroup]="adminEditReservationForm" class="space-y-6">
+          <form [formGroup]="adminEditReservationForm" 
+          (enterSubmit)="saveChanges()"
+          appEnterSubmit
+          class="space-y-6">
             <!-- Input Field Group -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <!-- Customer Name -->

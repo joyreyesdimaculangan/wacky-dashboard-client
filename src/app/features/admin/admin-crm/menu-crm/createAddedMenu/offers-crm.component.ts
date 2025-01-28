@@ -26,6 +26,7 @@ import { AuthService } from '../../../../../core/auth/services/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
+import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-offers-crm',
@@ -36,6 +37,7 @@ import { ToastNotificationsComponent } from '../../../../../core/toastNotificati
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    EnterSubmitDirective
   ],
   template: `
     <div
@@ -73,6 +75,8 @@ import { ToastNotificationsComponent } from '../../../../../core/toastNotificati
           <!-- Form -->
           <form
             [formGroup]="addContentForm"
+            (enterSubmit)="onSubmit()"
+            appEnterSubmit
             class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]"
           >
             <!-- Form content here -->

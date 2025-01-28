@@ -4,11 +4,12 @@ import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
+import { EnterSubmitDirective } from '../../../../enter-submit.directive';
 
 @Component({
   standalone: true,
   selector: 'app-password-recovery',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, EnterSubmitDirective],
   template: `
   <div
       class="min-h-[100dvh] relative flex items-center justify-center bg-cover bg-center p-[clamp(1rem,3vw,2rem)]"
@@ -36,7 +37,8 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
       </h2>
 
       <!-- Email Input -->
-      <form [formGroup]="passwordRecoveryForm">
+      <form [formGroup]="passwordRecoveryForm" (enterSubmit)="onSubmit()"
+      appEnterSubmit>
       <div class="mb-6">
         <label 
           for="email" 

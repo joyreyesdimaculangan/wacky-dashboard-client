@@ -18,11 +18,12 @@ import { MenuService } from '../../../../../services/menu.service';
 import { EditMenuValues, Menu } from '../../../../../models/menu';
 import { FileUploadService } from '../../../../../services/file-upload.service';
 import { ToastNotificationsComponent } from '../../../../../core/toastNotifications/toastNotifications.component';
+import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-edit-offers',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, EnterSubmitDirective],
   template: ` <div
     class="flex-1 bg-green-100 min-h-[100dvh] flex flex-col sticky top-0 z-50"
   >
@@ -57,6 +58,8 @@ import { ToastNotificationsComponent } from '../../../../../core/toastNotificati
         <!-- Form -->
         <form
           [formGroup]="editMenuForm"
+          (enterSubmit)="submitForm()"
+          appEnterSubmit
           class="p-[clamp(1rem,4vw,2rem)] space-y-[clamp(1rem,3vw,1.5rem)]"
         >
           <div

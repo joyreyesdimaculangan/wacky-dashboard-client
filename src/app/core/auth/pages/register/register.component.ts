@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ToastNotificationsComponent } from '../../../toastNotifications/toastNotifications.component';
 import { LoadingSpinnerService } from '../../../../features/loadingFunction/loadingSpinner.service';
 import { LoadingFunctionComponent } from '../../../../features/loadingFunction/loadingFunction.component';
+import { EnterSubmitDirective } from '../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-register',
@@ -33,6 +34,7 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
     MatInputModule,
     RouterModule,
     LoadingFunctionComponent,
+    EnterSubmitDirective
   ],
   template: `
     <div
@@ -109,7 +111,8 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
         </h2>
 
         <div *ngIf="currentSection === 1">
-          <form [formGroup]="registerForm">
+          <form [formGroup]="registerForm" (enterSubmit)="nextSection()"
+          appEnterSubmit>
             <!-- Full Name Input -->
             <div class="mb-4">
               <label
@@ -209,7 +212,8 @@ import { LoadingFunctionComponent } from '../../../../features/loadingFunction/l
         </div>
 
         <div *ngIf="currentSection === 2">
-          <form #formContent [formGroup]="registerForm">
+          <form #formContent [formGroup]="registerForm" (enterSubmit)="onRegister()"
+          appEnterSubmit>
             <!-- Email Input -->
             <div class="mb-4">
               <label

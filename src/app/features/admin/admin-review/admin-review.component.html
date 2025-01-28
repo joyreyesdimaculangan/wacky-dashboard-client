@@ -1,158 +1,181 @@
-<div class="flex h-screen bg-gray-100 overflow-hidden">
-    <!-- Sidebar -->
-    <app-drawer></app-drawer>
+<div class="flex h-screen bg-gray-100">
+  <app-drawer></app-drawer>
+  <section class="dashboard-page flex-1 overflow-auto">
+    <div class="dashboard-content">
+      <!-- Header with consistent styling -->
+      <header class="header">
+        <h1>Manage Reviews</h1>
+      </header>
 
-    <!-- Main Content -->
-    <div class="flex flex-col flex-1 p-5 mx-8">
-        <!-- Reviews Header -->
-        <h1 class="py-5 text-2xl font-bold text-green-600">Reviews</h1>
+      <!-- Add Review Form -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <form
+          [formGroup]="reviewForm"
+          (ngSubmit)="onSubmit()"
+          class="space-y-6"
+        >
+          <!-- Name Input -->
+          <div>
+            <label
+              class="block text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-gray-700 mb-2"
+            >
+              Customer Name
+            </label>
+            <input
+              type="text"
+              formControlName="name"
+              class="mt-1 w-full rounded-md border border-gray-300 p-[clamp(0.75rem,1.5vw,1rem)] text-[clamp(0.875rem,1.2vw,1rem)] text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm hover:shadow-md transition duration-200"
+            />
+          </div>
 
-        <!-- Tabs for Published and Held for Review -->
-        <div class="flex justify-start gap-4 mb-6">
-            <button 
-                class="py-2 px-4 text-green-600 border-b-2" 
-                [ngClass]="{'border-green-600': selectedTab === 'published'}"
-                (click)="selectTab('published')">
-                Published
-            </button>
-            <button 
-                class="py-2 px-4 text-green-600 border-b-2"
-                [ngClass]="{'border-green-600': selectedTab === 'held'}"
-                (click)="selectTab('held')">
-                Held for Review
-            </button>
-        </div>
+          <!-- Platform Input -->
+          <div>
+            <label
+              class="block text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-gray-700 mb-2"
+            >
+              Platform
+            </label>
+            <select
+              formControlName="platform"
+              class="mt-1 w-full rounded-md border border-gray-300 p-[clamp(0.75rem,1.5vw,1rem)] text-[clamp(0.875rem,1.2vw,1rem)] text-gray-800 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm hover:shadow-md transition duration-200"
+            >
+              <option value="facebook">Facebook</option>
+              <option value="google">Google</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
 
-        <!-- Search Bars -->
-        <div class="flex gap-4 mb-4">
-            <div class="flex items-center bg-white border border-green-400 rounded-md flex-1 relative">
-                <mat-icon class="absolute left-3 text-green-600" style="font-size: 24px;">search</mat-icon>
-                <input
-                    type="text"
-                    [(ngModel)]="searchQuery"
-                    placeholder="Search Review"
-                    class="pl-10 p-2 flex-1 bg-transparent text-green-600 focus:outline-none rounded-md"
-                    (input)="filterReviews()" />
+          <!-- Comments Input -->
+          <div>
+            <label
+              class="block text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-gray-700 mb-2"
+            >
+              Review Comment
+            </label>
+            <textarea
+              formControlName="comments"
+              rows="4"
+              class="mt-1 w-full rounded-md border border-gray-300 p-[clamp(0.75rem,1.5vw,1rem)] text-[clamp(0.875rem,1.2vw,1rem)] text-gray-800 placeholder:text-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm hover:shadow-md transition duration-200"
+            ></textarea>
+          </div>
+
+          <!-- Rating Input -->
+          <div>
+            <label
+              class="block text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-gray-700 mb-2"
+            >
+              Rating
+            </label>
+            <div class="flex gap-2 mt-1">
+              <button
+                type="button"
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                (click)="setRating(star)"
+                class="text-[clamp(1.5rem,2vw,2rem)] transition-colors duration-200"
+                [class.text-yellow-400]="
+                  star <= (reviewForm.get('rating')?.value || 0)
+                "
+                [class.text-gray-300]="
+                  star > (reviewForm.get('rating')?.value || 0)
+                "
+              >
+                ★
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            [disabled]="!reviewForm.valid || loading"
+            class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+          >
+            {{ loading ? "Adding Review..." : "Add Review" }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Reviews List -->
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          *ngFor="let review of reviews"
+          class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+        >
+          <!-- Review Header -->
+          <div class="bg-green-50 p-4 border-b border-green-100">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <!-- User Avatar -->
+                <div
+                  class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center"
+                >
+                  <span class="text-white text-lg font-bold">
+                    {{ review.name.charAt(0).toUpperCase() }}
+                  </span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800">
+                  {{ review.name }}
+                </h3>
+              </div>
+
+              <!-- Platform Badge -->
+              <span
+                class="px-3 py-1 rounded-full text-xs font-medium"
+                [ngClass]="{
+                  'bg-blue-100 text-blue-800': review.platform === 'facebook',
+                  'bg-red-100 text-red-800': review.platform === 'google',
+                  'bg-gray-100 text-gray-800': review.platform === 'other'
+                }"
+              >
+                {{ review.platform }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Review Content -->
+          <div class="p-6">
+            <!-- Rating Stars -->
+            <div class="flex items-center mb-4">
+              <div class="flex text-yellow-400 text-xl">
+                <span *ngFor="let star of [].constructor(review.rating)"
+                  >★</span
+                >
+                <span class="text-gray-300">
+                  {{ "★".repeat(5 - review.rating) }}
+                </span>
+              </div>
+              <span class="ml-2 text-sm text-gray-600">
+                {{ review.rating }}/5
+              </span>
             </div>
 
-            <!-- Add Date Search Input -->
-            <div class="flex items-center bg-white border border-green-400 rounded-md w-1/4 relative"> <!-- Adjust width as needed -->
-                <mat-icon class="absolute left-3 text-green-600" style="font-size: 24px;">calendar_today</mat-icon>
-                <input
-                    type="date"
-                    [(ngModel)]="searchDate"
-                    (input)="filterReviews()"
-                    class="pl-10 p-2 flex-1 bg-transparent text-green-600 focus:outline-none rounded-md" />
+            <!-- Review Text -->
+            <p class="text-gray-700 leading-relaxed mb-4">
+              {{ review.comments }}
+            </p>
+
+            <!-- Actions -->
+            <div class="flex justify-end pt-4 border-t border-gray-100">
+              <button
+                (click)="deleteReview(review.reviewID!)"
+                class="flex items-center space-x-2 px-4 py-2 rounded-md text-red-500 hover:bg-red-50 transition-colors duration-200"
+              >
+                <i class="fas fa-trash-alt"></i>
+                <span>Delete</span>
+              </button>
             </div>
-
-            <!-- Reset Button -->
-            <button 
-                (click)="resetSearch()"
-                class="p-2 bg-gray-300 text-green-600 border border-green-400 rounded-md">
-                Reset
-            </button>
+          </div>
         </div>
+      </div>
 
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-2 py-2 mb-4">
-            <span
-                class="px-3 py-1 text-sm border rounded-md cursor-pointer"
-                *ngFor="let tag of ['Food', 'Experience', 'Location', 'Staff', 'Price']"
-                (click)="toggleTag(tag)"
-                [ngClass]="{'bg-green-500 text-white': selectedTags.includes(tag), 'bg-white text-green-600': !selectedTags.includes(tag)}">
-                {{ tag }}
-            </span>
-        </div>
-
-        <!-- Published Reviews Section -->
-        <div *ngIf="selectedTab === 'published'" class="flex flex-col gap-4">
-            <ng-container *ngFor="let review of publishedReviews">
-                <div class="flex flex-col gap-3 bg-white border border-green-400 rounded-md p-4 mb-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white">
-                                {{ review.name.charAt(0) }}
-                            </div>
-                            <span class="text-green-600 text-base font-semibold">{{ review.name }}</span>
-                        </div>
-
-                        <!-- Star Ratings -->
-                        <div class="flex items-center gap-1 text-green-500">
-                            <ng-container *ngFor="let star of [].constructor(5)">
-                                <mat-icon class="text-lg" [class.filled]="star <= review.rating">
-                                    {{ star <= review.rating ? 'star' : 'star_outline' }}
-                                </mat-icon>
-                            </ng-container>
-                            <ng-container *ngIf="review.rating % 1 !== 0">
-                                <mat-icon class="text-lg">star_half</mat-icon>
-                            </ng-container>
-                        </div>
-                    </div>
-
-                    <div class="text-green-600 text-sm">{{ review.content }}</div>
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-green-600 text-xs">{{ review.date }}</span>
-                        <div class="flex items-center gap-2">
-                            <button
-                                (click)="deleteReview(review.id)"
-                                class="p-1 px-3 bg-red-500 text-white border border-red-600 rounded-md flex items-center gap-1 text-xs">
-                                <mat-icon class="text-xs">delete</mat-icon> Delete
-                            </button>
-                            <button
-                                class="p-1 px-3 bg-green-500 text-white border border-green-600 rounded-md flex items-center gap-1 text-xs">
-                                <mat-icon class="text-xs">share</mat-icon> Share
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
-
-        <!-- Held for Review Section -->
-        <div *ngIf="selectedTab === 'held'" class="flex flex-col gap-4">
-            <ng-container *ngFor="let review of heldReviews">
-                <div class="flex flex-col gap-3 bg-white border border-green-400 rounded-md p-4 mb-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white">
-                                {{ review.name.charAt(0) }}
-                            </div>
-                            <span class="text-green-600 text-base font-semibold">{{ review.name }}</span>
-                        </div>
-
-                        <!-- Star Ratings -->
-                        <div class="flex items-center gap-1 text-green-500">
-                            <ng-container *ngFor="let star of [].constructor(5)">
-                                <mat-icon class="text-lg" [class.filled]="star <= review.rating">
-                                    {{ star <= review.rating ? 'star' : 'star_outline' }}
-                                </mat-icon>
-                            </ng-container>
-                            <ng-container *ngIf="review.rating % 1 !== 0">
-                                <mat-icon class="text-lg">star_half</mat-icon>
-                            </ng-container>
-                        </div>
-                    </div>
-
-                    <div class="text-green-600 text-sm">{{ review.content }}</div>
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-green-600 text-xs">{{ review.date }}</span>
-                        <div class="flex items-center gap-2">
-                            <button
-                                (click)="approveReview(review.id)"
-                                class="p-1 px-3 bg-blue-500 text-white border border-blue-600 rounded-md flex items-center gap-1 text-xs">
-                                <mat-icon class="text-xs">done</mat-icon> Approve
-                            </button>
-                            <button
-                                (click)="deleteReview(review.id)"
-                                class="p-1 px-3 bg-red-500 text-white border border-red-600 rounded-md flex items-center gap-1 text-xs">
-                                <mat-icon class="text-xs">delete</mat-icon> Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
+      <!-- Empty State -->
+      <div
+        *ngIf="reviews.length === 0"
+        class="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-sm"
+      >
+        <i class="fas fa-comments text-4xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500 text-lg">No reviews yet</p>
+      </div>
     </div>
+  </section>
 </div>

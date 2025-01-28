@@ -40,6 +40,9 @@ import { GetAccountIdService } from './getAccountId.service';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 import { toZonedTime } from 'date-fns-tz';
 import { UserService } from '../../../core/auth/services/user.service';
+import { EnterSubmitDirective } from '../../../enter-submit.directive';
+import { TermsOfService } from '../../../models/terms';
+import { TermsService } from '../../../services/terms.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -54,6 +57,7 @@ import { UserService } from '../../../core/auth/services/user.service';
     MatFormFieldModule,
     MatInputModule,
     RouterModule,
+    EnterSubmitDirective,
   ],
   templateUrl: './reservation-form.component.html',
   styleUrls: ['./reservation-form.component.scss'], // Corrected from styleUrl to styleUrls
@@ -65,6 +69,7 @@ export class ReservationFormComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private packageAddOnsService = inject(GetPackageAddOnsService);
+  private termsService = inject(TermsService);
 
   private getAccountProfileIDService = inject(GetAccountIdService);
   private packageNameService = inject(GetPackageNameService);
@@ -98,6 +103,8 @@ export class ReservationFormComponent implements OnInit {
   isSecondStepComplete = false;
   isReservationOpen = false;
   isEditing = false;
+
+  terms: TermsOfService | null = null;
 
   constructor() {
     effect(() => {
@@ -219,6 +226,22 @@ export class ReservationFormComponent implements OnInit {
     } catch (error) {
       console.error('Error loading user data:', error);
     }
+
+    this.loadTerms();
+  }
+
+  private loadTerms() {
+    this.loading = true;
+    this.termsService.getLatestTerms().subscribe({
+      next: (terms) => {
+        this.terms = terms;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading terms:', error);
+        this.loading = false;
+      }
+    });
   }
 
   fetchReservations(): void {

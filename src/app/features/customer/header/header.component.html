@@ -63,6 +63,16 @@
         <li>
           <button
             [routerLink]="['/home']"
+            fragment="reviews"
+            [ngClass]="{ 'bg-white-100': isActive('reviews') }"
+            class="text-[clamp(0.875rem,1.5vw,1rem)] text-green-100 hover:text-green-700 px-[clamp(0.75rem,2vw,1rem)] py-[clamp(0.5rem,1.5vw,0.75rem)] rounded-md transition-all duration-200"
+          >
+            Reviews
+          </button>
+        </li>
+        <li>
+          <button
+            [routerLink]="['/home']"
             fragment="inquiry"
             [ngClass]="{ 'bg-white-100': isActive('inquiry') }"
             class="text-[clamp(0.875rem,1.5vw,1rem)] text-green-100 hover:text-green-700 px-[clamp(0.75rem,2vw,1rem)] py-[clamp(0.5rem,1.5vw,0.75rem)] rounded-md transition-all duration-200"
@@ -218,6 +228,16 @@
             (click)="adjustMenuSize('services'); toggleMobileMenu()"
           >
             Services
+          </a>
+        </li>
+        <li>
+          <a
+            [routerLink]="['/home']"
+            fragment="reviews"
+            class="block py-[clamp(0.75rem,2vw,1rem)] text-[clamp(1rem,2.5vw,1.25rem)] text-green-100 hover:bg-white/10 rounded-lg transition-all duration-200 font-poppins"
+            (click)="adjustMenuSize('reviews'); toggleMobileMenu()"
+          >
+            Reviews
           </a>
         </li>
         <li>

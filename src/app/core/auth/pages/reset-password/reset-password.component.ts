@@ -11,11 +11,12 @@ import { ToastNotificationsComponent } from '../../../toastNotifications/toastNo
 import { MatFormField } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { EnterSubmitDirective } from '../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatInputModule],
+  imports: [ReactiveFormsModule, CommonModule, MatInputModule, EnterSubmitDirective],
   template: ` <div
     class="min-h-screen relative flex items-center justify-center bg-cover bg-center"
     style="background-image: url('assets/images/Food House.jpg');"
@@ -37,7 +38,8 @@ import { MatInputModule } from '@angular/material/input';
       <h2 class="text-4xl font-extrabold text-green-700 text-center mt-16 mb-8">
         Password Reset
       </h2>
-      <form [formGroup]="resetPasswordForm">
+      <form [formGroup]="resetPasswordForm" (enterSubmit)="onSubmit()"
+      appEnterSubmit>
         <div class="relative mb-6">
           <label
             for="newPassword"

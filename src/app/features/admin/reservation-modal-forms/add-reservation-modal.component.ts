@@ -31,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { EditedReservationForm } from '../../../models/reservation-form';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { EnterSubmitDirective } from '../../../enter-submit.directive';
 
 @Component({
   selector: 'app-add-reservation-modal',
@@ -44,6 +45,7 @@ import { ToastNotificationsComponent } from '../../../core/toastNotifications/to
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    EnterSubmitDirective
   ],
   template: `
     <div
@@ -70,7 +72,9 @@ import { ToastNotificationsComponent } from '../../../core/toastNotifications/to
         </h2>
 
         <!-- Reservation Form -->
-        <form [formGroup]="adminReservationForm">
+        <form [formGroup]="adminReservationForm"
+        (enterSubmit)="submitForm()"
+        appEnterSubmit>
           <div class="space-y-6">
             <!-- Package Type -->
             <div class="relative">

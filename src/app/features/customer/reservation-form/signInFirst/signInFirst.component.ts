@@ -22,6 +22,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastNotificationsComponent } from '../../../../core/toastNotifications/toastNotifications.component';
+import { EnterSubmitDirective } from '../../../../enter-submit.directive';
 
 @Component({
   selector: 'app-sign-in-first',
@@ -33,6 +34,7 @@ import { ToastNotificationsComponent } from '../../../../core/toastNotifications
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    EnterSubmitDirective,
   ],
   template: `
     <div
@@ -60,7 +62,8 @@ import { ToastNotificationsComponent } from '../../../../core/toastNotifications
           Ready to make your reservations? Sign In First
         </h2>
 
-        <form [formGroup]="loginForm">
+        <form [formGroup]="loginForm" (enterSubmit)="login()"
+        appEnterSubmit>
           <!-- Email Input -->
           <div class="mb-6">
             <label

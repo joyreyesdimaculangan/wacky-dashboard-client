@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Review } from '../../../models/review';
+import { ReviewService } from '../../../services/review.service';
 
 @Component({
   selector: 'app-review-section',
@@ -10,43 +12,33 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 })
 export class ReviewSectionComponent implements OnInit, OnDestroy {
   slideIndex: number = 0;
+  slidesPerView: number = 1;
   image = signal<string>('');
-  autoplayInterval: any;
   isReviewsOpen: boolean = false;
   additionalReviews!: { name: string; comments: string; rating: number; };
 
-  reviews = [
-    { 
-      name: "Gabrielle Ramos", 
-      comments: "We just stopped by for breakfast last Saturday. Lunch and dinner are always busy here, and you need to book in advance for their eat-all-you-can. Food is great at a very affordable price, and the staff is very accommodating.",
-      rating: 5
-    },
-    { 
-      name: "Clark Barcelona", 
-      comments: "The place is cozy, the service is nice, and most importantly, the food is all delicious. Worth the price! Will surely be back!",
-      rating: 5
-    },
-    { 
-      name: "Abelardo Altamira", 
-      comments: "Great food, unlimited yet very affordable.",
-      rating: 4
-    },
-    { 
-      name: "Carlo Saquitin", 
-      comments: "Definitely a bang for your buck! The lomi overload and pancit can feed at least 4. Didn’t try their buffet though, but it’s also decent for the price of 198. It looks like the place got popular and can get really crowded. I used to enjoy this place as this was a good relaxing pit stop to grab a local lomi.",
-      rating: 4
-    },
-    { 
-      name: "Jessie Tenorio", 
-      comments: "When you talk about affordability, this definitely is! 😊 Eat All You Can Lunch for only 198 pesos.",
-      rating: 4
-    },
-    { 
-      name: "Jenifer Pascual", 
-      comments: "We just stopped by for breakfast last Saturday. Lunch and dinner are always busy here, and you need to book in advance for their eat-all-you-can food. The staff is very accommodating.",
-      rating: 4
-    },
-  ];
+  reviews: Review[] = [];
+  private reviewService = inject(ReviewService);  
+  loading = false;
+
+  currentIndex = 0;
+  autoplayInterval: any;
+  isPaused = false;
+
+  loadReviews() {
+    this.loading = true;
+    this.reviewService.getReviews().subscribe({
+      next: (reviews) => {
+        console.log('Reviews received:', reviews);
+        this.reviews = reviews;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading reviews:', error);
+        this.loading = false;
+      }
+    });
+  }
 
   openReviews(reviews: any) {
     this.isReviewsOpen = true;
@@ -62,34 +54,51 @@ export class ReviewSectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.startAutoplay(); 
+    console.log('ReviewSectionComponent initialized');
+    this.loadReviews();
+    this.startSlideshow();
+    
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.autoplayInterval);
+    this.stopSlideshow();
   }
 
-  startAutoplay() {
+  startSlideshow() {
     this.autoplayInterval = setInterval(() => {
-      this.nextSlide();
-    }, 3000); // Change slide every 3 seconds
+      if (!this.isPaused) {
+        this.nextSlide();
+      }
+    }, 5000); // Change slide every 5 seconds
+  }
+
+  stopSlideshow() {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
+  }
+
+  pauseSlideshow() {
+    this.isPaused = true;
+  }
+
+  resumeSlideshow() {
+    this.isPaused = false;
+  }
+
+  get slidesCount() {
+    return new Array(Math.ceil(this.reviews.length / 3));
   }
 
   prevSlide() {
-    if (this.slideIndex > 0) {
-      this.slideIndex--;
-    }
-  }
-  
-  nextSlide() {
-    if ((this.slideIndex + 1) * 3 < this.reviews.length) {
-      this.slideIndex++;
-    } else {
-      this.slideIndex = 0; // Reset to the first slide when reaching the end
-    }
+    this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.reviews.length - 1;
   }
 
-  get maxSlides(): number {
-    return Math.ceil(this.reviews.length / 3);
+  nextSlide() {
+    this.currentIndex = (this.currentIndex + 1) % this.reviews.length;
+  }
+
+  goToSlide(index: number) {
+    this.currentIndex = index;
   }
 }

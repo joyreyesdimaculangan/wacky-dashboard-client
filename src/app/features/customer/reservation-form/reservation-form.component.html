@@ -41,44 +41,59 @@
             {{ packageName }}
           </h4>
 
-          <div class="space-y-4 sm:space-y-6" [formGroup]="reservationForm">
+          <div
+            class="space-y-4 sm:space-y-6"
+            [formGroup]="reservationForm"
+            (enterSubmit)="goToNextStep()"
+            appEnterSubmit
+          >
             <mat-stepper #stepper linear>
               <!-- Step 1: Terms & Conditions -->
               <mat-step [stepControl]="termsForm">
                 <form [formGroup]="termsForm">
                   <ng-template matStepLabel>Terms & Conditions</ng-template>
 
-                  <h2 class="text-[clamp(1.125rem,2.5vw,1.5rem)] font-bold text-green-700 mb-[clamp(1rem,2vw,1.5rem)]">
+                  <h2
+                    class="text-[clamp(1.125rem,2.5vw,1.5rem)] font-bold text-green-700 mb-[clamp(1rem,2vw,1.5rem)]"
+                  >
                     Terms and Conditions
                   </h2>
-                  
-                  <div class="h-[clamp(16rem,50vh,24rem)] overflow-y-auto mb-4 sm:mb-6 p-3 sm:p-4 border border-gray-200 rounded-lg">
-                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
-                      1. Reservation and Payment Policy
-                    </h3>
-                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
-                      <li>A 50% down payment is required to confirm your reservation</li>
-                      <li>Full payment must be settled 3 days before the event date</li>
-                      <li>Reservation dates are subject to availability</li>
-                      <li>Only walk-in payments are allowed</li>
-                    </ul>
-                  
-                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
-                      2. Cancellation Policy
-                    </h3>
-                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
-                      <li>Cancelled reservations are non-refundable</li>
-                    </ul>
-                  
-                    <h3 class="text-[clamp(1rem,2vw,1.25rem)] font-semibold mb-[clamp(0.5rem,1.5vw,1rem)] text-green-600">
-                      3. Event Rules
-                    </h3>
-                    <ul class="list-disc pl-5 mb-[clamp(1rem,2vw,1.5rem)] space-y-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.5vw,1rem)] text-gray-800">
-                      <li>Maximum event duration: 4 hours</li>
-                      <li>Additional charges apply for extended hours</li>
-                      <li>The available food options are based on the ingredients stocked for that specific date</li>
-                      <li>No smoking inside the venue</li>
-                    </ul>
+
+                  <div
+                    class="h-[clamp(16rem,50vh,24rem)] overflow-y-auto mb-4 sm:mb-6 p-3 sm:p-4 border border-gray-200 rounded-lg"
+                  >
+                    <!-- Loading State -->
+                    <div
+                      *ngIf="loading"
+                      class="flex justify-center items-center h-full"
+                    >
+                      <div
+                        class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"
+                      ></div>
+                    </div>
+
+                    <!-- Terms Content -->
+                    <div *ngIf="terms && !loading">
+                      <div *ngFor="let section of terms.sections" class="mb-6">
+                        <h3 class="text-lg font-semibold text-green-700 mb-2">
+                          {{ section.title }}
+                        </h3>
+                        <ul class="list-disc space-y-2 pl-6">
+                          <li *ngFor="let line of section.content.split('\n')" 
+                              class="text-gray-600 leading-relaxed">
+                            {{ line }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- Error State -->
+                    <div
+                      *ngIf="!terms && !loading"
+                      class="text-center text-gray-500"
+                    >
+                      No terms and conditions available.
+                    </div>
                   </div>
 
                   <div class="flex items-start mb-6">
@@ -110,7 +125,11 @@
 
               <!-- Personal Details Step -->
               <mat-step [stepControl]="step1">
-                <form [formGroup]="step1">
+                <form
+                  [formGroup]="step1"
+                  (enterSubmit)="goToNextStep()"
+                  appEnterSubmit
+                >
                   <ng-template matStepLabel>Personal Details</ng-template>
 
                   <!-- Name Input -->
@@ -192,7 +211,11 @@
 
               <!-- Event Details Step -->
               <mat-step [stepControl]="step2">
-                <form [formGroup]="step2">
+                <form
+                  [formGroup]="step2"
+                  (enterSubmit)="goToNextStep()"
+                  appEnterSubmit
+                >
                   <ng-template matStepLabel>Event Details</ng-template>
                   <!-- Number of Guests Input -->
                   <div class="form-group mb-6">
@@ -350,7 +373,11 @@
 
               <!-- Event Preferences Step -->
               <mat-step [stepControl]="step3">
-                <form [formGroup]="step3">
+                <form
+                  [formGroup]="step3"
+                  (enterSubmit)="goToNextStep()"
+                  appEnterSubmit
+                >
                   <ng-template matStepLabel>Event Preferences</ng-template>
                   <!-- Event Theme Input -->
                   <div class="form-group mb-6">

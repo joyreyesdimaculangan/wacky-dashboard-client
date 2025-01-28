@@ -1,49 +1,101 @@
-<section class="my-5 p-10 pb-32">
-  <div class="container mx-auto px-6 py-10 lg:px-8">
-    <h3 class="text-4xl font-bold font-serif text-center mb-6 text-green-700 relative elegant-underline">
-      Our Customer's Feedback
-    </h3>
-  
-    <p class="text-center text-2xl text-gray-700 mb-10 font-poppins font-semibold">
-      Because your voice matters to us
-    </p>    
+<div class="container mx-auto px-6 py-10 lg:px-8">
+  <h3
+    class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold font-serif text-center mb-[clamp(1rem,3vw,1.5rem)] mt-[clamp(1.5rem,4vw,2rem)] text-green-700 relative elegant-underline"
+  >
+    Our Customer's Feedback
+  </h3>
+  <p
+    class="text-[clamp(1rem,2vw,1.25rem)] text-center text-gray-700 mb-[clamp(1rem,3vw,1.5rem)] font-semibold max-w-[clamp(300px,65ch,800px)] mx-auto"
+  >
+    We value your feedback. Here are some of the reviews from our satisfied
+    customers.
+  </p>
 
-    <div class="relative">
-      <div class="overflow-hidden">
-        <div class="flex space-x-6 justify-center transition-transform duration-300"
-             [style.transform]="'translateX(-' + (slideIndex * (100 / 3)) + '%)'">
-          <!-- Review container for each slide -->
-          <div class="flex space-x-6 justify-center" *ngFor="let slide of reviews.slice(slideIndex * 3, (slideIndex + 1) * 3)">
-            <div class="flex-none w-[400px] bg-white rounded-lg shadow-lg p-6">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                  <!-- Avatar placeholder -->
-                  <span class="text-black text-3xl font-bold">👤</span>
-                </div>
-                <div class="ml-4">
-                  <h4 class="text-lg font-semibold text-gray-800">{{slide.name}}</h4>
-                  <div class="flex text-green-600">
-                    <span 
-                      *ngFor="let star of [].constructor(slide.rating); let j = index" 
-                      class="material-icons" 
-                      [ngClass]="j < slide.rating ? 'text-yellow-500' : 'text-gray-300'">star</span>
-                  </div>
+  <!-- Carousel Container -->
+  <div
+    class="relative max-w-7xl mx-auto"
+    (mouseenter)="pauseSlideshow()"
+    (mouseleave)="resumeSlideshow()"
+  >
+    <!-- Reviews Carousel -->
+    <div class="overflow-hidden relative">
+      <div
+        class="flex transition-transform duration-500 ease-in-out"
+        [style.transform]="
+          'translateX(-' + currentIndex * (100 / slidesPerView) + '%)'
+        "
+      >
+        <div
+          *ngFor="let review of reviews; let i = index"
+          class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2 sm:px-4"
+        >
+          <div
+            class="bg-white rounded-lg shadow-lg p-4 sm:p-6 m-2 h-[280px] sm:h-[300px] transform transition-all duration-300 hover:scale-105"
+          >
+            <!-- Avatar and Name -->
+            <div class="flex items-center h-[50px] sm:h-[60px] mb-3 sm:mb-4">
+              <div
+                class="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0"
+              >
+                <span class="text-white text-base sm:text-xl font-bold">{{
+                  review.name.charAt(0).toUpperCase()
+                }}</span>
+              </div>
+              <div class="ml-3 sm:ml-4 min-w-0">
+                <h4
+                  class="text-base sm:text-lg font-semibold text-gray-800 truncate"
+                >
+                  {{ review.name }}
+                </h4>
+                <div class="flex text-yellow-400 text-sm sm:text-base">
+                  <span *ngFor="let star of [].constructor(review.rating)"
+                    >★</span
+                  >
+                  <span class="text-gray-300">{{
+                    "★".repeat(5 - review.rating)
+                  }}</span>
                 </div>
               </div>
-              <p class="text-gray-600 leading-relaxed">{{slide.comments}}</p>
-              <div class="text-gray-300 text-4xl font-bold mt-6">❝</div>
+            </div>
+            <!-- Review Content -->
+            <div class="h-[160px] sm:h-[180px] overflow-y-auto">
+              <p class="text-sm sm:text-base text-gray-600 mb-2 line-clamp-5">
+                {{ review.comments }}
+              </p>
+              <p class="text-xs sm:text-sm text-gray-500">
+                via {{ review.platform }}
+              </p>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Navigation buttons -->
-      <button (click)="prevSlide()" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-green-200 hover:bg-green-400 text-white p-2 rounded-full shadow-md transition duration-300">
-        ❮
+
+      <!-- Navigation Arrows -->
+      <button
+        (click)="prevSlide()"
+        class="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full shadow-lg hover:bg-white flex items-center justify-center"
+      >
+        <i class="fas fa-chevron-left text-green-600 text-sm sm:text-base"></i>
       </button>
-      <button (click)="nextSlide()" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-green-200 hover:bg-green-400 text-white p-2 rounded-full shadow-md transition duration-300">
-        ❯
+      <button
+        (click)="nextSlide()"
+        class="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full shadow-lg hover:bg-white flex items-center justify-center"
+      >
+        <i class="fas fa-chevron-right text-green-600 text-sm sm:text-base"></i>
       </button>
+
+      <!-- Slide Indicators -->
+      <div
+        class="absolute -bottom-8 sm:-bottom-10 left-0 right-0 flex justify-center gap-1 sm:gap-2"
+      >
+        <button
+          *ngFor="let _ of slidesCount; let i = index"
+          (click)="goToSlide(i)"
+          class="w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300"
+          [class.bg-green-600]="i === currentIndex"
+          [class.bg-gray-300]="i !== currentIndex"
+        ></button>
+      </div>
     </div>
   </div>
-</section>
+</div>

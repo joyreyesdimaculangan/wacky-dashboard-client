@@ -24,7 +24,8 @@ import { LoadingFunctionComponent } from "../loadingFunction/loadingFunction.com
     ServicesComponent,
     InquiryFormComponent,
     HeaderComponent,
-    LoadingFunctionComponent
+    LoadingFunctionComponent,
+    ReviewSectionComponent
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

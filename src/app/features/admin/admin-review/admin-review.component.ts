@@ -1,117 +1,116 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { DrawerComponent } from "../drawer/drawer.component";
-import { FormsModule } from '@angular/forms';
+import { DrawerComponent } from '../drawer/drawer.component';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Review } from '../../../models/review';
+import { ReviewService } from '../../../services/review.service';
+import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteReviewComponent } from './delete-review/delete-review.component';
 
 @Component({
   selector: 'app-admin-review',
   standalone: true,
-  imports: [MatIconModule, CommonModule, DrawerComponent, FormsModule],
+  imports: [
+    MatIconModule,
+    CommonModule,
+    DrawerComponent,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './admin-review.component.html',
   styleUrls: ['./admin-review.component.scss'],
 })
-export class AdminReviewComponent {
-  selectedTab: 'published' | 'held' = 'published';
-  selectedTags: string[] = []; 
-  searchQuery: string = '';
-  searchDate: string | null = null;
-  
-  // Example published and held reviews
-  private allPublishedReviews = [
-    { id: 1, name: 'John Doe', rating: 4, content: 'Great experience!', date: '2024-09-28', tags: ['Experience', 'Staff'] },
-    { id: 2, name: 'Jane Smith', rating: 5, content: 'Excellent quality!', date: '2024-09-29', tags: ['Food', 'Price'] },
-  ];
+export class AdminReviewComponent implements OnInit {
+  reviewForm!: FormGroup;
+  reviews: Review[] = [];
+  loading = false;
 
-  private allHeldReviews = [
-    { id: 3, name: 'Charlie', rating: 3.5, content: 'Good value, but...', date: '2024-09-28', tags: ['Food', 'Location'] },
-    { id: 4, name: 'Dave', rating: 2, content: 'Could be better', date: '2024-09-27', tags: ['Price'] },
-  ];
+  private readonly dialog = inject(MatDialog);
 
-  publishedReviews = [...this.allPublishedReviews];
-  heldReviews = [...this.allHeldReviews];
+  private fb = inject(FormBuilder);
+  private reviewService = inject(ReviewService);
+  private toastNotifications = inject(ToastNotificationsComponent);
 
-  // Method to switch tabs
-  selectTab(tab: 'published' | 'held') {
-    this.selectedTab = tab;
-    this.filterReviews(); // Filter reviews when tab changes
+  constructor() {
+    this.initForm();
   }
 
-  // Function to delete a review
-  deleteReview(id: number) {
-    if (this.selectedTab === 'published') {
-      this.allPublishedReviews = this.allPublishedReviews.filter(review => review.id !== id);
-    } else {
-      this.allHeldReviews = this.allHeldReviews.filter(review => review.id !== id);
-    }
-    this.filterReviews(); // Re-filter after deletion
+  ngOnInit() {
+    this.loadReviews();
   }
 
-  // Method to approve a review from the "held for review" section
-  approveReview(id: number) {
-    const review = this.allHeldReviews.find(review => review.id === id);
-    if (review) {
-      this.allHeldReviews = this.allHeldReviews.filter(review => review.id !== id);
-      this.allPublishedReviews.push(review);
-      this.filterReviews(); // Update filter after approval
-    }
+  private initForm() {
+    this.reviewForm = this.fb.group({
+      name: ['', Validators.required],
+      rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      platform: ['', Validators.required],
+      comments: ['', Validators.required],
+    });
   }
 
-  // Method to toggle tag selection
-  toggleTag(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
-    if (index === -1) {
-      this.selectedTags.push(tag); // Add tag if not selected
-    } else {
-      this.selectedTags.splice(index, 1); // Remove tag if already selected
-    }
-    this.filterReviews(); // Call to filter reviews based on selected tags
+  setRating(rating: number) {
+    this.reviewForm.patchValue({ rating });
   }
 
-  // Method to filter reviews based on selected tags and search query
-  filterReviews() {
-    let reviewsToFilter = this.selectedTab === 'published' ? [...this.allPublishedReviews] : [...this.allHeldReviews];
+  loadReviews() {
+    this.reviewService.getReviews().subscribe({
+      next: (reviews) => (this.reviews = reviews),
+      error: (error) =>
+        this.toastNotifications.showError('Failed to load reviews', 'Error'),
+    });
+  }
 
-    // Filter by selected tags
-    if (this.selectedTags.length > 0) {
-      reviewsToFilter = reviewsToFilter.filter(review => 
-        this.selectedTags.some(tag => review.tags.includes(tag))
-      );
-    }
-
-    // Filter by search query
-    if (this.searchQuery) {
-      const queryLower = this.searchQuery.toLowerCase();
-      reviewsToFilter = reviewsToFilter.filter(review =>
-        review.name.toLowerCase().includes(queryLower) ||
-        review.content.toLowerCase().includes(queryLower)
-      );
-    }
-
-     // Filter by date search
-    if (this.searchDate) {
-      const inputDate = new Date(this.searchDate).toISOString().split('T')[0]; // Convert input date to 'YYYY-MM-DD' format
-      reviewsToFilter = reviewsToFilter.filter(review => {
-        const reviewDate = new Date(review.date).toISOString().split('T')[0]; // Convert review date to 'YYYY-MM-DD' format
-        return reviewDate === inputDate; // Compare dates
+  onSubmit() {
+    if (this.reviewForm.valid) {
+      this.loading = true;
+      this.reviewService.createReview(this.reviewForm.value).subscribe({
+        next: () => {
+          this.loading = false;
+          this.reviewForm.reset();
+          this.loadReviews();
+          this.toastNotifications.showSuccess(
+            'Review added successfully',
+            'Success'
+          );
+        },
+        error: (error) => {
+          this.loading = false;
+          this.toastNotifications.showError('Failed to add review', 'Error');
+        },
       });
     }
-
-    // Assign filtered reviews to the correct property
-    if (this.selectedTab === 'published') {
-      this.publishedReviews = reviewsToFilter;
-    } else {
-      this.heldReviews = reviewsToFilter;
-    }
-
-    // Log final filtered reviews for debugging
-    console.log("Filtered Reviews:", reviewsToFilter);
   }
 
-  resetSearch(): void {
-    this.searchQuery = '';
-    this.searchDate = null;
-    this.filterReviews(); // Optionally, call filterReviews to refresh the reviews
-  }
+  deleteReview(id: string) {
+    const dialogRef = this.dialog.open(DeleteReviewComponent, {
+      width: 'auto',
+      data: {
+        message:
+          'Are you sure you want to delete the selected items? This action is irreversible and cannot be undone.',
+      },
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.reviewService.deleteReview(id).subscribe({
+          next: () => {
+            this.loadReviews();
+            this.toastNotifications.showSuccess('Review deleted successfully', 'Success');
+          },
+          error: (error) => {
+            console.error('Error deleting review:', error);
+            this.toastNotifications.showError('Failed to delete review', 'Error');
+          }
+        });
+      }
+    });
+  }
 }
