@@ -28,6 +28,7 @@ import { GetPackageNameService } from '../../customer/reservation-form/getPackag
 import { GetPackageAddOnsService } from '../../customer/reservation-form/getPackageAddOns.service';
 import { ToastNotificationsComponent } from '../../../core/toastNotifications/toastNotifications.component';
 import { Location } from '@angular/common';
+import { Timeslot } from '../../../models/timeslot';
 
 @Component({
   selector: 'app-edit-reservation-modal',
@@ -188,34 +189,40 @@ import { Location } from '@angular/common';
               </mat-form-field>
             </div>
 
-            <!-- Time Picker -->
+            <!-- Time Slots -->
             <div class="form-group mb-6">
-              <label class="block text-sm font-medium text-gray-700"
-                >Select Time</label
-              >
-              <ul class="grid grid-cols-2 gap-4 mt-2">
-                <li *ngFor="let time of availableTimes; let i = index">
-                  <input
-                    type="radio"
-                    [id]="'time' + i"
-                    [value]="time"
-                    class="hidden peer"
-                    formControlName="eventTime"
-                    [disabled]="isTimeDisabled(time)"
-                    required
-                  />
-                  <label
-                    [for]="'time' + i"
-                    class="inline-flex items-center justify-center w-full p-3 text-sm font-medium text-center bg-white border border-green-600 rounded-lg cursor-pointer text-green-600 peer-checked:bg-green-600 peer-checked:text-white hover:bg-green-500 transition duration-300 ease-in-out"
-                    [ngClass]="{
-                      'opacity-50 cursor-not-allowed': isTimeDisabled(time)
-                    }"
-                  >
-                    {{ time }}
-                  </label>
-                </li>
-              </ul>
-            </div>
+                    <label
+                      class="block text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-gray-700 mb-2"
+                    >
+                      Time
+                    </label>
+                    <div
+                      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    >
+                      <button
+                        *ngFor="let slot of availableTimeSlots"
+                        type="button"
+                        [disabled]="!slot.isAvailable"
+                        (click)="selectTime(slot.time)"
+                        [class.bg-green-600]="
+                          adminEditReservationForm.get('eventTime')?.value === slot.time
+                        "
+                        [class.text-white]="
+                          adminEditReservationForm.get('eventTime')?.value === slot.time
+                        "
+                        class="p-[clamp(0.5rem,1vw,0.75rem)] text-[clamp(0.875rem,1.2vw,1rem)] border rounded-lg transition-colors duration-200 font-medium tracking-wide disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:bg-green-50 enabled:hover:border-green-500"
+                      >
+                        {{ slot.time }}
+                        <span
+                          *ngIf="slot.bookingCount > 0"
+                          class="text-[clamp(0.75rem,1vw,0.875rem)] block mt-1"
+                        >
+                          ({{ maxBookingPerSlot - slot.bookingCount }} slots
+                          left)
+                        </span>
+                      </button>
+                    </div>
+                  </div>
 
             <!-- Textareas -->
             <div>
@@ -378,14 +385,9 @@ export class EditReservationModalComponent implements OnInit {
 
   fullyBookedDates: Date[] = [];
   fullyBookedTimes: { [date: string]: string[] } = {};
-  availableTimes: string[] = [
-    '10:00 AM',
-    '10:30 AM',
-    '11:00 AM',
-    '3:00 PM',
-    '3:30 PM',
-    '4:00 PM',
-  ];
+  
+  availableTimeSlots: Timeslot[] = [];
+  maxBookingPerSlot = 4;
 
   reservations: EditedReservationForm[] = [];
 
@@ -432,7 +434,53 @@ export class EditReservationModalComponent implements OnInit {
     this.getReservationById();
     this.fetchReservations();
     this.getFullyBookedDates(this.reservations);
+
+    const today = new Date();
+    this.generateTimeSlots(today);
   }
+
+  generateTimeSlots(selectedDate: Date) {
+    this.availableTimeSlots = [];
+    const startHour = 10; // 10 AM
+    const endHour = 20;   // 8 PM
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minute of [0, 30]) {
+        const timeString = this.formatTime(hour, minute);
+        const bookingCount = this.getBookingCount(selectedDate, timeString);
+        
+        this.availableTimeSlots.push({
+          time: timeString,
+          isAvailable: bookingCount < this.maxBookingPerSlot,
+          bookingCount: bookingCount
+        });
+      }
+    }
+  }
+
+  private formatTime(hour: number, minute: number): string {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    const minuteString = minute.toString().padStart(2, '0');
+    return `${displayHour}:${minuteString} ${period}`;
+  }
+
+  private getBookingCount(date: Date, time: string): number {
+    return this.reservations
+      .filter(reservation => {
+        const reservationDate = new Date(reservation.eventDate);
+        return reservationDate.toDateString() === date.toDateString() && 
+               reservation.eventTime === time;
+      }).length;
+  }
+
+  onDateChange(event: any): void {
+    const selectedDate = event.value;
+    if (selectedDate) {
+      this.generateTimeSlots(selectedDate);
+    }
+  }
+
 
   getVenueBasedOnPax(pax: number): string {
     if (pax >= 100 && pax <= 200) {
@@ -486,6 +534,16 @@ export class EditReservationModalComponent implements OnInit {
     return Object.keys(dateCounts)
       .filter((date) => dateCounts[date] >= 4)
       .map((date) => new Date(date));
+  }
+
+  selectTime(time: string): void {
+    // Update form control with selected time
+    this.adminEditReservationForm.patchValue({ eventTime: time });
+
+    // Optional: Validate time selection
+    if (this.adminEditReservationForm.get('eventTime')?.value) {
+      this.adminEditReservationForm.get('eventTime')?.markAsTouched();
+    }
   }
 
   dateFilter = (date: Date | null): boolean => {
