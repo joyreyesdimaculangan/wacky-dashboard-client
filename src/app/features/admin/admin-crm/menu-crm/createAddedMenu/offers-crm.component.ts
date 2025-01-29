@@ -37,7 +37,7 @@ import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    EnterSubmitDirective
+    EnterSubmitDirective,
   ],
   template: `
     <div
@@ -111,27 +111,28 @@ import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
                 </mat-error>
               </div>
 
-              <!-- Image upload dropzone -->
               <div class="col-span-2">
                 <label
                   for="image_url"
                   class="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Image URL
+                  Image Upload
+                  <span class="text-sm text-gray-500">(Max size: 5MB)</span>
                 </label>
 
                 <div class="flex items-center justify-center w-full">
                   <label
                     for="dropzone-file"
-                    class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                     [ngClass]="selectedFile ? 'h-auto' : 'h-64'"
                   >
+                    <!-- Upload Icon and Text -->
                     <div
                       class="flex flex-col items-center justify-center pt-5 pb-6"
                       *ngIf="!selectedFile"
                     >
                       <svg
-                        class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        class="w-8 h-8 mb-4 text-gray-500"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -145,35 +146,51 @@ import { EnterSubmitDirective } from '../../../../../enter-submit.directive';
                           d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                         />
                       </svg>
-                      <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                      <p class="mb-2 text-sm text-gray-500">
                         <span class="font-semibold">Click to upload</span> or
                         drag and drop
                       </p>
-                      <p class="text-xs text-gray-500 dark:text-gray-400">
-                        SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      <p class="text-xs text-gray-500">
+                        SVG, PNG, JPG or GIF (MAX. 5MB, 800x400px recommended)
                       </p>
                     </div>
 
-                    <!-- Image preview -->
-                    <img
-                      *ngIf="selectedFile"
-                      [src]="previewUrl()"
-                      alt="Preview"
-                      class="w-full object-cover rounded-lg"
-                      style="max-height: 300px; max-width: 100%;"
-                    />
+                    <!-- Image Preview -->
+                    <div *ngIf="selectedFile" class="relative w-full">
+                      <img
+                        [src]="previewUrl()"
+                        alt="Preview"
+                        class="w-full object-cover rounded-lg"
+                        style="max-height: 300px"
+                      />
+                      <div
+                        class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded"
+                      >
+                        {{ formatFileSize(selectedFile.size) }}
+                      </div>
+                    </div>
 
                     <input
                       id="dropzone-file"
                       type="file"
                       class="hidden"
                       (change)="onFileSelected($event)"
+                      accept="image/*"
                     />
                   </label>
                 </div>
-                <mat-error *ngIf="!selectedFile"> Image is required </mat-error>
-              </div>
 
+                <!-- Error Messages -->
+                <mat-error *ngIf="!selectedFile" class="mt-2">
+                  Image is required
+                </mat-error>
+                <mat-error
+                  *ngIf="selectedFile && selectedFile.size > maxFileSize"
+                  class="mt-2"
+                >
+                  File size exceeds maximum limit of 5MB
+                </mat-error>
+              </div>
               <!-- Description input -->
               <div class="col-span-2">
                 <label
@@ -240,6 +257,24 @@ export class OffersCrmComponent {
   previewUrl = signal<string | ArrayBuffer | null>(null);
   toastNotification = inject(ToastNotificationsComponent);
 
+  maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
+  validateFile(file: File): boolean {
+    if (file.size > this.maxFileSize) {
+      this.toastNotification.showError(
+        `File size must be less than ${this.formatFileSize(this.maxFileSize)}`,
+        'Error'
+      );
+      return false;
+    }
+    return true;
+  }
+
+  formatFileSize(bytes: number): string {
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(2)}MB`;
+  }
+
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
   }
@@ -257,18 +292,23 @@ export class OffersCrmComponent {
     this.router.navigate(['/admin/home']);
   }
 
-  onFileSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files[0]) {
-      this.selectedFile = fileInput.files[0];
-
-      // Preview the image
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl.set(reader.result as string);
-        console.log(this.previewUrl);
-      };
-      reader.readAsDataURL(this.selectedFile);
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('File selected:', file.name, 'Size:', file.size / (1024 * 1024), 'MB');
+      
+      if (this.validateFile(file)) {
+        this.selectedFile = file;
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.previewUrl.set(reader.result as string);
+        };
+        reader.onerror = (error) => {
+          console.error('Error reading file:', error);
+          this.toastNotification.showError('Error reading file', 'Error');
+        };
+        reader.readAsDataURL(file);
+      }
     }
   }
 

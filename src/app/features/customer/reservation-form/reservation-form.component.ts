@@ -85,9 +85,8 @@ export class ReservationFormComponent implements OnInit {
   availableTimeSlots: Timeslot[] = [];
   maxBookingPerSlot = 4;
 
-  startTime = 10; // 10 AM
-  endTime = 20;   // 8 PM
-  interval = 30;  // 30 minutes interval
+  startHour = 10; // 10 AM
+  endHour = 20;   // 8 PM
 
   packages: any[] = [];
   accountProfileName: any[] = [];
@@ -253,22 +252,19 @@ export class ReservationFormComponent implements OnInit {
     });
   }
 
-  generateTimeSlots(selectedDate: Date): void {
+  generateTimeSlots(selectedDate: Date) {
     this.availableTimeSlots = [];
-    const currentDate = new Date();
-    
-    for (let hour = this.startTime; hour < this.endTime; hour++) {
-      for (let minute = 0; minute < 60; minute += this.interval) {
+    const startHour = 10; // 10 AM
+    const endHour = 20;   // 8 PM
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minute of [0, 30]) {
         const timeString = this.formatTime(hour, minute);
         const bookingCount = this.getBookingCount(selectedDate, timeString);
         
-        // Check if this time is in the past for today
-        const isToday = selectedDate.toDateString() === currentDate.toDateString();
-        const isPastTime = isToday && this.isTimeInPast(hour, minute);
-
         this.availableTimeSlots.push({
           time: timeString,
-          isAvailable: !isPastTime && bookingCount < this.maxBookingPerSlot,
+          isAvailable: bookingCount < this.maxBookingPerSlot,
           bookingCount: bookingCount
         });
       }
