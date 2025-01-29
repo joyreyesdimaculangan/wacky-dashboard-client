@@ -53,11 +53,13 @@
                 <form [formGroup]="termsForm">
                   <ng-template matStepLabel>Terms & Conditions</ng-template>
 
-                  <h2
-                    class="text-[clamp(1.125rem,2.5vw,1.5rem)] font-bold text-green-700 mb-[clamp(1rem,2vw,1.5rem)]"
-                  >
+                  <h2 class="text-[clamp(1.125rem,2.5vw,1.5rem)] font-bold text-green-700 mb-[clamp(0.5rem,1vw,0.75rem)]">
                     Terms and Conditions
                   </h2>
+                  
+                  <p class="text-gray-600 mb-[clamp(1rem,2vw,1.5rem)] text-[clamp(0.875rem,1.2vw,1rem)]">
+                    We’re excited to serve you! To ensure an enjoyable dining experience for everyone, we kindly ask all customers to review and agree to the terms of our Unlimited Buffet Policy below before dining with us.
+                  </p>
 
                   <div
                     class="h-[clamp(16rem,50vh,24rem)] overflow-y-auto mb-4 sm:mb-6 p-3 sm:p-4 border border-gray-200 rounded-lg"
@@ -103,9 +105,14 @@
                       id="terms"
                       class="mt-1 mr-2"
                     />
-                    <label for="terms" class="text-base text-gray-800">
-                      I have read and agree to the terms and conditions
-                    </label>
+                    <div class="flex flex-col">
+                      <label for="terms" class="text-base text-gray-800">
+                        I have read and agree to the terms and conditions
+                      </label>
+                      <span class="text-sm text-gray-500 mt-1">
+                        By checking this box, you acknowledge and agree to abide by Wacky’s Food House Unlimited Buffet Policy. Failure to comply may result in additional charges or denial of service.
+                      </span>
+                    </div>
                   </div>
 
                   <div class="flex justify-end">
