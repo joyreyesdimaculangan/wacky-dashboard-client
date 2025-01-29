@@ -43,6 +43,7 @@ import { UserService } from '../../../core/auth/services/user.service';
 import { EnterSubmitDirective } from '../../../enter-submit.directive';
 import { TermsOfService } from '../../../models/terms';
 import { TermsService } from '../../../services/terms.service';
+import { Timeslot } from '../../../models/timeslot';
 
 @Component({
   selector: 'app-reservation-form',
@@ -81,6 +82,12 @@ export class ReservationFormComponent implements OnInit {
   packageID: PackageName | null | undefined;
   accountProfileId!: null | string | undefined;
   addOnsId: string[] = [];
+  availableTimeSlots: Timeslot[] = [];
+  maxBookingPerSlot = 4;
+
+  startTime = 10; // 10 AM
+  endTime = 20;   // 8 PM
+  interval = 30;  // 30 minutes interval
 
   packages: any[] = [];
   accountProfileName: any[] = [];
@@ -204,6 +211,8 @@ export class ReservationFormComponent implements OnInit {
     this.getFullyBookedDates(this.reservations);
     this.populateFullyBookedTimes(this.reservations);
     this.loadUserData();  
+    const today = new Date();
+    this.generateTimeSlots(today);
   }
 
   private async loadUserData(): Promise<void> {
@@ -244,6 +253,66 @@ export class ReservationFormComponent implements OnInit {
     });
   }
 
+  generateTimeSlots(selectedDate: Date): void {
+    this.availableTimeSlots = [];
+    const currentDate = new Date();
+    
+    for (let hour = this.startTime; hour < this.endTime; hour++) {
+      for (let minute = 0; minute < 60; minute += this.interval) {
+        const timeString = this.formatTime(hour, minute);
+        const bookingCount = this.getBookingCount(selectedDate, timeString);
+        
+        // Check if this time is in the past for today
+        const isToday = selectedDate.toDateString() === currentDate.toDateString();
+        const isPastTime = isToday && this.isTimeInPast(hour, minute);
+
+        this.availableTimeSlots.push({
+          time: timeString,
+          isAvailable: !isPastTime && bookingCount < this.maxBookingPerSlot,
+          bookingCount: bookingCount
+        });
+      }
+    }
+  }
+
+  private formatTime(hour: number, minute: number): string {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    const minuteString = minute.toString().padStart(2, '0');
+    return `${displayHour}:${minuteString} ${period}`;
+  }
+
+  private isTimeInPast(hour: number, minute: number): boolean {
+    const now = new Date();
+    return hour < now.getHours() || (hour === now.getHours() && minute <= now.getMinutes());
+  }
+
+  private getBookingCount(date: Date, time: string): number {
+    return this.reservations
+      .filter(reservation => {
+        const reservationDate = new Date(reservation.eventDate);
+        return reservationDate.toDateString() === date.toDateString() && 
+               reservation.eventTime === time;
+      }).length;
+  }
+
+  onDateChange(event: any): void {
+    const selectedDate = event.value;
+    if (selectedDate) {
+      this.generateTimeSlots(selectedDate);
+    }
+  }
+
+  selectTime(time: string): void {
+    // Update form control with selected time
+    this.step2.patchValue({ eventTime: time });
+
+    // Optional: Validate time selection
+    if (this.step2.get('eventTime')?.value) {
+      this.step2.get('eventTime')?.markAsTouched();
+    }
+  }
+
   fetchReservations(): void {
     this.reservationService.getReservations().subscribe({
       next: (data: EditedReservationForm[]) => {
@@ -282,9 +351,9 @@ export class ReservationFormComponent implements OnInit {
 
     console.log('Date counts:', dateCounts);
 
-    // Return fully booked dates (more than 6 reservations)
+    // Return fully booked dates (more than 4 reservations)
     return Object.keys(dateCounts)
-      .filter((date) => dateCounts[date] >= 6)
+      .filter((date) => dateCounts[date] >= 4)
       .map((date) => new Date(date));
   }
 

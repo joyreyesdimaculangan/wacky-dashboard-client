@@ -482,9 +482,9 @@ export class EditReservationModalComponent implements OnInit {
 
     console.log('Date counts:', dateCounts);
 
-    // Return fully booked dates (more than 6 reservations)
+    // Return fully booked dates (more than 4 reservations)
     return Object.keys(dateCounts)
-      .filter((date) => dateCounts[date] >= 6)
+      .filter((date) => dateCounts[date] >= 4)
       .map((date) => new Date(date));
   }
 
