@@ -13,6 +13,7 @@ import { ReviewService } from '../../../services/review.service';
 export class ReviewSectionComponent implements OnInit, OnDestroy {
   slideIndex: number = 0;
   slidesPerView: number = 1;
+  itemsPerSlide: number = 3;
   image = signal<string>('');
   isReviewsOpen: boolean = false;
   additionalReviews!: { name: string; comments: string; rating: number; };
@@ -64,14 +65,6 @@ export class ReviewSectionComponent implements OnInit, OnDestroy {
     this.stopSlideshow();
   }
 
-  startSlideshow() {
-    this.autoplayInterval = setInterval(() => {
-      if (!this.isPaused) {
-        this.nextSlide();
-      }
-    }, 5000); // Change slide every 5 seconds
-  }
-
   stopSlideshow() {
     if (this.autoplayInterval) {
       clearInterval(this.autoplayInterval);
@@ -86,19 +79,46 @@ export class ReviewSectionComponent implements OnInit, OnDestroy {
     this.isPaused = false;
   }
 
-  get slidesCount() {
-    return new Array(Math.ceil(this.reviews.length / 3));
+  get filteredReviews() {
+    return this.reviews.filter(review => 
+      review && 
+      review.comments && 
+      review.comments.trim().length > 0 &&
+      review.name &&
+      review.rating
+    );
+  }
+
+  get totalSlides() {
+    return Math.ceil(this.filteredReviews.length / this.itemsPerSlide);
   }
 
   prevSlide() {
-    this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.reviews.length - 1;
+    const lastIndex = this.totalSlides - 1;
+    this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : lastIndex;
   }
 
   nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.reviews.length;
+    this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
   }
 
   goToSlide(index: number) {
-    this.currentIndex = index;
+    if (index >= 0 && index < this.totalSlides) {
+      this.currentIndex = index;
+    }
+  }
+
+  startSlideshow() {
+    if (this.filteredReviews.length > 1) {
+      this.autoplayInterval = setInterval(() => {
+        if (!this.isPaused) {
+          this.nextSlide();
+        }
+      }, 5000);
+    }
+  }
+
+  get slidesCount() {
+    return new Array(Math.ceil(this.filteredReviews.length / this.itemsPerSlide));
   }
 }

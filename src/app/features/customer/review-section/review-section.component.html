@@ -11,24 +11,12 @@
     customers.
   </p>
 
-  <!-- Carousel Container -->
-  <div
-    class="relative max-w-7xl mx-auto"
-    (mouseenter)="pauseSlideshow()"
-    (mouseleave)="resumeSlideshow()"
-  >
-    <!-- Reviews Carousel -->
+  <div class="relative max-w-7xl mx-auto" *ngIf="filteredReviews.length > 0">
     <div class="overflow-hidden relative">
-      <div
-        class="flex transition-transform duration-500 ease-in-out"
-        [style.transform]="
-          'translateX(-' + currentIndex * (100 / slidesPerView) + '%)'
-        "
-      >
-        <div
-          *ngFor="let review of reviews; let i = index"
-          class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2 sm:px-4"
-        >
+      <div class="flex transition-transform duration-500 ease-in-out"
+           [style.transform]="'translateX(-' + currentIndex * (100 / slidesPerView) + '%)'">
+        <div *ngFor="let review of filteredReviews; let i = index"
+             class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2 sm:px-4">
           <div
             class="bg-white rounded-lg shadow-lg p-4 sm:p-6 m-2 h-[280px] sm:h-[300px] transform transition-all duration-300 hover:scale-105"
           >
